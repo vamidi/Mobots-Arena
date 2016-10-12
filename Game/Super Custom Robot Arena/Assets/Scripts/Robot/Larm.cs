@@ -1,15 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Head : Part {
-
-	// texture
-	// stats - health armor (weapon) damage 
+public class Larm : Part {
 
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
-		this.mPart = PART.HEAD;
+		this.mPart = PART.LARM;
 	}
 	
 	// Update is called once per frame
