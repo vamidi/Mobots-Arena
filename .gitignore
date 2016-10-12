@@ -1,115 +1,31 @@
-Game/Super Custom Robot Arena/Library/
-Game/Super Custom Robot Arena/Library/.gitginore.rtf
-Game/Super Custom Robot Arena/Library/AnnotationManager
-Game/Super Custom Robot Arena/Library/assetDatabase3
-Game/Super Custom Robot Arena/Library/AssetImportState
-Game/Super Custom Robot Arena/Library/AssetServerCacheV3
-Game/Super Custom Robot Arena/Library/BuildPlayer.prefs
-Game/Super Custom Robot Arena/Library/BuildSettings.asset
-Game/Super Custom Robot Arena/Library/CurrentLayout.dwlt
-Game/Super Custom Robot Arena/Library/EditorUserBuildSettings.asset
-Game/Super Custom Robot Arena/Library/EditorUserSettings.asset
-Game/Super Custom Robot Arena/Library/expandedItems
-Game/Super Custom Robot Arena/Library/InspectorExpandedItems.asset
-Game/Super Custom Robot Arena/Library/LastSceneManagerSetup.txt
-Game/Super Custom Robot Arena/Library/LibraryFormatVersion.txt
-Game/Super Custom Robot Arena/Library/MonoManager.asset
-Game/Super Custom Robot Arena/Library/ProjectSettings.asset
-Game/Super Custom Robot Arena/Library/ScriptMapper
-Game/Super Custom Robot Arena/Library/shadercompiler-UnityShaderCompiler0.log
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000001000000000000000
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000001000000000000000.info
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000002000000000000000
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000002000000000000000.info
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000003000000000000000
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000003000000000000000.info
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000004000000000000000
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000004000000000000000.info
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000004100000000000000
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000004100000000000000.info
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000005000000000000000
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000005000000000000000.info
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000005100000000000000
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000005100000000000000.info
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000006000000000000000
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000006000000000000000.info
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000006100000000000000
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000006100000000000000.info
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000007000000000000000
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000007000000000000000.info
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000007100000000000000
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000007100000000000000.info
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000008000000000000000
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000008000000000000000.info
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000008100000000000000
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000008100000000000000.info
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000009000000000000000
-Game/Super Custom Robot Arena/Library/metadata/00/00000000000000009000000000000000.info
-Game/Super Custom Robot Arena/Library/metadata/00/0000000000000000a000000000000000
-Game/Super Custom Robot Arena/Library/metadata/00/0000000000000000a000000000000000.info
-Game/Super Custom Robot Arena/Library/metadata/00/0000000000000000a100000000000000
-Game/Super Custom Robot Arena/Library/metadata/00/0000000000000000a100000000000000.info
-Game/Super Custom Robot Arena/Library/metadata/00/0000000000000000b000000000000000
-Game/Super Custom Robot Arena/Library/metadata/00/0000000000000000b000000000000000.info
-Game/Super Custom Robot Arena/Library/metadata/00/0000000000000000c000000000000000
-Game/Super Custom Robot Arena/Library/metadata/00/0000000000000000c000000000000000.info
-Game/Super Custom Robot Arena/Library/metadata/3c/3c0ad459c1534645b5d603b7cc258f97
-Game/Super Custom Robot Arena/Library/metadata/3c/3c0ad459c1534645b5d603b7cc258f97.info
-Game/Super Custom Robot Arena/Library/metadata/5f/5f32cd94baa94578a686d4b9d6b660f7
-Game/Super Custom Robot Arena/Library/metadata/5f/5f32cd94baa94578a686d4b9d6b660f7.info
-Game/Super Custom Robot Arena/Library/metadata/73/739bbd9f364b4268874f9fd86ab3beef
-Game/Super Custom Robot Arena/Library/metadata/73/739bbd9f364b4268874f9fd86ab3beef.info
-Game/Super Custom Robot Arena/Library/metadata/7c/7cbab2be89b54486bbd23a6fe637d30e
-Game/Super Custom Robot Arena/Library/metadata/7c/7cbab2be89b54486bbd23a6fe637d30e.info
-Game/Super Custom Robot Arena/Library/metadata/80/80a3616ca19596e4da0f10f14d241e9f
-Game/Super Custom Robot Arena/Library/metadata/80/80a3616ca19596e4da0f10f14d241e9f.info
-Game/Super Custom Robot Arena/Library/metadata/85/852e56802eb941638acbb491814497b0
-Game/Super Custom Robot Arena/Library/metadata/85/852e56802eb941638acbb491814497b0.info
-Game/Super Custom Robot Arena/Library/metadata/87/870353891bb340e2b2a9c8707e7419ba
-Game/Super Custom Robot Arena/Library/metadata/87/870353891bb340e2b2a9c8707e7419ba.info
-Game/Super Custom Robot Arena/Library/metadata/8e/8e0cd8ed44d4412cbe0642067abc9e44
-Game/Super Custom Robot Arena/Library/metadata/8e/8e0cd8ed44d4412cbe0642067abc9e44.info
-Game/Super Custom Robot Arena/Library/metadata/97/97decbdab0634cdd991f8d23ddf0dead
-Game/Super Custom Robot Arena/Library/metadata/97/97decbdab0634cdd991f8d23ddf0dead.info
-Game/Super Custom Robot Arena/Library/metadata/ad/adebbd281f1a4ef3a30be7f21937e02f
-Game/Super Custom Robot Arena/Library/metadata/ad/adebbd281f1a4ef3a30be7f21937e02f.info
-Game/Super Custom Robot Arena/Library/metadata/f5/f5f67c52d1564df4a8936ccd202a3bd8
-Game/Super Custom Robot Arena/Library/metadata/f5/f5f67c52d1564df4a8936ccd202a3bd8.info
-Game/Super Custom Robot Arena/Library/ScriptAssemblies/BuiltinAssemblies.stamp
-Game/Super Custom Robot Arena/Library/ShaderCache/0/023eb01512d081218b0eb0dadcbafd5e.bin
-Game/Super Custom Robot Arena/Library/ShaderCache/0/0d5dd07f3c8faa38a95b0d8df10f2c49.bin
-Game/Super Custom Robot Arena/Library/ShaderCache/1/119a9fa04cddfc61d49c88117e4eb607.bin
-Game/Super Custom Robot Arena/Library/ShaderCache/3/370854452f7f4ac75aed2dcc41edbd68.bin
-Game/Super Custom Robot Arena/Library/ShaderCache/4/473993ede3e46e50fad0ba0cb64abe04.bin
-Game/Super Custom Robot Arena/Library/ShaderCache/8/80e24a7587c53eb7be5130d5aa2eedc3.bin
-Game/Super Custom Robot Arena/Library/ShaderCache/8/896c443dbcd6c3f79dcaf726e48dbff3.bin
-Game/Super Custom Robot Arena/Library/ShaderCache/8/8d4a29511276cbfd198acd276abbeb47.bin
-Game/Super Custom Robot Arena/Library/ShaderCache/a/a3f9d603020695043958c3ce36389350.bin
-Game/Super Custom Robot Arena/Library/ShaderCache/a/ab40555d756d3c9b084b0bfe4dc241cf.bin
-Game/Super Custom Robot Arena/Library/ShaderCache/b/b3d9b226290159245d3c7f6401eff18d.bin
-Game/Super Custom Robot Arena/Library/ShaderCache/b/b986f1692ec2cf7f928c43fb16155c13.bin
-Game/Super Custom Robot Arena/Library/ShaderCache/b/ba3d5f3596539c11879888384c4147ee.bin
-Game/Super Custom Robot Arena/Library/ShaderCache/c/cdb01314c41f0681fbdbfb28000a216a.bin
-Game/Super Custom Robot Arena/Library/ShaderCache/d/d26b888d9fb9f839a89439935d4613c2.bin
-Game/Super Custom Robot Arena/Library/ShaderCache/d/df5344daf71e72bc2524707c7ee4230a.bin
-Game/Super Custom Robot Arena/Library/ShaderCache/e/e765f0bec8ebe924f7232d7165964930.bin
-Game/Super Custom Robot Arena/Library/ShaderCache/f/f80d84a37caa84c4cb08ed4bdc4ddc6c.bin
-Game/Super Custom Robot Arena/ProjectSettings/AudioManager.asset
-Game/Super Custom Robot Arena/ProjectSettings/ClusterInputManager.asset
-Game/Super Custom Robot Arena/ProjectSettings/DynamicsManager.asset
-Game/Super Custom Robot Arena/ProjectSettings/EditorBuildSettings.asset
-Game/Super Custom Robot Arena/ProjectSettings/EditorSettings.asset
-Game/Super Custom Robot Arena/ProjectSettings/GraphicsSettings.asset
-Game/Super Custom Robot Arena/ProjectSettings/InputManager.asset
-Game/Super Custom Robot Arena/ProjectSettings/NavMeshAreas.asset
-Game/Super Custom Robot Arena/ProjectSettings/NetworkManager.asset
-Game/Super Custom Robot Arena/ProjectSettings/Physics2DSettings.asset
-Game/Super Custom Robot Arena/ProjectSettings/ProjectSettings.asset
-Game/Super Custom Robot Arena/ProjectSettings/ProjectVersion.txt
-Game/Super Custom Robot Arena/ProjectSettings/QualitySettings.asset
-Game/Super Custom Robot Arena/ProjectSettings/TagManager.asset
-Game/Super Custom Robot Arena/ProjectSettings/TimeManager.asset
-Game/Super Custom Robot Arena/ProjectSettings/UnityAdsSettings.asset
-Game/Super Custom Robot Arena/ProjectSettings/UnityConnectSettings.asset
-Game/Super Custom Robot Arena/Temp/UnityLockfile
-Game/Super Custom Robot Arena/Temp/ProcessJobs/e9a6970f79cd12d8b075e7d72f1b07cb.bakert
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/Assets/AssetStoreTools*
+
+# Autogenerated VS/MD/Consulo solution and project files
+ExportedObj/
+.consulo/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+
+
+# Unity3D generated meta files
+*.pidb.meta
+
+# Unity3D Generated File On Crash Reports
+sysinfo.txt
+
+# Builds
+*.apk
+*.unitypackage
