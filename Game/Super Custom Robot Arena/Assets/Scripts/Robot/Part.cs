@@ -2,6 +2,9 @@
 using UnityEngine.UI;
 using System.Collections;
 
+/// <summary>
+/// The parts of the robot
+/// </summary>
 public enum PART {
 	HEAD, CAR, LARM, RARM
 }
@@ -32,6 +35,13 @@ public class Part : MonoBehaviour {
 	/// The armor of the robot
 	/// </summary>
 	protected float mArmor = 100f;
+
+	/// <summary>
+	/// The strength that the armor has (0 to 100%)
+	/// </summary>
+	protected float mArmorStrength = 5;
+
+	protected int mRobotWegith = 50;
 
 	/// <summary>
 	/// The weapon of the robot
