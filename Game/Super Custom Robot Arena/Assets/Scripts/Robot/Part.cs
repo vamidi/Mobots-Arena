@@ -29,18 +29,22 @@ public class Part : MonoBehaviour {
 	/// <summary>
 	/// The health of the robot
 	/// </summary>
+	[SerializeField]
 	protected float mHealth = 100f;
 
 	/// <summary>
 	/// The armor of the robot
 	/// </summary>
+	[SerializeField]
 	protected float mArmor = 100f;
 
 	/// <summary>
 	/// The strength that the armor has (0 to 100%)
 	/// </summary>
-	protected float mArmorStrength = 5;
+	[SerializeField]
+	protected float mArmorStrength = 5f;
 
+	[SerializeField]
 	protected int mRobotWegith = 50;
 
 	/// <summary>
@@ -49,8 +53,24 @@ public class Part : MonoBehaviour {
 	protected GameObject weapon = null;
 
 
-	public PART getPart(){
+	public PART GetPart(){
 		return this.mPart;
+	}
+
+	public void SetHealth(float health){
+		this.mHealth = health;
+	}
+
+	public void SetArmor(float armor){
+		this.mArmor = armor;
+	}
+
+	public void SetStrength(float strength){
+		this.mArmorStrength = strength;
+	}
+
+	public void SetWeight(int weight){
+		this.mRobotWegith = weight;
 	}
 
 	// Use this for initialization

@@ -1,0 +1,38 @@
+{
+  "robots": [
+    {
+      "robotname": "Henk",
+      "parts": {
+        "head": {
+          "owned": false
+        },
+        "left": {
+          "owned": false
+        },
+        "right": {
+          "owned": false
+        },
+        "car": {
+          "owned": false
+        }
+      }
+    },
+    {
+      "robotname": "Red_Robot",
+      "parts": {
+        "head": {
+          "owned": false
+        },
+        "left": {
+          "owned": false
+        },
+        "right": {
+          "owned": false
+        },
+        "car": {
+          "owned": false
+        }
+      }
+    }
+  ]
+}
