@@ -4,16 +4,16 @@
       "robotname": "Henk",
       "parts": {
         "head": {
-          "owned": false
+          "owned": true
         },
         "left": {
-          "owned": false
+          "owned": true
         },
         "right": {
-          "owned": false
+          "owned": true
         },
         "car": {
-          "owned": false
+          "owned": true
         }
       }
     },
@@ -21,16 +21,16 @@
       "robotname": "Red_Robot",
       "parts": {
         "head": {
-          "owned": false
+          "owned": true
         },
         "left": {
-          "owned": false
+          "owned": true
         },
         "right": {
-          "owned": false
+          "owned": true
         },
         "car": {
-          "owned": false
+          "owned": true
         }
       }
     }

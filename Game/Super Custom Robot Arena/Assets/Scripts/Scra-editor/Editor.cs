@@ -2,12 +2,22 @@
 using System.Collections;
 using System.Collections.Generic;
 
+using Boomlagoon.JSON;
+
 public delegate void mAssignValues (PART part, string name);
+
 /// <summary>
 /// Editor class.
 /// 
 /// </summary>
 public class Editor : MonoBehaviour {
+
+	public GameObject HomeContent;
+
+	/// <summary>
+	/// The prefab to load the buttons of the robot parts
+	/// </summary>
+	public GameObject mButtonPrefab;
 
 	/// <summary>
 	/// The content of the menu
@@ -16,7 +26,7 @@ public class Editor : MonoBehaviour {
 	/// <summary>
 	/// The values of the parts
 	/// </summary>
-	private Dictionary<string, object> mValues = new Dictionary<string, object> ();
+	private List<RobotBtn> buttons = new List<RobotBtn>();
 	/// <summary>
 	/// Content manager delegate
 	/// </summary>
@@ -82,22 +92,22 @@ public class Editor : MonoBehaviour {
 			break;
 		}
 			
-		if (holder != null && mRobot != null && part != null) {
-			mRobot.SetRobot (part, robotName, holder, mAssign);
+		if (holder != null && this.mRobot != null && part != null) {
+			this.mRobot.SetRobot (part, robotName, holder, this.mAssign);
 
 		}
 	}
 
 	// Use this for initialization
 	void Start () {
-		mRobot = GameObject.FindGameObjectWithTag ("Robot").GetComponent<Robot>();
+		this.mRobot = GameObject.FindGameObjectWithTag ("Robot").GetComponent<Robot>();
 
-		mContents.Add("HomeScreen", GameObject.Find("HomeContent"));
-		mContents.Add("PartsContent", GameObject.Find("PartsContent"));
-		mContents.Add("Heads", GameObject.Find("HeadsContent"));
-		mContents.Add("LeftArms", GameObject.Find("LeftArmsContent"));
-		mContents.Add("RightArms", GameObject.Find("RightArmsContent"));
-		mContents.Add("Cars", GameObject.Find("CarsContent"));
+		this.mContents.Add("HomeScreen", GameObject.Find("HomeContent"));
+		this.mContents.Add("PartsContent", GameObject.Find("PartsContent"));
+		this.mContents.Add("Heads", GameObject.Find("HeadsContent"));
+		this.mContents.Add("LeftArms", GameObject.Find("LeftArmsContent"));
+		this.mContents.Add("RightArms", GameObject.Find("RightArmsContent"));
+		this.mContents.Add("Cars", GameObject.Find("CarsContent"));
 
 		foreach(KeyValuePair<string, GameObject> entry in mContents) {
 			if (entry.Value != null && entry.Key != "HomeScreen") {
@@ -106,16 +116,73 @@ public class Editor : MonoBehaviour {
 			}
 		}
 			
-		mManager = new mContentManager (Home);
-		mAssign = new mAssignValues (ChangeStats);
+		this.mManager = new mContentManager (Home);
+		this.mAssign = new mAssignValues (ChangeStats);
+        this.GetRobots();
+
 	}
 	
 	// Update is called once per frame
-	void Update () {
-
-		if(mManager != null)
-			mManager ();
+        void Update () {
+            if(this.mManager != null)
+			    this.mManager ();
 	} 
+
+	private void GetRobots(){
+		string robots = GameUtilities.ReadFile ("Robots/robots");
+		JSONArray jArray = JSONObject.Parse(robots).GetArray("robots");
+		Vector3 initHeadVector = new Vector3(91f, -43, 0);
+		Vector3 initLeftVector = new Vector3(91f, -43, 0);
+		Vector3 initRightVector = new Vector3(91f, -43, 0);
+		Vector3 initCarVector = new Vector3(91f, -43, 0);
+
+		Debug.Log(jArray);
+		foreach(JSONValue o in jArray){
+			// Do a check for the head
+			JSONObject check = o.Obj;
+			GameObject button = null;
+			if(check.GetObject("parts").GetObject("head").GetBoolean("owned")){
+			 	button = (GameObject)Instantiate(mButtonPrefab, initHeadVector, Quaternion.identity);
+				button.transform.SetParent(this.mContents["Heads"].transform, false);
+				RobotBtn btn = button.GetComponent<RobotBtn>();
+				btn.SetName(check.GetString("robotname"));
+				initHeadVector += new Vector3(0, -34f, 0);
+			}
+
+			if(check.GetObject("parts").GetObject("left").GetBoolean("owned")){
+			 	button = (GameObject)Instantiate(mButtonPrefab, initLeftVector, Quaternion.identity);
+				button.transform.SetParent(this.mContents["LeftArms"].transform, false);
+				RobotBtn btn = button.GetComponent<RobotBtn>();
+				btn.SetName(check.GetString("robotname"));
+				initLeftVector += new Vector3(0, -34f, 0);
+			}
+			
+			if(check.GetObject("parts").GetObject("right").GetBoolean("owned")){
+			 	button = (GameObject)Instantiate(mButtonPrefab, initRightVector, Quaternion.identity);
+				button.transform.SetParent(this.mContents["RightArms"].transform, false);
+				RobotBtn btn = button.GetComponent<RobotBtn>();
+				btn.SetName(check.GetString("robotname"));
+				initRightVector += new Vector3(0, -34f, 0);
+			}
+
+			if(check.GetObject("parts").GetObject("car").GetBoolean("owned")){
+			 	button = (GameObject)Instantiate(mButtonPrefab, initCarVector, Quaternion.identity);
+				button.transform.SetParent(this.mContents["Cars"].transform, false);
+				RobotBtn btn = button.GetComponent<RobotBtn>();
+				btn.SetName(check.GetString("robotname"));
+				initCarVector += new Vector3(0, -34f, 0);
+			}
+		}
+		// List<JSONObject>values = null;
+		// Dictionary<string, JSONObject>mArrary = GameUtilities.GetJSON(new JSONObject(robots));
+		// foreach(KeyValuePair<string, JSONObject> entry in mArrary) {
+		// 	Debug.Log(entry.Key);
+		// 	Debug.Log(entry.Value); // JSON Array
+		// 	foreach(JSONObject j in entry.Value.list){
+		// 		Dictionary<string, JSONObject>m    = GameUtilities.GetJSON(j);
+		// 	}
+		// }
+	}
 
 	/// <summary>
 	/// Method to disable the content.
@@ -179,23 +246,23 @@ public class Editor : MonoBehaviour {
 
 		mManager = Home;
 		switch (mLocation.ToLower ()) {
-		case "home":
-			mManager += HomeScreen;
+			case "home":
+				mManager += HomeScreen;
 			break;
-		case "parts":
-			mManager += Parts;	
+			case "parts":
+				mManager += Parts;	
 			break;
-		case "heads":
-			mManager += Heads;	
+			case "heads":
+				mManager += Heads;	
 			break;
-		case "leftarms":
-			mManager += LeftArms;	
+			case "leftarms":
+				mManager += LeftArms;	
 			break;
-		case "rightarms":
-			mManager += RightArms;	
+			case "rightarms":
+				mManager += RightArms;	
 			break;
-		case "cars":
-			mManager += Cars;	
+			case "cars":
+				mManager += Cars;	
 			break;
 		}
 	}
@@ -245,52 +312,51 @@ public class Editor : MonoBehaviour {
 	/// <param name="part">Part.</param>
 	/// <param name="robotName">Robot name.</param>
 	private void ChangeStats(PART part, string robotName = ""){
-
+                
 		if (robotName == "")
 			return;
-
 		string head = "", arm = "", car = "";
-		mValues.Clear ();
+		JSONObject json;
 		switch (part) {
 		case PART.HEAD:
 			head = GameUtilities.ReadFile ("Robots/" + robotName + "/" + robotName + "_" + part + "_stats");
-			mValues = GameUtilities.GetJSONData (new JSONObject (head));
-			mRobot.SetValue (part, "SetHealth", mValues ["health"]);
-			mRobot.SetValue (part, "SetArmor", mValues ["armor"]);
-			mRobot.SetValue (part, "SetStrength", mValues ["armorstrength"]);
-			mRobot.SetValue (part, "SetWeight", mValues ["weight"]);
+			json = JSONObject.Parse(head);
+			mRobot.SetValue (part, "SetHealth", (float)json.GetNumber("health"));
+			mRobot.SetValue (part, "SetArmor", (float)json.GetNumber("armor"));
+			mRobot.SetValue (part, "SetStrength", (float)json.GetNumber("armorstrength"));
+			mRobot.SetValue (part, "SetWeight", (int)json.GetNumber("weight"));
 			break;
 		case PART.LARM:
 			arm = GameUtilities.ReadFile ("Robots/" + robotName + "/" + robotName + "_" + part + "_stats");
-			mValues = GameUtilities.GetJSONData (new JSONObject (arm));
-			mRobot.SetValue (part, "SetHealth", mValues ["health"]);
-			mRobot.SetValue (part, "SetArmor", mValues ["armor"]);
-			mRobot.SetValue (part, "SetStrength", mValues ["armorstrength"]);
-			mRobot.SetValue (part, "SetWeight", mValues ["weight"]);
-			mRobot.SetValue (part, "SetDamagePerRound", mValues ["damageperround"]);
-			mRobot.SetValue (part, "SetRoundsPerSecond", mValues ["roudspersecond"]);
-			mRobot.SetValue (part, "SetAccuracy", mValues ["accuracy"]);
+			json = JSONObject.Parse(arm);
+			mRobot.SetValue (part, "SetHealth", (float)json.GetNumber("health"));
+			mRobot.SetValue (part, "SetArmor", (float)json.GetNumber("armor"));
+			mRobot.SetValue (part, "SetStrength", (float)json.GetNumber("armorstrength"));
+			mRobot.SetValue (part, "SetWeight", (int)json.GetNumber ("weight"));
+			mRobot.SetValue (part, "SetDamagePerRound", (float)json.GetNumber ("damageperround"));
+			mRobot.SetValue (part, "SetRoundsPerSecond", (float)json.GetNumber ("roudspersecond"));
+			mRobot.SetValue (part, "SetAccuracy", (float)json.GetNumber ("accuracy"));
 			break;
 		case PART.RARM:
 			arm = GameUtilities.ReadFile ("Robots/" + robotName + "/" + robotName + "_" + part + "_stats");
-			mValues = GameUtilities.GetJSONData (new JSONObject (arm));
-			mRobot.SetValue (part, "SetHealth", mValues ["health"]);
-			mRobot.SetValue (part, "SetArmor", mValues ["armor"]);
-			mRobot.SetValue (part, "SetStrength", mValues ["armorstrength"]);
-			mRobot.SetValue (part, "SetWeight", mValues ["weight"]);
-			mRobot.SetValue (part, "SetDamagePerRound", mValues ["damageperround"]);
-			mRobot.SetValue (part, "SetRoundsPerSecond", mValues ["roudspersecond"]);
-			mRobot.SetValue (part, "SetAccuracy", mValues ["accuracy"]);
+			json = JSONObject.Parse(arm);
+			mRobot.SetValue (part, "SetHealth", (float)json.GetNumber ("health"));
+			mRobot.SetValue (part, "SetArmor", (float)json.GetNumber ("armor"));
+			mRobot.SetValue (part, "SetStrength", (float)json.GetNumber ("armorstrength"));
+			mRobot.SetValue (part, "SetWeight", (int)json.GetNumber ("weight"));
+			mRobot.SetValue (part, "SetDamagePerRound", (float)json.GetNumber ("damageperround"));
+			mRobot.SetValue (part, "SetRoundsPerSecond", (float)json.GetNumber ("roudspersecond"));
+			mRobot.SetValue (part, "SetAccuracy", (float)json.GetNumber("accuracy"));
 			break;
 		case PART.CAR:
 			car = GameUtilities.ReadFile ("Robots/" + robotName + "/" + robotName + "_" + part + "_stats");
-			mValues = GameUtilities.GetJSONData (new JSONObject (car));
-			mRobot.SetValue (part, "SetHealth", mValues ["health"]);
-			mRobot.SetValue (part, "SetArmor", mValues ["armor"]);
-			mRobot.SetValue (part, "SetStrength", mValues ["armorstrength"]);
-			mRobot.SetValue (part, "SetWeight", mValues ["weight"]);
-			mRobot.SetValue (part, "SetSpeed", mValues ["speed"]);
-			mRobot.SetValue (part, "SetJumpStrength", mValues ["jumpstrength"]);
+			json = JSONObject.Parse(car);
+			mRobot.SetValue (part, "SetHealth", (float)json.GetNumber ("health"));
+			mRobot.SetValue (part, "SetArmor", (float)json.GetNumber ("armor"));
+			mRobot.SetValue (part, "SetStrength", (float)json.GetNumber ("armorstrength"));
+			mRobot.SetValue (part, "SetWeight", (int)json.GetNumber ("weight"));
+			mRobot.SetValue (part, "SetSpeed", (float)json.GetNumber ("speed"));
+			mRobot.SetValue (part, "SetJumpStrength", (float)json.GetNumber ("jumpstrength"));
 			break;
 		}
 	}
