@@ -33,6 +33,23 @@
           "owned": true
         }
       }
+    },
+    {
+      "robotname": "Dino",
+      "parts": {
+        "head": {
+          "owned": true
+        },
+        "left": {
+          "owned": true
+        },
+        "right": {
+          "owned": true
+        },
+        "car": {
+          "owned": true
+        }
+      }
     }
   ]
 }
