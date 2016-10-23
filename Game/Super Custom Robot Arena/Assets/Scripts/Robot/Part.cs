@@ -6,7 +6,7 @@ using System.Collections;
 /// The parts of the robot
 /// </summary>
 public enum PART {
-	HEAD, CAR, LARM, RARM
+	HEAD, CAR, LARM, RARM, UNASSIGNED
 }
 
 public class Part : MonoBehaviour {

@@ -4,15 +4,47 @@
       "robotname": "Henk",
       "parts": {
         "head": {
+          "stats": {
+            "health": 120,
+            "armor": 120,
+            "armorstrength": 10,
+            "weight": 75
+          },
           "owned": true
         },
         "left": {
+          "stasts": {
+            "health": 120,
+            "armor": 120,
+            "armorstrength": 10,
+            "weight": 75,
+            "damageperround": 3,
+            "roudspersecond": 4,
+            "accuracy": 2
+          },
           "owned": true
         },
         "right": {
+          "stats": {
+            "health": 120,
+            "armor": 120,
+            "armorstrength": 10,
+            "weight": 75,
+            "damageperround": 7, 
+            "roudspersecond": 2, 
+            "accuracy": 5
+          },
           "owned": true
         },
         "car": {
+          "stats": {
+            "health": 120,
+            "armor": 120,
+            "armorstrength": 10,
+            "weight": 75, 
+            "speed":8,
+            "jumpstrength":15
+          },
           "owned": true
         }
       }
@@ -21,15 +53,47 @@
       "robotname": "Red_Robot",
       "parts": {
         "head": {
+          "stats": {
+            "health": 100,
+            "armor": 100,
+            "armorstrength": 5,
+            "weight": 50
+          },
           "owned": true
         },
         "left": {
+          "stats": {
+            "health": 100,
+            "armor": 100,
+            "armorstrength": 5,
+            "weight": 50,
+            "damageperround": 5, 
+            "roudspersecond": 1, 
+            "accuracy": 3
+          },
           "owned": true
         },
         "right": {
+          "stats":{
+            "health": 100,
+            "armor": 100,
+            "armorstrength": 5,
+            "weight": 50,
+            "damageperround": 5, 
+            "roudspersecond": 1, 
+            "accuracy": 3
+          },
           "owned": true
         },
         "car": {
+          "stats":{
+            "health": 100,
+            "armor": 100,
+            "armorstrength": 5,
+            "weight": 50, 
+            "speed":5,
+            "jumpstrength":15
+          },
           "owned": true
         }
       }
@@ -38,15 +102,47 @@
       "robotname": "Dino",
       "parts": {
         "head": {
+          "stats": {
+            "health": 120,
+            "armor": 120,
+            "armorstrength": 10,
+            "weight": 75
+          },
           "owned": true
         },
         "left": {
+          "stasts": {
+            "health": 120,
+            "armor": 120,
+            "armorstrength": 10,
+            "weight": 75,
+            "damageperround": 3,
+            "roudspersecond": 4,
+            "accuracy": 2
+          },
           "owned": true
         },
         "right": {
+          "stats": {
+            "health": 120,
+            "armor": 120,
+            "armorstrength": 10,
+            "weight": 75,
+            "damageperround": 7, 
+            "roudspersecond": 2, 
+            "accuracy": 5
+          },
           "owned": true
         },
         "car": {
+          "stats": {
+            "health": 120,
+            "armor": 120,
+            "armorstrength": 10,
+            "weight": 75, 
+            "speed":8,
+            "jumpstrength":15
+          },
           "owned": true
         }
       }

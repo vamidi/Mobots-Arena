@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 using Boomlagoon.JSON;
 
+/// <summary>
+/// Call back for when the robot is done with building
+/// </summary>
 public delegate void mAssignValues (PART part, string name);
 
 /// <summary>
@@ -11,8 +14,6 @@ public delegate void mAssignValues (PART part, string name);
 /// 
 /// </summary>
 public class Editor : MonoBehaviour {
-
-	public GameObject HomeContent;
 
 	/// <summary>
 	/// The prefab to load the buttons of the robot parts
@@ -24,9 +25,9 @@ public class Editor : MonoBehaviour {
 	/// </summary>
 	private Dictionary<string, GameObject> mContents = new Dictionary<string, GameObject>();
 	/// <summary>
-	/// The values of the parts
+	/// The dictionary that contains the robots and their parts
 	/// </summary>
-	private List<RobotBtn> buttons = new List<RobotBtn>();
+	private Dictionary<string, JSONObject>mRobots = new Dictionary<string, JSONObject>();
 	/// <summary>
 	/// Content manager delegate
 	/// </summary>
@@ -71,8 +72,11 @@ public class Editor : MonoBehaviour {
 	/// </summary>
 	/// <param name="robotName">Robot name.</param>
 	public void ChangeRobotByName(string robotName){
+		
+		// holder for the part
 		GameObject holder = null;
-		PART part = PART.HEAD;
+		// Standard part enum
+		PART part = PART.UNASSIGNED;
 		switch (mLocation.ToLower ()) {
 		case "heads":
 			holder = (GameObject)Resources.Load ("Robots/" + robotName + "/" + robotName + "_head", typeof(GameObject));	
@@ -92,16 +96,17 @@ public class Editor : MonoBehaviour {
 			break;
 		}
 			
-		if (holder != null && this.mRobot != null && part != null) {
+		if (this.mAssign != null && this.mRobot != null && holder != null && part != PART.UNASSIGNED )
+			// Change the robot part with the new object (assign is a callback)
 			this.mRobot.SetRobot (part, robotName, holder, this.mAssign);
-
-		}
 	}
 
 	// Use this for initialization
 	void Start () {
+		// Get the robot of the editor
 		this.mRobot = GameObject.FindGameObjectWithTag ("Robot").GetComponent<Robot>();
 
+		// Add all the contents to the contents dictionary
 		this.mContents.Add("HomeScreen", GameObject.Find("HomeContent"));
 		this.mContents.Add("PartsContent", GameObject.Find("PartsContent"));
 		this.mContents.Add("Heads", GameObject.Find("HeadsContent"));
@@ -112,6 +117,7 @@ public class Editor : MonoBehaviour {
 		foreach(KeyValuePair<string, GameObject> entry in mContents) {
 			if (entry.Value != null && entry.Key != "HomeScreen") {
 				//Debug.Log (entry);
+				// Set all the content except homescreen to false
 				entry.Value.SetActive (false);
 			}
 		}
@@ -128,19 +134,30 @@ public class Editor : MonoBehaviour {
 			    this.mManager ();
 	} 
 
+	/// <summary>
+	/// Gets the robots.
+	/// </summary>
 	private void GetRobots(){
+				
 		string robots = GameUtilities.ReadFile ("Robots/robots");
 		JSONArray jArray = JSONObject.Parse(robots).GetArray("robots");
+		
 		Vector3 initHeadVector = new Vector3(91f, -43, 0);
 		Vector3 initLeftVector = new Vector3(91f, -43, 0);
 		Vector3 initRightVector = new Vector3(91f, -43, 0);
 		Vector3 initCarVector = new Vector3(91f, -43, 0);
 
-		Debug.Log(jArray);
+//		Debug.Log(jArray);
 		foreach(JSONValue o in jArray){
+					
 			// Do a check for the head
 			JSONObject check = o.Obj;
 			GameObject button = null;
+						
+			// Set the json of the robot into the dictionary.
+			mRobots.Add(o.Obj.GetString("robotname"), o.Obj);
+				
+			
 			if(check.GetObject("parts").GetObject("head").GetBoolean("owned")){
 			 	button = (GameObject)Instantiate(mButtonPrefab, initHeadVector, Quaternion.identity);
 				button.transform.SetParent(this.mContents["Heads"].transform, false);
@@ -173,17 +190,9 @@ public class Editor : MonoBehaviour {
 				initCarVector += new Vector3(0, -34f, 0);
 			}
 		}
-		// List<JSONObject>values = null;
-		// Dictionary<string, JSONObject>mArrary = GameUtilities.GetJSON(new JSONObject(robots));
-		// foreach(KeyValuePair<string, JSONObject> entry in mArrary) {
-		// 	Debug.Log(entry.Key);
-		// 	Debug.Log(entry.Value); // JSON Array
-		// 	foreach(JSONObject j in entry.Value.list){
-		// 		Dictionary<string, JSONObject>m    = GameUtilities.GetJSON(j);
-		// 	}
-		// }
 	}
 
+	#region ContentManaging
 	/// <summary>
 	/// Method to disable the content.
 	/// This will be based on the location parameter
@@ -239,8 +248,9 @@ public class Editor : MonoBehaviour {
 		}
 	}
 
-	#region ContentManaging
-	// Content methods
+	///<summary>
+	/// Content methods
+	/// </summary>
 	private void Home() {
 		//Debug.Log ("Delegate Home is called");
 
@@ -315,49 +325,55 @@ public class Editor : MonoBehaviour {
                 
 		if (robotName == "")
 			return;
-		string head = "", arm = "", car = "";
-		JSONObject json;
+		
+		// json object from the robots dictionary
+		JSONObject json = mRobots[robotName].GetObject("parts");
+		
 		switch (part) {
-		case PART.HEAD:
-			head = GameUtilities.ReadFile ("Robots/" + robotName + "/" + robotName + "_" + part + "_stats");
-			json = JSONObject.Parse(head);
-			mRobot.SetValue (part, "SetHealth", (float)json.GetNumber("health"));
-			mRobot.SetValue (part, "SetArmor", (float)json.GetNumber("armor"));
-			mRobot.SetValue (part, "SetStrength", (float)json.GetNumber("armorstrength"));
-			mRobot.SetValue (part, "SetWeight", (int)json.GetNumber("weight"));
-			break;
+			case PART.HEAD:
+//				head = GameUtilities.ReadFile ("Robots/" + robotName + "/" + robotName + "_" + part + "_stats");
+//				json = JSONObject.Parse(head);
+				json = json.GetObject("head").GetObject("stats");
+				mRobot.SetValue (part, "SetHealth", (float)json.GetNumber("health"));
+				mRobot.SetValue (part, "SetArmor", (float)json.GetNumber("armor"));
+				mRobot.SetValue (part, "SetStrength", (float)json.GetNumber("armorstrength"));
+				mRobot.SetValue (part, "SetWeight", (int)json.GetNumber("weight"));
+				break;
 		case PART.LARM:
-			arm = GameUtilities.ReadFile ("Robots/" + robotName + "/" + robotName + "_" + part + "_stats");
-			json = JSONObject.Parse(arm);
-			mRobot.SetValue (part, "SetHealth", (float)json.GetNumber("health"));
-			mRobot.SetValue (part, "SetArmor", (float)json.GetNumber("armor"));
-			mRobot.SetValue (part, "SetStrength", (float)json.GetNumber("armorstrength"));
-			mRobot.SetValue (part, "SetWeight", (int)json.GetNumber ("weight"));
-			mRobot.SetValue (part, "SetDamagePerRound", (float)json.GetNumber ("damageperround"));
-			mRobot.SetValue (part, "SetRoundsPerSecond", (float)json.GetNumber ("roudspersecond"));
-			mRobot.SetValue (part, "SetAccuracy", (float)json.GetNumber ("accuracy"));
-			break;
+//			    arm = GameUtilities.ReadFile ("Robots/" + robotName + "/" + robotName + "_" + part + "_stats");
+//			    json = JSONObject.Parse(arm);
+				json = json.GetObject("left").GetObject("stats");
+				mRobot.SetValue (part, "SetHealth", (float)json.GetNumber("health"));
+				mRobot.SetValue (part, "SetArmor", (float)json.GetNumber("armor"));
+				mRobot.SetValue (part, "SetStrength", (float)json.GetNumber("armorstrength"));
+				mRobot.SetValue (part, "SetWeight", (int)json.GetNumber ("weight"));
+				mRobot.SetValue (part, "SetDamagePerRound", (float)json.GetNumber ("damageperround"));
+				mRobot.SetValue (part, "SetRoundsPerSecond", (float)json.GetNumber ("roudspersecond"));
+				mRobot.SetValue (part, "SetAccuracy", (float)json.GetNumber ("accuracy"));
+				break;
 		case PART.RARM:
-			arm = GameUtilities.ReadFile ("Robots/" + robotName + "/" + robotName + "_" + part + "_stats");
-			json = JSONObject.Parse(arm);
-			mRobot.SetValue (part, "SetHealth", (float)json.GetNumber ("health"));
-			mRobot.SetValue (part, "SetArmor", (float)json.GetNumber ("armor"));
-			mRobot.SetValue (part, "SetStrength", (float)json.GetNumber ("armorstrength"));
-			mRobot.SetValue (part, "SetWeight", (int)json.GetNumber ("weight"));
-			mRobot.SetValue (part, "SetDamagePerRound", (float)json.GetNumber ("damageperround"));
-			mRobot.SetValue (part, "SetRoundsPerSecond", (float)json.GetNumber ("roudspersecond"));
-			mRobot.SetValue (part, "SetAccuracy", (float)json.GetNumber("accuracy"));
-			break;
+//			    arm = GameUtilities.ReadFile ("Robots/" + robotName + "/" + robotName + "_" + part + "_stats");
+//			    json = JSONObject.Parse(arm);
+				json = json.GetObject("right").GetObject("stats");
+				mRobot.SetValue (part, "SetHealth", (float)json.GetNumber ("health"));
+				mRobot.SetValue (part, "SetArmor", (float)json.GetNumber ("armor"));
+				mRobot.SetValue (part, "SetStrength", (float)json.GetNumber ("armorstrength"));
+				mRobot.SetValue (part, "SetWeight", (int)json.GetNumber ("weight"));
+				mRobot.SetValue (part, "SetDamagePerRound", (float)json.GetNumber ("damageperround"));
+				mRobot.SetValue (part, "SetRoundsPerSecond", (float)json.GetNumber ("roudspersecond"));
+				mRobot.SetValue (part, "SetAccuracy", (float)json.GetNumber("accuracy"));
+				break;
 		case PART.CAR:
-			car = GameUtilities.ReadFile ("Robots/" + robotName + "/" + robotName + "_" + part + "_stats");
-			json = JSONObject.Parse(car);
-			mRobot.SetValue (part, "SetHealth", (float)json.GetNumber ("health"));
-			mRobot.SetValue (part, "SetArmor", (float)json.GetNumber ("armor"));
-			mRobot.SetValue (part, "SetStrength", (float)json.GetNumber ("armorstrength"));
-			mRobot.SetValue (part, "SetWeight", (int)json.GetNumber ("weight"));
-			mRobot.SetValue (part, "SetSpeed", (float)json.GetNumber ("speed"));
-			mRobot.SetValue (part, "SetJumpStrength", (float)json.GetNumber ("jumpstrength"));
-			break;
+//			    car = GameUtilities.ReadFile ("Robots/" + robotName + "/" + robotName + "_" + part + "_stats");
+//			    json = JSONObject.Parse(car);
+				json = json.GetObject("car").GetObject("stats");
+				mRobot.SetValue (part, "SetHealth", (float)json.GetNumber ("health"));
+				mRobot.SetValue (part, "SetArmor", (float)json.GetNumber ("armor"));
+				mRobot.SetValue (part, "SetStrength", (float)json.GetNumber ("armorstrength"));
+				mRobot.SetValue (part, "SetWeight", (int)json.GetNumber ("weight"));
+				mRobot.SetValue (part, "SetSpeed", (float)json.GetNumber ("speed"));
+				mRobot.SetValue (part, "SetJumpStrength", (float)json.GetNumber ("jumpstrength"));
+				break;
 		}
 	}
 }
