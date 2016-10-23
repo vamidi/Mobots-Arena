@@ -32,12 +32,14 @@ public class Robot : MonoBehaviour {
 				holder.transform.parent = parent;
 				Destroy (goHead);
 				goHead = holder;
+				goLarm.transform.position = GameObject.Find("larm_spawn").transform.position;
+				goRarm.transform.position = GameObject.Find("rarm_spawn").transform.position;
 			}
 			break;
 		case PART.LARM:
 			if (newObj.name != goHead.name) {
 				Transform parent = goLarm.transform.parent;
-				GameObject holder = (GameObject)Instantiate (newObj, goLarm.transform.position, goLarm.transform.rotation);
+				GameObject holder = (GameObject)Instantiate (newObj, GameObject.Find("larm_spawn").transform.position, goLarm.transform.rotation);
 				holder.name = newObj.name;
 				holder.AddComponent<Larm>();
 				mParts [1] = holder.GetComponent<Larm> ();
@@ -49,7 +51,7 @@ public class Robot : MonoBehaviour {
 		case PART.RARM:
 			if (newObj.name != goHead.name) {
 				Transform parent = goRarm.transform.parent;
-				GameObject holder = (GameObject)Instantiate (newObj, goRarm.transform.position, goRarm.transform.rotation);
+				GameObject holder = (GameObject)Instantiate (newObj, GameObject.Find("rarm_spawn").transform.position, goRarm.transform.rotation);
 				holder.name = newObj.name;
 				holder.AddComponent<Rarm>();
 				mParts [2] = holder.GetComponent<Rarm> ();
