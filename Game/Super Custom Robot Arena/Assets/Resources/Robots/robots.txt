@@ -13,7 +13,7 @@
           "owned": true
         },
         "left": {
-          "stasts": {
+          "stats": {
             "health": 120,
             "armor": 120,
             "armorstrength": 10,
@@ -111,7 +111,7 @@
           "owned": true
         },
         "left": {
-          "stasts": {
+          "stats": {
             "health": 120,
             "armor": 120,
             "armorstrength": 10,

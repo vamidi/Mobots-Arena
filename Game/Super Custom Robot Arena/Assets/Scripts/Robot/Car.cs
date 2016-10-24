@@ -13,7 +13,7 @@ public class Car : Part {
 	/// The jump strengtj pf the robot
 	/// </summary>
 	[SerializeField]
-	private float mJumpStrength = 15f;
+	private float mJumpForce = 15f;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -25,12 +25,20 @@ public class Car : Part {
 	protected override void Update () {
 		
 	}
+	
+	public float GetSpeed(){
+		return this.mSpeed;
+	}
+	
+	public float GetJumpPower(){
+		return this.mJumpForce;
+	}
 
 	public void SetSpeed(float speed){
 		this.mSpeed = speed;
 	}
 
 	public void SetJumpStrength(float strength){
-		this.mJumpStrength = strength;
+		this.mJumpForce = strength;
 	}
 }

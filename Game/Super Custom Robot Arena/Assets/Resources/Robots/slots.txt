@@ -1,0 +1,12 @@
+{
+  "slots": [
+      {
+        "parts": {
+            "head": "Henk",
+            "larm": "Henk",
+            "rarm": "Henk",
+            "car": "Henk"
+        }
+      }
+    ]
+}

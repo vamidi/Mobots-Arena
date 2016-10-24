@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -19,7 +20,8 @@ public class Editor : MonoBehaviour {
 	/// The prefab to load the buttons of the robot parts
 	/// </summary>
 	public GameObject mButtonPrefab;
-
+	
+	
 	/// <summary>
 	/// The content of the menu
 	/// </summary>
@@ -28,6 +30,13 @@ public class Editor : MonoBehaviour {
 	/// The dictionary that contains the robots and their parts
 	/// </summary>
 	private Dictionary<string, JSONObject>mRobots = new Dictionary<string, JSONObject>();
+	/// <summary>
+	/// The slots saved by the user
+	/// so that user can save robots to a
+	/// slot. Hereby the can acces their
+	/// robots much faster
+	/// </summary>
+	private Dictionary<int, JSONObject>mSlots = new Dictionary<int, JSONObject>();
 	/// <summary>
 	/// Content manager delegate
 	/// </summary>
@@ -62,11 +71,30 @@ public class Editor : MonoBehaviour {
 	/// Catch the click event of the buttons
 	/// </summary>
 	/// <param name="location">Location.</param>
-	public void onClick(string location){
+	public void OnClick(string location){
 		prevLocation = mLocation;
 		mLocation = location;
 	}
 
+	public void OnSlotClick(int location){
+		PART[] parts = new PART[4] {PART.HEAD, PART.LARM, PART.RARM, PART.CAR};
+		for(int i = 0; i < parts.Length; i++){
+			string name = mSlots[location].GetString(parts[i].ToString().ToLower());
+			this.ChangeRobotByName(parts[i], name);
+		}
+		
+	}
+	
+	/// <summary>
+	/// Play the game.
+	/// </summary>
+	/// <param name="robot">Robot.</param>
+	public void PlayGame(){
+		mRobot.gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
+		SceneManager.LoadScene("game_scene");
+		this.mRobot.isControllable = true;
+	}
+	
 	/// <summary>
 	/// Change the robot part by name
 	/// </summary>
@@ -100,9 +128,40 @@ public class Editor : MonoBehaviour {
 			// Change the robot part with the new object (assign is a callback)
 			this.mRobot.SetRobot (part, robotName, holder, this.mAssign);
 	}
+	
+	public void ChangeRobotByName(PART part, string robotName){
 
+		// holder for the part
+		GameObject holder = null;
+		switch (part) {
+			case PART.HEAD:
+				holder = (GameObject)Resources.Load ("Robots/" + robotName + "/" + robotName + "_head", typeof(GameObject));	
+				break;
+			case PART.LARM:
+				holder = (GameObject)Resources.Load ("Robots/" + robotName + "/" + robotName + "_larm", typeof(GameObject));		
+				break;
+			case PART.RARM:
+				holder = (GameObject)Resources.Load ("Robots/" + robotName + "/" + robotName + "_rarm", typeof(GameObject));		
+				break;
+			case PART.CAR:
+				holder = (GameObject)Resources.Load ("Robots/" + robotName + "/" + robotName + "_car", typeof(GameObject));		
+				break;
+		}
+
+		if (this.mAssign != null && this.mRobot != null && holder != null && part != PART.UNASSIGNED )
+			// Change the robot part with the new object (assign is a callback)
+			this.mRobot.SetRobot (part, robotName, holder, this.mAssign);
+	}
+	
+	// Awake is called before Start
+	void Awake() {
+		// Dont destroy this gameobject
+		DontDestroyOnLoad(this.gameObject);
+	}
+	
 	// Use this for initialization
 	void Start () {
+				
 		// Get the robot of the editor
 		this.mRobot = GameObject.FindGameObjectWithTag ("Robot").GetComponent<Robot>();
 
@@ -124,30 +183,41 @@ public class Editor : MonoBehaviour {
 			
 		this.mManager = new mContentManager (Home);
 		this.mAssign = new mAssignValues (ChangeStats);
-        this.GetRobots();
 
+		this.GetRobots();	
+		
+		mRobot.isControllable = false;
 	}
 	
 	// Update is called once per frame
-        void Update () {
-            if(this.mManager != null)
-			    this.mManager ();
+    void Update () {
+		if(this.mManager != null && SceneManager.GetActiveScene().name == "editor_scene")
+			this.mManager ();	
 	} 
-
+	
 	/// <summary>
 	/// Gets the robots.
 	/// </summary>
 	private void GetRobots(){
 				
 		string robots = GameUtilities.ReadFile ("Robots/robots");
+		string slots = GameUtilities.ReadFile("Robots/slots");
+		
 		JSONArray jArray = JSONObject.Parse(robots).GetArray("robots");
+		JSONArray sArray = JSONObject.Parse(slots).GetArray("slots");		
 		
 		Vector3 initHeadVector = new Vector3(91f, -43, 0);
 		Vector3 initLeftVector = new Vector3(91f, -43, 0);
 		Vector3 initRightVector = new Vector3(91f, -43, 0);
 		Vector3 initCarVector = new Vector3(91f, -43, 0);
-
-//		Debug.Log(jArray);
+		
+		for(int i = 0; i < sArray.Length; i++){
+			JSONObject slotObj = sArray[i].Obj.GetObject("parts");
+			
+			mSlots.Add(i, slotObj);
+			
+		}
+		
 		foreach(JSONValue o in jArray){
 					
 			// Do a check for the head
@@ -191,7 +261,7 @@ public class Editor : MonoBehaviour {
 			}
 		}
 	}
-
+	
 	#region ContentManaging
 	/// <summary>
 	/// Method to disable the content.
