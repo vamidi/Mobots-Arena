@@ -119,10 +119,10 @@ public class CameraController : MonoBehaviour {
 			mOrbit.mYRotation = -180f;
 		}
 
-		mOrbit.mXRotation += -mMouseInputVertical * mOrbit.mVorbitSmooth * Time.deltaTime;
+		mOrbit.mXRotation += mMouseInputVertical * mOrbit.mVorbitSmooth * Time.deltaTime;
 		mOrbit.mYRotation += mMouseInputHorizontal * mOrbit.mHorbitSmooth * Time.deltaTime;
 
-		
+		// get localrotation of the y and store it in the arms
 		// cap the orbiting
 		if(mOrbit.mXRotation > mOrbit.mMaxXRotation) {
 			mOrbit.mXRotation = mOrbit.mMaxXRotation;

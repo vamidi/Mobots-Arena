@@ -249,7 +249,7 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 			this.mOrbit.mYRotation = -180f;
 		}
 
-		this.mOrbit.mXRotation += -this.mVOrbitInput * this.mOrbit.mVorbitSmooth * Time.deltaTime;
+		this.mOrbit.mXRotation += this.mVOrbitInput * this.mOrbit.mVorbitSmooth * Time.deltaTime;
 		this.mOrbit.mYRotation += -this.mHOrbitInput * this.mOrbit.mHorbitSmooth * Time.deltaTime;
 
 		// cap the orbiting
@@ -291,20 +291,13 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 		g = new Vector3(0, this.mVerticalVel, 0);
 		
 		if(Mathf.Abs(mMouseInputVertical) > 0) {
-			mOrbit.mXRotation += -this.mMouseInputVertical * mOrbit.mVorbitSmooth * Time.deltaTime;
-			Quaternion rot = this.goLarm.transform.localRotation;
-
-			// cap the orbiting
-			if(mOrbit.mXRotation > mOrbit.mMaxXRotation) {
-				mOrbit.mXRotation = mOrbit.mMaxXRotation;
-			}
-
-			if (mOrbit.mXRotation < mOrbit.mMinXRotation) {
-				mOrbit.mXRotation = mOrbit.mMinXRotation;
-			}
+//			mOrbit.mXRotation = -mMouseInputVertical * mOrbit.mVorbitSmooth * Time.deltaTime;
+	
 			
-			rot = Quaternion.Euler(mOrbit.mXRotation, 0, 0);
-			this.goLarm.transform.localRotation = this.goRarm.transform.localRotation = rot;		
+			float tiltAroundX = -mMouseInputVertical * 60f;
+			Quaternion target = Quaternion.Euler(tiltAroundX, goLarm.transform.rotation.y, goLarm.transform.rotation.z);
+			Mathf.Clamp(target.eulerAngles.x, -30f, 30f);
+			goLarm.transform.rotation = goRarm.transform.rotation = Quaternion.Slerp(goLarm.transform.rotation, target, Time.deltaTime * 2f);
 		}
 
 		
