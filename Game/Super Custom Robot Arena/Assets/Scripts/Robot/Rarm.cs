@@ -1,23 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Rarm : Part {
-
-	/// <summary>
-	/// The damage that the robot deals to 
-	/// the other player
-	/// </summary>
-	private float mDamagePerRound = 5f;
-
-	/// <summary>
-	/// Rounds per second.
-	/// </summary>
-	private float mRoundPerSecond = 1f;
-
-	/// <summary>
-	/// The Robot accuracy.
-	/// </summary>
-	private float mAccuracy = 3f;
+public class Rarm : Arm {
 
 	// Use this for initialization
 	protected override void Start () {
@@ -27,6 +11,10 @@ public class Rarm : Part {
 	
 	// Update is called once per frame
 	protected override void Update () {
-	
+		base.Update();
+	}
+
+	protected override void LateUpdate () {
+		base.LateUpdate();
 	}
 }

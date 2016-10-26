@@ -246,7 +246,7 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 	/// </summary>
 	void OrbitRobot() {
 		if (this.mOrbitSnapInput > 0) {
-			this.mOrbit.mYRotation = -180f;
+			this.mOrbit.mYRotation = 0f;
 		}
 
 		this.mOrbit.mXRotation += this.mVOrbitInput * this.mOrbit.mVorbitSmooth * Time.deltaTime;
@@ -289,16 +289,6 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 		}
 		
 		g = new Vector3(0, this.mVerticalVel, 0);
-		
-		if(Mathf.Abs(mMouseInputVertical) > 0) {
-//			mOrbit.mXRotation = -mMouseInputVertical * mOrbit.mVorbitSmooth * Time.deltaTime;
-	
-			
-			float tiltAroundX = -mMouseInputVertical * 60f;
-			Quaternion target = Quaternion.Euler(tiltAroundX, goLarm.transform.rotation.y, goLarm.transform.rotation.z);
-			Mathf.Clamp(target.eulerAngles.x, -30f, 30f);
-			goLarm.transform.rotation = goRarm.transform.rotation = Quaternion.Slerp(goLarm.transform.rotation, target, Time.deltaTime * 2f);
-		}
 
 		
 		if(Mathf.Abs(this.mForwardInput) > this.mInputDelay) {
@@ -317,8 +307,8 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 	/// </summary>
 	void MoveToTarget() {
 		if (this.mTorsoTransform) {
-			this.mTargetRotTorso = Quaternion.Euler(0, -this.mOrbit.mYRotation, 0);
-			this.mTorsoTransform.localRotation = Quaternion.Lerp(this.mTorsoTransform.rotation, this.mTargetRotTorso, Time.deltaTime * this.mPosition.mLookSmooth);
+			this.mTargetRotTorso = Quaternion.Euler(0, -this.mOrbit.mYRotation + Camera.main.transform.eulerAngles.y, 0);
+			this.mTorsoTransform.rotation = Quaternion.Lerp(this.mTorsoTransform.rotation, this.mTargetRotTorso, Time.deltaTime * this.mPosition.mLookSmooth);
 		}
 	}
 	
