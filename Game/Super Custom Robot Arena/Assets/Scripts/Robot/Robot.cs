@@ -37,7 +37,7 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 	private float mVerticalVel;
 	private float mGravity = -14.0f;
 	private bool isGrounded = false;
-	private float mVOrbitInput, mHOrbitInput, mOrbitSnapInput, mMouseInputVertical;             // Input for orbiting and mouse input
+	private float mVOrbitInput, mHOrbitInput, mOrbitSnapInput, mMouseInputVertical;     // Input for orbiting and mouse input
 
 	[SerializeField]
 	private GameObject goHead, goLarm, goRarm, goCar;                                   // Gameobject of the parts
@@ -196,8 +196,9 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 		
 		if(this.isControllable){
 			this.GetInput();
-			this.OrbitRobot();
-			this.Turn();
+//			this.OrbitRobot();
+//			this.Turn();
+			this.MoveToTarget();
 			
 			if (Input.GetMouseButtonDown(0)) {
 				this.goLarm.SendMessage("Shoot", SendMessageOptions.DontRequireReceiver);
@@ -214,8 +215,8 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 
 	// LateUpdate is called after each frame
 	void LateUpdate() {
-		if(this.isControllable)
-			this.MoveToTarget();
+//		if(this.isControllable)
+//			this.MoveToTarget();
 	}
 
 	/****************************** INPUT METHODS *********************/
@@ -280,7 +281,7 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 		Vector3 g;
 		if(this.isGrounded) {
 			this.mVerticalVel = -this.mGravity * Time.deltaTime; 
-			if(Input.GetKeyDown(KeyCode.Space) && this.isGrounded){
+			if(Input.GetButton("Jump") && this.isGrounded){
 				Debug.Log("Jump");
 				this.mVerticalVel = ((Car)mParts[3]).GetJumpPower(); 
 			}
@@ -307,8 +308,8 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 	/// </summary>
 	void MoveToTarget() {
 		if (this.mTorsoTransform) {
-			this.mTargetRotTorso = Quaternion.Euler(0, -this.mOrbit.mYRotation + Camera.main.transform.eulerAngles.y, 0);
-			this.mTorsoTransform.rotation = Quaternion.Lerp(this.mTorsoTransform.rotation, this.mTargetRotTorso, Time.deltaTime * this.mPosition.mLookSmooth);
+//			this.mTargetRotTorso = Quaternion.Euler(0, -this.mOrbit.mYRotation + Camera.main.transform.eulerAngles.y, 0);
+			this.mTorsoTransform.rotation = Quaternion.Lerp(this.mTorsoTransform.rotation, Camera.main.transform.rotation, Time.deltaTime * this.mPosition.mLookSmooth);
 		}
 	}
 	
