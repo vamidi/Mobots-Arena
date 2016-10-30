@@ -36,18 +36,44 @@ public class InputSettings {
 
 public class CameraController : MonoBehaviour {
 
+	/// <summary>
+	/// The target for the camera
+	/// </summary>
 	public Transform mTarget;
+	/// <summary>
+	/// The Robot script
+	/// </summary>
 	public Robot mRobot;
-	public GameObject mTorso;
-
+	/// <summary>
+	/// The position settings
+	/// </summary>
 	public PositionSettings mPosition = new PositionSettings();
+	/// <summary>
+	/// The orbit settings
+	/// </summary>
 	public OrbitSettings mOrbit = new OrbitSettings();
+	/// <summary>
+	/// The input settings
+	/// </summary>
 	public InputSettings mInput = new InputSettings();
 
+	/// <summary>
+	/// The target position
+	/// </summary>
 	private Vector3 mTargetPos = Vector3.zero;
+	/// <summary>
+	/// The destination of the camera
+	/// </summary>
 	private Vector3 mDestination = Vector3.zero;
+	/// <summary>
+	/// Input variables
+	/// </summary>
 	private float mMouseInputVertical, mMouseInputHorizontal, mZoomInput, mOrbitSnapInput;
 
+	/// <summary>
+	/// Sets the camera target.
+	/// </summary>
+	/// <param name="t">T.</param>
 	public void SetCameraTarget(Transform t) {
 		mTarget = t;
 	}
@@ -68,6 +94,9 @@ public class CameraController : MonoBehaviour {
 		
 	}
 
+	/// <summary>
+	/// Inits the rotation.
+	/// </summary>
 	void initRotation() {
 		mTargetPos = mTarget.position + mPosition.mTargetPosOffset;
 		mDestination = Quaternion.Euler(mOrbit.mXRotation, mOrbit.mYRotation + mTarget.eulerAngles.y, 0) * -Vector3.forward * mPosition.mDistanceFromTarget;
@@ -78,14 +107,12 @@ public class CameraController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(mRobot != null && mRobot.isControllable){
+			// Input
 			GetInput();
+			// Orbit the camera
 			OrbitTarget();
+			// Zoom function camera
 			ZoomInOnTarget();
-		}
-	}
-
-	void LateUpdate() {
-		if(mRobot != null && mRobot.isControllable){
 			// moving
 			MoveToTarget();
 			// rotating
@@ -93,27 +120,39 @@ public class CameraController : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Gets the input.
+	/// </summary>
 	void GetInput() {
-		mOrbitSnapInput = Input.GetAxisRaw(mInput.mOrbitHorizontalSnap);
-		mZoomInput = Input.GetAxisRaw(mInput.mZoom);
+		this.mOrbitSnapInput = Input.GetAxisRaw(this.mInput.mOrbitHorizontalSnap);
+		this.mZoomInput = Input.GetAxisRaw(this.mInput.mZoom);
 		// arms movement
 		this.mMouseInputVertical = Input.GetAxisRaw(this.mInput.mMouseVertical);
 		this.mMouseInputHorizontal = Input.GetAxisRaw(this.mInput.mMouseHorizontal);
 	}
 
+	/// <summary>
+	/// Moves to target.
+	/// </summary>
 	void MoveToTarget() {
-		mTargetPos = mTarget.position + mPosition.mTargetPosOffset;
-		mDestination = Quaternion.Euler(mOrbit.mXRotation, mOrbit.mYRotation + mTarget.eulerAngles.y, 0) * -Vector3.forward * mPosition.mDistanceFromTarget;
-		mDestination += mTarget.position;
-		transform.position = mDestination;
+		this.mTargetPos = this.mTarget.position + this.mPosition.mTargetPosOffset;
+		this.mDestination = Quaternion.Euler(this.mOrbit.mXRotation, this.mOrbit.mYRotation + this.mTarget.eulerAngles.y, 0) * -Vector3.forward * this.mPosition.mDistanceFromTarget;
+		this.mDestination += this.mTarget.position;
+		this.transform.position = this.mDestination;
 	}
 
+	/// <summary>
+	/// Looks at target.
+	/// </summary>
 	void LookAtTarget() {
 		Quaternion targetRotation = Quaternion.LookRotation(mTargetPos - transform.position);
 		transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, mPosition.mLookSmooth * Time.deltaTime);
 
 	}
 
+	/// <summary>
+	/// Orbits to the target.
+	/// </summary>
 	void OrbitTarget() {
 		if(mOrbitSnapInput > 0) {
 			mOrbit.mYRotation = -180f;
@@ -134,6 +173,9 @@ public class CameraController : MonoBehaviour {
 
 	}
 
+	/// <summary>
+	/// Zooms in on target.
+	/// </summary>
 	void ZoomInOnTarget() {
 		mPosition.mDistanceFromTarget += mZoomInput * mPosition.mZoomSmooth * Time.deltaTime;
 

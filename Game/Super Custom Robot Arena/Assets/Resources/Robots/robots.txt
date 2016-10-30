@@ -146,6 +146,104 @@
           "owned": true
         }
       }
+    },
+    {
+      "robotname": "Samurai",
+      "parts": {
+        "head": {
+          "stats": {
+            "health": 120,
+            "armor": 120,
+            "armorstrength": 10,
+            "weight": 75
+          },
+          "owned": true
+        },
+        "left": {
+          "stats": {
+            "health": 120,
+            "armor": 120,
+            "armorstrength": 10,
+            "weight": 75,
+            "damageperround": 3,
+            "roudspersecond": 4,
+            "accuracy": 2
+          },
+          "owned": true
+        },
+        "right": {
+          "stats": {
+            "health": 120,
+            "armor": 120,
+            "armorstrength": 10,
+            "weight": 75,
+            "damageperround": 7, 
+            "roudspersecond": 2, 
+            "accuracy": 5
+          },
+          "owned": true
+        },
+        "car": {
+          "stats": {
+            "health": 120,
+            "armor": 120,
+            "armorstrength": 10,
+            "weight": 75, 
+            "speed":8,
+            "jumpstrength":15
+          },
+          "owned": true
+        }
+      }
+    },
+    {
+      "robotname": "MKVI",
+      "parts": {
+        "head": {
+          "stats": {
+            "health": 120,
+            "armor": 120,
+            "armorstrength": 10,
+            "weight": 75
+          },
+          "owned": true
+        },
+        "left": {
+          "stats": {
+            "health": 120,
+            "armor": 120,
+            "armorstrength": 10,
+            "weight": 75,
+            "damageperround": 3,
+            "roudspersecond": 4,
+            "accuracy": 2
+          },
+          "owned": true
+        },
+        "right": {
+          "stats": {
+            "health": 120,
+            "armor": 120,
+            "armorstrength": 10,
+            "weight": 75,
+            "damageperround": 7, 
+            "roudspersecond": 2, 
+            "accuracy": 5
+          },
+          "owned": true
+        },
+        "car": {
+          "stats": {
+            "health": 120,
+            "armor": 120,
+            "armorstrength": 10,
+            "weight": 75, 
+            "speed":8,
+            "jumpstrength":15
+          },
+          "owned": true
+        }
+      }
     }
   ]
 }

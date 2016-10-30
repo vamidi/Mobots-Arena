@@ -39,7 +39,7 @@ public class Arm : Part {
 	}
 
 	// Use this for initialization
-	protected virtual void Start () {
+	protected override void Start () {
 		this.mRobot = GameObject.FindObjectOfType<Robot>();
 		this.mOrbit.mVorbitSmooth = 5f;
 		this.mOrbit.mMinXRotation = -30f;
@@ -47,7 +47,7 @@ public class Arm : Part {
 	}
 	
 	// Update is called once per frame
-	protected virtual void Update () {
+	protected override void Update () {
 		if(mRobot.isControllable)
 			this.GetInput();
 	}

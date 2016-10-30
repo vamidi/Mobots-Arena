@@ -6,42 +6,112 @@ using System;
 public class Robot : MonoBehaviour { // IDamageable<float> 
 
 	/****************************** PUBLIC PROPERTIES *********************/
-	public bool isControllable = true;                                                  // To see if the player is controllable
-	public string mName = "Henk de tank";                                               // Name of the robot
-	public string mHeadTag = "";                                                        // Tag for the head
-	public string mLarmTag = "";                                                        // Tag for the left arm
-	public string mRamTag = "";                                                         // Tag for the right arm
-	public string mCarTag = "";                                                         // Tag for the car
-	public string mGroundTag = "";
 	
-	public float mInputDelay = 0.1f;                                                    // Small delay deadzone
-	public float mRotateVel = 100f;                                                     // How fast we are going to rotate
+	/// <summary>
+	/// To see if the player is controllable
+	/// </summary>
+	public bool isControllable = true;  
+	/// <summary>
+	/// Name of the robot
+	/// </summary>
+	public string mName = "Henk de tank";                                               
+	/// <summary>
+	/// Tag for the head
+	/// </summary>
+	public string mHeadTag = "";                                                        
+	/// <summary>
+	/// Tag for the left arm
+	/// </summary>
+	public string mLarmTag = "";                                                   
+	/// <summary>
+	/// Tag for the right arm
+	/// </summary>
+	public string mRamTag = "";                                            
+	/// <summary>
+	/// Tag for the car
+	/// </summary>
+	public string mCarTag = "";                                                         
+	/// <summary>
+	/// Tag for the floor
+	/// </summary>
+	public string mGroundTag = "";	
+	/// <summary>
+	/// Deadzone foor the input
+	/// </summary>
+	public float mInputDelay = 0.1f;                                               
+	/// <summary>
+	/// The velocity of the robot
+	/// how fast he me turn.
+	/// </summary>
+	public float mRotateVel = 100f;                                                     
 
-	public Transform mTorsoTransform;                                                   // The transform of the torso                                          
+	/// <summary>
+	/// The torso of the robot
+	/// </summary>
+	public Transform mTorsoTransform;                                                                                             
 
-	public PositionSettings mPosition = new PositionSettings();                         // Class for the position settings
-	public OrbitSettings mOrbit = new OrbitSettings();                                  // Class for the orbit settings
+	/// <summary>
+	/// Position settings
+	/// </summary>
+	public PositionSettings mPosition = new PositionSettings();                        
+	/// <summary>
+	/// Class for the orbit settings
+	/// </summary>
+	public OrbitSettings mOrbit = new OrbitSettings();                                  
 
 	/****************************** PRIVATE PROPERTIES *********************/
 	
+	/// <summary>
+	/// The class for the input settings
+	/// </summary>
 	[SerializeField]
-	private InputSettings mInput = new InputSettings();                                 // Input class to get all input
-	private Quaternion mTargetRot, mTargetRotTorso;                                     // Target rotation
+	private InputSettings mInput = new InputSettings();     
+	/// <summary>
+	/// Target rotaion variables
+	/// </summary>
+	private Quaternion mTargetRot, mTargetRotTorso;                                     
+	/// <summary>
+	/// Rigidbody of the robot
+	/// </summary>
 	[SerializeField]                    
-	private Rigidbody mRigidbody;                                                       // Rigidbody of the player
+	private Rigidbody mRigidbody;
+	/// <summary>
+	/// Forward, RotateInput calculations
+	/// </summary>
 	[SerializeField]
-	private float mForwardInput, mRotateInput;                                          // Forward, RotateInput calculations
+	private float mForwardInput, mRotateInput;                                    
+	/// <summary>
+	/// The mass of the robot
+	/// </summary>
 	[SerializeField]
-	private int mMass = 10;                                                             // The mass of the robot
+	private int mMass = 10;                                                             
 
+	/// <summary>
+	/// Vertical velocity
+	/// </summary>
 	private float mVerticalVel;
+	/// <summary>
+	/// The gravity
+	/// </summary>
 	private float mGravity = -14.0f;
+	/// <summary>
+	/// To see if the player is grounded
+	/// </summary>
 	private bool isGrounded = false;
-	private float mVOrbitInput, mHOrbitInput, mOrbitSnapInput, mMouseInputVertical;     // Input for orbiting and mouse input
+	/// <summary>
+	/// Input variables
+	/// </summary>
+	private float mVOrbitInput, mHOrbitInput, mOrbitSnapInput;
 
+	/// <summary>
+	/// Gameobject of the parts
+	/// </summary>
 	[SerializeField]
-	private GameObject goHead, goLarm, goRarm, goCar;                                   // Gameobject of the parts
+	private GameObject goHead, goLarm, goRarm, goCar;                                   
 
+	/// <summary>
+	/// Classes of the parts
+	/// </summary>
 	[SerializeField]
 	private Part[] mParts= new Part[4];                                                 // Classes of the parts
 		
@@ -196,9 +266,8 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 		
 		if(this.isControllable){
 			this.GetInput();
-//			this.OrbitRobot();
-//			this.Turn();
-			this.MoveToTarget();
+			this.OrbitRobot();
+			this.Turn();
 			
 			if (Input.GetMouseButtonDown(0)) {
 				this.goLarm.SendMessage("Shoot", SendMessageOptions.DontRequireReceiver);
@@ -215,8 +284,8 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 
 	// LateUpdate is called after each frame
 	void LateUpdate() {
-//		if(this.isControllable)
-//			this.MoveToTarget();
+		if(this.isControllable)
+			this.MoveToTarget();
 	}
 
 	/****************************** INPUT METHODS *********************/
@@ -230,13 +299,10 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 		this.mForwardInput = Input.GetAxis(this.mInput.mVertical);
 		this.mRotateInput = Input.GetAxis(mInput.mHorizontal);
 
-		// body rotation
-		this.mVOrbitInput = Input.GetAxisRaw(this.mInput.mMouseVertical);
-		this.mHOrbitInput = Input.GetAxisRaw(this.mInput.mMouseHorizontal);
-		this.mOrbitSnapInput = Input.GetAxisRaw(this.mInput.mOrbitHorizontalSnap);
-		
-		// arms movement
-		this.mMouseInputVertical = Input.GetAxisRaw(this.mInput.mMouseVertical);
+		// body + arms rotation
+		this.mVOrbitInput = Input.GetAxis(this.mInput.mMouseVertical);
+		this.mHOrbitInput = Input.GetAxis(this.mInput.mMouseHorizontal);
+		this.mOrbitSnapInput = Input.GetAxis(this.mInput.mOrbitHorizontalSnap);
 	}
 
 	/****************************** ROTATION METHODS *********************/
@@ -264,6 +330,16 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 	}
 
 	/// <summary>
+	/// Applying the rotation to the torso
+	/// </summary>
+	void MoveToTarget() {
+		if (this.mTorsoTransform) {
+			//			this.mTargetRotTorso = Quaternion.Euler(0, -this.mOrbit.mYRotation + Camera.main.transform.eulerAngles.y, 0);
+			this.mTorsoTransform.rotation = Quaternion.Lerp(this.mTorsoTransform.rotation, Camera.main.transform.rotation, Time.deltaTime * this.mPosition.mLookSmooth);
+		}
+	}
+	
+	/// <summary>
 	/// This method is for to turn the robot
 	/// </summary>
 	void Turn() {
@@ -282,7 +358,7 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 		if(this.isGrounded) {
 			this.mVerticalVel = -this.mGravity * Time.deltaTime; 
 			if(Input.GetButton("Jump") && this.isGrounded){
-				Debug.Log("Jump");
+//				Debug.Log("Jump");
 				this.mVerticalVel = ((Car)mParts[3]).GetJumpPower(); 
 			}
 		}else{
@@ -302,25 +378,13 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 		this.mRigidbody.velocity += g;
 
 	}
-
-	/// <summary>
-	/// Applying the rotation to the torso
-	/// </summary>
-	void MoveToTarget() {
-		if (this.mTorsoTransform) {
-//			this.mTargetRotTorso = Quaternion.Euler(0, -this.mOrbit.mYRotation + Camera.main.transform.eulerAngles.y, 0);
-			this.mTorsoTransform.rotation = Quaternion.Lerp(this.mTorsoTransform.rotation, Camera.main.transform.rotation, Time.deltaTime * this.mPosition.mLookSmooth);
-		}
-	}
 	
-	//make sure u replace "floor" with your gameobject name.on which player is standing
 	void OnCollisionEnter(Collision col){
 		if(col.gameObject.tag == mGroundTag) {
 			isGrounded = true;
 		}
 	}
 
-	//consider when character is jumping .. it will exit collision.
 	void OnCollisionExit(Collision col){
 		if(col.gameObject.tag == mGroundTag) {
 			isGrounded = false;
