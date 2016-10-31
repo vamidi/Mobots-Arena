@@ -21,7 +21,6 @@ public class Arm : Part {
 	protected InputSettings mInput = new InputSettings();
 	[SerializeField]
 	protected OrbitSettings mOrbit = new OrbitSettings();
-	protected Robot mRobot;
 	protected float currentXrotation;
 	protected float refRotateVel;
 	protected float dampVel = 0.1f;
@@ -39,15 +38,14 @@ public class Arm : Part {
 	}
 
 	// Use this for initialization
-	protected override void Start () {
-		this.mRobot = GameObject.FindObjectOfType<Robot>();
+	protected virtual void Start () {
 		this.mOrbit.mVorbitSmooth = 5f;
 		this.mOrbit.mMinXRotation = -30f;
 		this.mOrbit.mMaxXRotation = 30f;
 	}
 	
 	// Update is called once per frame
-	protected override void Update () {
+	protected virtual void Update () {
 		if(mRobot.isControllable)
 			this.GetInput();
 	}

@@ -3,10 +3,10 @@ using System.Collections;
 using System;
 
 public class Larm : Arm { 
-
+	
 	// Use this for initialization
 	protected override void Start () {
-		base.Start ();
+		base.Start();
 		this.mPart = PART.LARM;
 	}
 	

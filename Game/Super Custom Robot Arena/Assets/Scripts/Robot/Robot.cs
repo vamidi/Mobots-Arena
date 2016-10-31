@@ -14,7 +14,11 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 	/// <summary>
 	/// Name of the robot
 	/// </summary>
-	public string mName = "Henk de tank";                                               
+	public string mName = "Henk de tank";
+	/// <summary>
+	/// The armor of the robot
+	/// </summary>
+	public float mArmor = 100f;
 	/// <summary>
 	/// Tag for the head
 	/// </summary>
@@ -49,23 +53,34 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 	/// The torso of the robot
 	/// </summary>
 	public Transform mTorsoTransform;                                                                                             
-
+	
 	/// <summary>
-	/// Position settings
+	/// The ground.
 	/// </summary>
-	public PositionSettings mPosition = new PositionSettings();                        
-	/// <summary>
-	/// Class for the orbit settings
-	/// </summary>
-	public OrbitSettings mOrbit = new OrbitSettings();                                  
-
+	public LayerMask Ground;
+	
 	/****************************** PRIVATE PROPERTIES *********************/
 	
 	/// <summary>
 	/// The class for the input settings
 	/// </summary>
 	[SerializeField]
-	private InputSettings mInput = new InputSettings();     
+	private InputSettings mInput = new InputSettings();
+	/// <summary>
+	/// Position settings
+	/// </summary>
+	[SerializeField]
+	public PositionSettings mPosition = new PositionSettings();                        
+	/// <summary>
+	/// Class for the orbit settings
+	/// </summary>
+	[SerializeField]
+	public OrbitSettings mOrbit = new OrbitSettings();                                  
+	/// <summary>
+	/// The m physics.
+	/// </summary>
+	[SerializeField]
+	public PhysicSettings mPhysics = new PhysicSettings();
 	/// <summary>
 	/// Target rotaion variables
 	/// </summary>
@@ -76,28 +91,24 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 	[SerializeField]                    
 	private Rigidbody mRigidbody;
 	/// <summary>
+	/// The m velocity.
+	/// </summary>
+	private Vector3 mVelocity = Vector3.zero;
+	/// <summary>
 	/// Forward, RotateInput calculations
 	/// </summary>
 	[SerializeField]
-	private float mForwardInput, mRotateInput;                                    
+	private float mForwardInput, mRotateInput, mJumpInput;                                    
 	/// <summary>
 	/// The mass of the robot
 	/// </summary>
 	[SerializeField]
-	private int mMass = 10;                                                             
+	private int mMass;                                                             
 
 	/// <summary>
 	/// Vertical velocity
 	/// </summary>
 	private float mVerticalVel;
-	/// <summary>
-	/// The gravity
-	/// </summary>
-	private float mGravity = -14.0f;
-	/// <summary>
-	/// To see if the player is grounded
-	/// </summary>
-	private bool isGrounded = false;
 	/// <summary>
 	/// Input variables
 	/// </summary>
@@ -113,14 +124,25 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 	/// Classes of the parts
 	/// </summary>
 	[SerializeField]
-	private Part[] mParts= new Part[4];                                                 // Classes of the parts
+	private Part[] mParts= new Part[4];                                      
 		
 	/****************************** PUBLIC METHODS *********************/
 	
+	/// <summary>
+	/// Returns the rotation.
+	/// </summary>
+	/// <value>The target rotation.</value>
 	public Quaternion TargetRotation {
 		get { return mTargetRot;  }
 	}
 
+	/// <summary>
+	/// Change the part of the robot.
+	/// </summary>
+	/// <param name="part">Part.</param>
+	/// <param name="robotName">Robot name.</param>
+	/// <param name="newObj">New object.</param>
+	/// <param name="callBack">Call back.</param>
 	public void SetRobot(PART part, string robotName, GameObject newObj, mAssignValues callBack){
 		switch (part) {
 			case PART.HEAD:
@@ -135,14 +157,15 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 					Destroy (goHead);
 					goHead = holder;
 					
-					goLarm.transform.position = GameObject.Find("larm_spawn").transform.position;
-					goRarm.transform.position = GameObject.Find("rarm_spawn").transform.position;
+					goLarm.transform.localPosition = GameObject.Find("larm_spawn").transform.localPosition;
+					goRarm.transform.localPosition = GameObject.Find("rarm_spawn").transform.localPosition;
 				}
 				break;
 			case PART.LARM:
 				if (newObj.name != goHead.name) {
 					Transform parent = goLarm.transform.parent;
-					GameObject holder = (GameObject)Instantiate (newObj, GameObject.Find("larm_spawn").transform.position, goLarm.transform.rotation);
+					GameObject holder = (GameObject)Instantiate (newObj, goLarm.transform.position, goLarm.transform.rotation);
+					//holder.transform.localPosition = GameObject.Find("larm_spawn").transform.localPosition;
 					holder.name = newObj.name;
 					holder.tag = mLarmTag;
 					holder.AddComponent<Larm>();
@@ -155,7 +178,7 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 			case PART.RARM:
 				if (newObj.name != goHead.name) {
 					Transform parent = goRarm.transform.parent;
-					GameObject holder = (GameObject)Instantiate (newObj, GameObject.Find("rarm_spawn").transform.position, goRarm.transform.rotation);
+					GameObject holder = (GameObject)Instantiate (newObj, goRarm.transform.position, goRarm.transform.rotation);
 					holder.name = newObj.name;
 					holder.tag = mRamTag;
 					holder.AddComponent<Rarm>();
@@ -183,6 +206,12 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 		callBack (part, robotName);
 	}
 
+	/// <summary>
+	/// Sets the correct values to the right part
+	/// </summary>
+	/// <param name="part">Part.</param>
+	/// <param name="method">Method.</param>
+	/// <param name="value">Value.</param>
 	public void SetValue(PART part, string method = "", object value = null) {
 
 		if (method == "" || value == null)
@@ -204,21 +233,29 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 		}
 	}
 	
+	/// <summary>
+	/// Gets the mass of the robot/
+	/// </summary>
+	/// <returns>The robot mass.</returns>
+	public int GetRobotMass(){
+		return this.mMass;
+	}
+	
 	/****************************** UNITY METHODS *********************/
 	
-	// Use this for initialization
-	void Start () {
+	/// <summary>
+	/// See if the player is grounded
+	/// </summary>
+	bool Grounded(){
+		return Physics.Raycast(this.transform.position, Vector3.down, mPhysics.mDistToGround, Ground);
+	}
+	
+	void Awake() {
 		DontDestroyOnLoad(this.gameObject);
 		DontDestroyOnLoad(this.goHead);
 		DontDestroyOnLoad(this.goLarm);
 		DontDestroyOnLoad(this.goRarm);
 		DontDestroyOnLoad(this.goCar);
-		
-		this.mTargetRot = this.transform.rotation;
-		this.mRigidbody = this.GetComponent<Rigidbody>();
-
-		if (!mRigidbody)
-			Debug.LogError("Character needs Rigidbody");
 		
 		foreach( Transform child in this.transform){
 			if (child.gameObject.tag == this.mCarTag) {
@@ -239,25 +276,38 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 				}
 			}
 		}
+	}
+	
+	// Use this for initialization
+	void Start () {
+	
+		this.mTargetRot = this.transform.rotation;
+		this.mRigidbody = this.GetComponent<Rigidbody>();
+
+		if (!mRigidbody)
+			Debug.LogError("Character needs Rigidbody");
 
 		this.mParts [0] = this.goHead.GetComponent<Head> ();
 		this.mParts [1] = this.goLarm.GetComponent<Larm> ();
 		this.mParts [2] = this.goRarm.GetComponent<Rarm> ();
 		this.mParts [3] = this.goCar.GetComponent<Car> ();
-
-		if (!this.mParts[0] || this.mParts [0].GetPart () != PART.HEAD)
+		
+		if (this.mParts [0].GetPart () != PART.HEAD)
 			Debug.LogError ("The part is not a head part");
-
-		if (!this.mParts[1] || this.mParts [1].GetPart () != PART.LARM)
+		
+		if (this.mParts [1].GetPart () != PART.LARM)
 			Debug.LogError ("The part is not a left arm part");
 
-		if (!this.mParts[2] || this.mParts [2].GetPart () != PART.RARM)
+		if (this.mParts [2].GetPart () != PART.RARM)
 			Debug.LogError ("The part is not a right arm part");
 
-		if (!this.mParts[3] || this.mParts [3].GetPart () != PART.CAR)
+		if (this.mParts [3].GetPart () != PART.CAR)
 			Debug.LogError ("The part is not a car part");
 		
-		mForwardInput = mRotateInput = 0;		
+		mForwardInput = mRotateInput = mJumpInput = 0;	
+		
+		this.mMass =  this.mParts [0].mRobotWegith + this.mParts [1].mRobotWegith + this.mParts [2].mRobotWegith + this.mParts [3].mRobotWegith;
+		((Car)this.mParts[3]).SetSpeed(1825);
 		
 	}
 
@@ -278,8 +328,12 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 
 	// FixedUpdate is called 
 	void FixedUpdate() {
-		if(this.isControllable)
+		if(this.isControllable){
 			this.Move();
+			this.Jump();
+			
+			this.mRigidbody.velocity = this.transform.TransformDirection(this.mVelocity);
+		}
 	}
 
 	// LateUpdate is called after each frame
@@ -303,6 +357,9 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 		this.mVOrbitInput = Input.GetAxis(this.mInput.mMouseVertical);
 		this.mHOrbitInput = Input.GetAxis(this.mInput.mMouseHorizontal);
 		this.mOrbitSnapInput = Input.GetAxis(this.mInput.mOrbitHorizontalSnap);
+		
+		// Jump movement
+		this.mJumpInput = Input.GetAxisRaw(this.mInput.mJump);
 	}
 
 	/****************************** ROTATION METHODS *********************/
@@ -334,7 +391,7 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 	/// </summary>
 	void MoveToTarget() {
 		if (this.mTorsoTransform) {
-			//			this.mTargetRotTorso = Quaternion.Euler(0, -this.mOrbit.mYRotation + Camera.main.transform.eulerAngles.y, 0);
+			// this.mTargetRotTorso = Quaternion.Euler(0, -this.mOrbit.mYRotation + Camera.main.transform.eulerAngles.y, 0);
 			this.mTorsoTransform.rotation = Quaternion.Lerp(this.mTorsoTransform.rotation, Camera.main.transform.rotation, Time.deltaTime * this.mPosition.mLookSmooth);
 		}
 	}
@@ -354,40 +411,24 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 	/// Movement of the robot
 	/// </summary>
 	void Move() {
-		Vector3 g;
-		if(this.isGrounded) {
-			this.mVerticalVel = -this.mGravity * Time.deltaTime; 
-			if(Input.GetButton("Jump") && this.isGrounded){
-//				Debug.Log("Jump");
-				this.mVerticalVel = ((Car)mParts[3]).GetJumpPower(); 
-			}
-		}else{
-			this.mVerticalVel += mGravity * Time.deltaTime;
-		}
-		
-		g = new Vector3(0, this.mVerticalVel, 0);
-
-		
 		if(Mathf.Abs(this.mForwardInput) > this.mInputDelay) {
 			// Move the player
-			this.mRigidbody.velocity = transform.forward * this.mForwardInput * ((Car)this.mParts[3]).GetSpeed();
+			this.mVelocity.z = this.mForwardInput * ((Car)this.mParts[3]).GetSpeed();
 		} else {
-			this.mRigidbody.velocity = Vector3.zero;
+			this.mVelocity.z = 0;
 		}
-		
-		this.mRigidbody.velocity += g;
-
 	}
 	
-	void OnCollisionEnter(Collision col){
-		if(col.gameObject.tag == mGroundTag) {
-			isGrounded = true;
-		}
-	}
-
-	void OnCollisionExit(Collision col){
-		if(col.gameObject.tag == mGroundTag) {
-			isGrounded = false;
+	/// <summary>
+	/// Jump this instance.
+	/// </summary>
+	void Jump(){
+		if(mJumpInput > 0 && Grounded()){
+			this.mVelocity.y = mPhysics.mJumpVel;
+		}else if(mJumpInput == 0 && Grounded()){
+			mVelocity.y = 0;
+		}else{
+			this.mVelocity.y -= mPhysics.mDownAcc;
 		}
 	}
 }

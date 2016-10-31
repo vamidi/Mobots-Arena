@@ -10,10 +10,18 @@ public enum PART {
 }
 
 public class Part : MonoBehaviour {
-
+	
+	/// <summary>
+	/// The weight of the part
+	/// </summary>
+	public int mRobotWegith = 75;	
+	
+	protected Robot mRobot = null;
+	
 	/// <summary>
 	/// This is needed to tell the robot which part this is.
 	/// </summary>
+	[SerializeField]
 	protected PART mPart = PART.HEAD;
 
 	/// <summary>
@@ -33,25 +41,21 @@ public class Part : MonoBehaviour {
 	protected float mHealth = 100f;
 
 	/// <summary>
-	/// The armor of the robot
+	/// The health of the armor
 	/// </summary>
 	[SerializeField]
-	protected float mArmor = 100f;
-
+	private float mArmorHealth = 100f;
+	
 	/// <summary>
 	/// The strength that the armor has (0 to 100%)
 	/// </summary>
 	[SerializeField]
-	protected float mArmorStrength = 5f;
-
-	[SerializeField]
-	protected int mRobotWegith = 50;
+	private float mArmorStrength = 5f;
 
 	/// <summary>
 	/// The weapon of the robot
 	/// </summary>
 	protected GameObject weapon = null;
-
 
 	public PART GetPart(){
 		return this.mPart;
@@ -61,25 +65,19 @@ public class Part : MonoBehaviour {
 		this.mHealth = health;
 	}
 
-	public void SetArmor(float armor){
-		this.mArmor = armor;
-	}
-
-	public void SetStrength(float strength){
-		this.mArmorStrength = strength;
-	}
-
 	public void SetWeight(int weight){
 		this.mRobotWegith = weight;
 	}
-
-	// Use this for initialization
-	protected virtual void Start () {
 	
+	public void SetArmor(float armor){
+		this.mArmorHealth = armor;
 	}
 	
-	// Update is called once per frame
-	protected virtual void Update () {
+	public void SetStrength(float strength){
+		this.mArmorStrength = strength;
+	}
 	
+	void Awake(){
+		this.mRobot = GameObject.FindObjectOfType<Robot>();
 	}
 }

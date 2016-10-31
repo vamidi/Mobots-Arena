@@ -5,7 +5,7 @@ public class Rarm : Arm {
 
 	// Use this for initialization
 	protected override void Start () {
-		base.Start ();
+		base.Start();
 		this.mPart = PART.RARM;
 	}
 	

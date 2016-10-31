@@ -29,9 +29,17 @@ public class InputSettings {
 	public string mVertical = "Vertical";
 	public string mHorizontal = "Horizontal";
 	public string mFire = "Fire1";
+	public string mJump = "Jump";
 
 	public string mMouseHorizontal = "Mouse X";
 	public string mMouseVertical = "Mouse Y";
+}
+
+[System.Serializable]
+public class PhysicSettings {
+	public float mJumpVel = 25f;
+	public float mDownAcc = 1.25f;
+	public float mDistToGround = 0.1f;
 }
 
 public class CameraController : MonoBehaviour {

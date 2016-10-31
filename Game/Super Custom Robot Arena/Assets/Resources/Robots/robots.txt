@@ -1,147 +1,43 @@
 {
   "robots": [
     {
-      "robotname": "Henk",
-      "parts": {
-        "head": {
-          "stats": {
-            "health": 120,
-            "armor": 120,
-            "armorstrength": 10,
-            "weight": 75
-          },
-          "owned": true
-        },
-        "left": {
-          "stats": {
-            "health": 120,
-            "armor": 120,
-            "armorstrength": 10,
-            "weight": 75,
-            "damageperround": 3,
-            "roudspersecond": 4,
-            "accuracy": 2
-          },
-          "owned": true
-        },
-        "right": {
-          "stats": {
-            "health": 120,
-            "armor": 120,
-            "armorstrength": 10,
-            "weight": 75,
-            "damageperround": 7, 
-            "roudspersecond": 2, 
-            "accuracy": 5
-          },
-          "owned": true
-        },
-        "car": {
-          "stats": {
-            "health": 120,
-            "armor": 120,
-            "armorstrength": 10,
-            "weight": 75, 
-            "speed":8,
-            "jumpstrength":15
-          },
-          "owned": true
-        }
-      }
-    },
-    {
-      "robotname": "Red_Robot",
-      "parts": {
-        "head": {
-          "stats": {
-            "health": 100,
-            "armor": 100,
-            "armorstrength": 5,
-            "weight": 50
-          },
-          "owned": true
-        },
-        "left": {
-          "stats": {
-            "health": 100,
-            "armor": 100,
-            "armorstrength": 5,
-            "weight": 50,
-            "damageperround": 5, 
-            "roudspersecond": 1, 
-            "accuracy": 3
-          },
-          "owned": true
-        },
-        "right": {
-          "stats":{
-            "health": 100,
-            "armor": 100,
-            "armorstrength": 5,
-            "weight": 50,
-            "damageperround": 5, 
-            "roudspersecond": 1, 
-            "accuracy": 3
-          },
-          "owned": true
-        },
-        "car": {
-          "stats":{
-            "health": 100,
-            "armor": 100,
-            "armorstrength": 5,
-            "weight": 50, 
-            "speed":5,
-            "jumpstrength":15
-          },
-          "owned": true
-        }
-      }
-    },
-    {
       "robotname": "Dino",
       "parts": {
         "head": {
           "stats": {
-            "health": 120,
-            "armor": 120,
-            "armorstrength": 10,
-            "weight": 75
+            "hitpoints": 180,
+            "shieldhitpoints": 95,
+            "shieldstrength": 15,
+            "weight": 115
           },
           "owned": true
         },
         "left": {
           "stats": {
-            "health": 120,
-            "armor": 120,
-            "armorstrength": 10,
-            "weight": 75,
-            "damageperround": 3,
-            "roudspersecond": 4,
-            "accuracy": 2
+            "hitpoints": 155,
+            "weight": 90,
+            "damageperround": 20,
+            "roundspersecond": 0.9,
+            "accuracy": 0.9
           },
           "owned": true
         },
         "right": {
           "stats": {
-            "health": 120,
-            "armor": 120,
-            "armorstrength": 10,
-            "weight": 75,
-            "damageperround": 7, 
-            "roudspersecond": 2, 
-            "accuracy": 5
+            "hitpoints": 155,
+            "weight": 90,
+            "damageperround": 20, 
+            "roundspersecond": 0.9, 
+            "accuracy": 0.9
           },
           "owned": true
         },
         "car": {
           "stats": {
-            "health": 120,
-            "armor": 120,
-            "armorstrength": 10,
-            "weight": 75, 
-            "speed":8,
-            "jumpstrength":15
+            "hitpoints": 175,
+            "weight": 100, 
+            "speed":1800,
+            "jumpstrength":1800
           },
           "owned": true
         }
@@ -152,45 +48,39 @@
       "parts": {
         "head": {
           "stats": {
-            "health": 120,
-            "armor": 120,
-            "armorstrength": 10,
-            "weight": 75
+            "hitpoints": 115,
+            "shieldhitpoints": 75,
+            "shieldstrength": 30,
+            "weight": 80
           },
           "owned": true
         },
         "left": {
           "stats": {
-            "health": 120,
-            "armor": 120,
-            "armorstrength": 10,
-            "weight": 75,
-            "damageperround": 3,
-            "roudspersecond": 4,
-            "accuracy": 2
+            "hitpoints": 105,
+            "weight": 65,
+            "damageperround": 5,
+            "roundspersecond": 4,
+            "accuracy": 0.5
           },
           "owned": true
         },
         "right": {
           "stats": {
-            "health": 120,
-            "armor": 120,
-            "armorstrength": 10,
-            "weight": 75,
-            "damageperround": 7, 
-            "roudspersecond": 2, 
-            "accuracy": 5
+            "hitpoints": 105,
+            "weight": 65,
+            "damageperround": 5, 
+            "roundspersecond": 4, 
+            "accuracy": 0.5
           },
           "owned": true
         },
         "car": {
           "stats": {
-            "health": 120,
-            "armor": 120,
-            "armorstrength": 10,
-            "weight": 75, 
-            "speed":8,
-            "jumpstrength":15
+            "hitpoints": 110,
+            "weight": 70, 
+            "speed":1960,
+            "jumpstrength":1960
           },
           "owned": true
         }
@@ -201,45 +91,39 @@
       "parts": {
         "head": {
           "stats": {
-            "health": 120,
-            "armor": 120,
-            "armorstrength": 10,
-            "weight": 75
+            "hitpoints": 130,
+            "shieldhitpoints": 85,
+            "shieldstrength": 25,
+            "weight": 90
           },
           "owned": true
         },
         "left": {
           "stats": {
-            "health": 120,
-            "armor": 120,
-            "armorstrength": 10,
+            "hitpoints": 115,
             "weight": 75,
-            "damageperround": 3,
-            "roudspersecond": 4,
-            "accuracy": 2
+            "damageperround": 15,
+            "roundspersecond": 1,
+            "accuracy": 0.8
           },
           "owned": true
         },
         "right": {
           "stats": {
-            "health": 120,
-            "armor": 120,
-            "armorstrength": 10,
+            "hitpoints": 115,
             "weight": 75,
-            "damageperround": 7, 
-            "roudspersecond": 2, 
-            "accuracy": 5
+            "damageperround": 15, 
+            "roundspersecond": 1, 
+            "accuracy": 0.8
           },
           "owned": true
         },
         "car": {
           "stats": {
-            "health": 120,
-            "armor": 120,
-            "armorstrength": 10,
-            "weight": 75, 
-            "speed":8,
-            "jumpstrength":15
+            "hitpoints": 120,
+            "weight": 85, 
+            "speed":1825,
+            "jumpstrength":1825
           },
           "owned": true
         }
