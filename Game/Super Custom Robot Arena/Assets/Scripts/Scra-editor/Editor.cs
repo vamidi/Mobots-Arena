@@ -65,14 +65,6 @@ public class Editor : MonoBehaviour {
 	/// The robot class
 	/// </summary>
 	private Robot mRobot = null;
-	/// <summary>
-	/// Loading text
-	/// </summary>
-	private string loadProgress = "Loading...";
-	/// <summary>
-	/// The last loaded progress.
-	/// </summary>
-	private string lastLoadProgress = null;
 	
 	/// <summary>
 	/// Catch the click event of the buttons
@@ -82,7 +74,7 @@ public class Editor : MonoBehaviour {
 		prevLocation = mLocation;
 		mLocation = location;
 	}
-
+	
 	public void OnSlotClick(int location){
 		PART[] parts = new PART[4] {PART.HEAD, PART.LARM, PART.RARM, PART.CAR};
 		for(int i = 0; i < parts.Length; i++){
@@ -98,7 +90,7 @@ public class Editor : MonoBehaviour {
 	/// <param name="robot">Robot.</param>
 	public void PlayGame(){
 		mRobot.gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
-		StartCoroutine(LoadRoutine());
+		StartCoroutine(GameUtilities.LoadLevelAsync("game_scene"));
 		this.mRobot.isControllable = true;
 	}
 	
@@ -158,33 +150,6 @@ public class Editor : MonoBehaviour {
 		if (this.mAssign != null && this.mRobot != null && holder != null && part != PART.UNASSIGNED )
 			// Change the robot part with the new object (assign is a callback)
 			this.mRobot.SetRobot (part, robotName, holder, this.mAssign);
-	}
-
-	/// <summary>
-	/// Async loader for the level
-	/// </summary>
-	/// <returns>The routine.</returns>
-	private IEnumerator LoadRoutine() {
-		AsyncOperation op = SceneManager.LoadSceneAsync ("game_scene");
-		op.allowSceneActivation = false;
-		while (!op.isDone) {
-			if (op.progress < 0.9f)
-			{
-				loadProgress = "Loading: " + (op.progress * 100f).ToString("F0") + "%";
-			}
-			else // if progress >= 0.9f the scene is loaded and is ready to activate.
-			{
-				if (Input.anyKeyDown)
-				{
-					op.allowSceneActivation = true;
-				}
-				loadProgress = "Loading ready for activation, Press any key to continue";
-			}
-			if (lastLoadProgress != loadProgress) { lastLoadProgress = loadProgress; Debug.Log(loadProgress); } // Don't spam console.
-			yield return null;
-		}
-		loadProgress = "Load complete.";
-		Debug.Log(loadProgress);
 	}
 	
 	// Awake is called before Start

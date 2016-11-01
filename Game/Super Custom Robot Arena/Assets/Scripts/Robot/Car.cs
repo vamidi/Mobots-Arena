@@ -14,13 +14,14 @@ public class Car : Part {
 	private float mJumpForce = 5f;
 
 	// Use this for initialization
-	protected void Start () {
+	protected override void Start () {
+		base.Start();
 		this.mPart = PART.CAR;
 	}
 	
 	// Update is called once per frame
-	protected void Update () {
-		
+	protected override void Update () {
+		base.Update();
 	}
 	
 	public float GetSpeed(){

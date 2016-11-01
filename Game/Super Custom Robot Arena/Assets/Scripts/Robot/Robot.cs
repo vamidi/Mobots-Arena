@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Robot : MonoBehaviour { // IDamageable<float> 
+public class Robot : MonoBehaviour {
 
 	/****************************** PUBLIC PROPERTIES *********************/
 	
@@ -241,6 +241,10 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 		return this.mMass;
 	}
 	
+	public Part GetPart(int index){
+		return mParts[index];
+	}
+	
 	/****************************** UNITY METHODS *********************/
 	
 	/// <summary>
@@ -319,10 +323,6 @@ public class Robot : MonoBehaviour { // IDamageable<float>
 			this.OrbitRobot();
 			this.Turn();
 			
-			if (Input.GetMouseButtonDown(0)) {
-				this.goLarm.SendMessage("Shoot", SendMessageOptions.DontRequireReceiver);
-				this.goRarm.SendMessage("Shoot", SendMessageOptions.DontRequireReceiver);
-			}
 		}
 	}
 

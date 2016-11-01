@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Arm : Part {
+public class Arm : Part, IShootable {
+	
+	public Transform mGunEnd;
 	
 	/// <summary>
 	/// The damage that the robot deals to 
@@ -10,8 +12,13 @@ public class Arm : Part {
 	protected float mDamagePerRound = 5f;
 	/// <summary>
 	/// Rounds per second.
+	/// How often they can fire
 	/// </summary>
 	protected float mRoundsPerSecond = 1f;
+	/// <summary>
+	/// Range of how far the player can shoot
+	/// </summary>
+	protected float mRange = 50f;
 	/// <summary>
 	/// The Robot accuracy.
 	/// </summary>
@@ -24,6 +31,10 @@ public class Arm : Part {
 	protected float currentXrotation;
 	protected float refRotateVel;
 	protected float dampVel = 0.1f;
+	protected Camera mCam;
+	protected WaitForSeconds shotDuration = new WaitForSeconds(.07f);
+	protected AudioSource mGunSound;
+
 
 	public void SetDamagePerRound(float damage){
 		this.mDamagePerRound = damage;
@@ -37,15 +48,28 @@ public class Arm : Part {
 		this.mAccuracy = accuracy;
 	}
 
+	public void Shoot() {
+		// left btn click
+		if (Input.GetMouseButtonDown(0)) {
+			Debug.Log("Shoot");
+		}
+		
+		if(Input.GetMouseButtonDown(1)){
+			
+		}
+	}
+	
 	// Use this for initialization
-	protected virtual void Start () {
+	protected override void Start () {
+		base.Start();
 		this.mOrbit.mVorbitSmooth = 5f;
 		this.mOrbit.mMinXRotation = -30f;
 		this.mOrbit.mMaxXRotation = 30f;
 	}
 	
 	// Update is called once per frame
-	protected virtual void Update () {
+	protected override void Update () {
+		base.Update();
 		if(mRobot.isControllable)
 			this.GetInput();
 	}
