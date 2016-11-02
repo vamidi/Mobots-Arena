@@ -14,7 +14,8 @@ public class Arm : Part, IShootable {
 	/// Rounds per second.
 	/// How often they can fire
 	/// </summary>
-	protected float mRoundsPerSecond = 1f;
+	protected float mRoundsPerSecond = .1f;
+	protected float mNextFire;
 	/// <summary>
 	/// Range of how far the player can shoot
 	/// </summary>
@@ -31,10 +32,11 @@ public class Arm : Part, IShootable {
 	protected float currentXrotation;
 	protected float refRotateVel;
 	protected float dampVel = 0.1f;
-	protected Camera mCam;
+	protected Camera mCamera;
 	protected WaitForSeconds shotDuration = new WaitForSeconds(.07f);
 	protected AudioSource mGunSound;
-
+	protected LineRenderer mLaserLine;
+	protected bool mFire = false;
 
 	public void SetDamagePerRound(float damage){
 		this.mDamagePerRound = damage;
@@ -48,15 +50,8 @@ public class Arm : Part, IShootable {
 		this.mAccuracy = accuracy;
 	}
 
-	public void Shoot() {
-		// left btn click
-		if (Input.GetMouseButtonDown(0)) {
-			Debug.Log("Shoot");
-		}
-		
-		if(Input.GetMouseButtonDown(1)){
-			
-		}
+	public virtual void Shoot() {
+
 	}
 	
 	// Use this for initialization
@@ -65,13 +60,17 @@ public class Arm : Part, IShootable {
 		this.mOrbit.mVorbitSmooth = 5f;
 		this.mOrbit.mMinXRotation = -30f;
 		this.mOrbit.mMaxXRotation = 30f;
+		this.mLaserLine = this.GetComponent<LineRenderer>();
+		this.mCamera = Camera.main;
 	}
 	
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
-		if(mRobot.isControllable)
+		if(mRobot.isControllable){
 			this.GetInput();
+			this.Shoot();
+		}
 	}
 	
 	protected virtual void LateUpdate(){
@@ -82,7 +81,7 @@ public class Arm : Part, IShootable {
 	/// <summary>
 	/// Is this method we get the input of the player
 	/// </summary>
-	protected void GetInput() {
+	protected virtual void GetInput() {
 		this.mMouseVertical = Input.GetAxisRaw(this.mInput.mMouseVertical);
 	}
 	
@@ -94,5 +93,11 @@ public class Arm : Part, IShootable {
 		this.mOrbit.mXRotation = Mathf.Clamp(this.mOrbit.mXRotation, this.mOrbit.mMinXRotation, this.mOrbit.mMaxXRotation);
 		this.currentXrotation = Mathf.SmoothDamp(this.currentXrotation, this.mOrbit.mXRotation, ref refRotateVel, dampVel);
 		this.transform.localRotation = Quaternion.Euler(this.mOrbit.mXRotation, 0, 0);
+	}
+
+	protected IEnumerator ShotEffect(){
+		this.mLaserLine.enabled = true;
+		yield return shotDuration;
+		this.mLaserLine.enabled = false;
 	}
 }

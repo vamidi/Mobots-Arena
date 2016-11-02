@@ -29,6 +29,7 @@ public class InputSettings {
 	public string mVertical = "Vertical";
 	public string mHorizontal = "Horizontal";
 	public string mFire = "Fire1";
+	public string mFire2 = "Fire2";
 	public string mJump = "Jump";
 
 	public string mMouseHorizontal = "Mouse X";
@@ -40,6 +41,34 @@ public class PhysicSettings {
 	public float mJumpVel = 25f;
 	public float mDownAcc = 1.25f;
 	public float mDistToGround = 0.1f;
+	/// <summary>
+	/// The ground.
+	/// </summary>
+	public LayerMask Ground;
+}
+
+[System.Serializable]
+public class TagSettings {
+	/// <summary>
+	/// Tag for the head
+	/// </summary>
+	public string mHeadTag = "";                                                        
+	/// <summary>
+	/// Tag for the left arm
+	/// </summary>
+	public string mLarmTag = "";                                                   
+	/// <summary>
+	/// Tag for the right arm
+	/// </summary>
+	public string mRamTag = "";                                            
+	/// <summary>
+	/// Tag for the car
+	/// </summary>
+	public string mCarTag = "";                                                         
+	/// <summary>
+	/// Tag for the floor
+	/// </summary>
+	public string mGroundTag = "";	
 }
 
 public class CameraController : MonoBehaviour {

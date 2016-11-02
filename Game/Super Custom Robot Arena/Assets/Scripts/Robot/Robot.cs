@@ -20,26 +20,6 @@ public class Robot : MonoBehaviour {
 	/// </summary>
 	public float mArmor = 100f;
 	/// <summary>
-	/// Tag for the head
-	/// </summary>
-	public string mHeadTag = "";                                                        
-	/// <summary>
-	/// Tag for the left arm
-	/// </summary>
-	public string mLarmTag = "";                                                   
-	/// <summary>
-	/// Tag for the right arm
-	/// </summary>
-	public string mRamTag = "";                                            
-	/// <summary>
-	/// Tag for the car
-	/// </summary>
-	public string mCarTag = "";                                                         
-	/// <summary>
-	/// Tag for the floor
-	/// </summary>
-	public string mGroundTag = "";	
-	/// <summary>
 	/// Deadzone foor the input
 	/// </summary>
 	public float mInputDelay = 0.1f;                                               
@@ -53,11 +33,6 @@ public class Robot : MonoBehaviour {
 	/// The torso of the robot
 	/// </summary>
 	public Transform mTorsoTransform;                                                                                             
-	
-	/// <summary>
-	/// The ground.
-	/// </summary>
-	public LayerMask Ground;
 	
 	/****************************** PRIVATE PROPERTIES *********************/
 	
@@ -81,6 +56,10 @@ public class Robot : MonoBehaviour {
 	/// </summary>
 	[SerializeField]
 	public PhysicSettings mPhysics = new PhysicSettings();
+	/// <summary>
+	/// The Tags
+	/// </summary>
+	public TagSettings mTags = new TagSettings();
 	/// <summary>
 	/// Target rotaion variables
 	/// </summary>
@@ -150,7 +129,7 @@ public class Robot : MonoBehaviour {
 					Transform parent = goHead.transform.parent;
 					GameObject holder = (GameObject)Instantiate (newObj, goHead.transform.position, goHead.transform.rotation);
 					holder.name = newObj.name;
-					holder.tag = mHeadTag;
+					holder.tag = this.mTags.mHeadTag;
 					holder.AddComponent<Head>();
 					mParts [0] = holder.GetComponent<Head> ();
 					holder.transform.parent = parent;
@@ -167,7 +146,7 @@ public class Robot : MonoBehaviour {
 					GameObject holder = (GameObject)Instantiate (newObj, goLarm.transform.position, goLarm.transform.rotation);
 					//holder.transform.localPosition = GameObject.Find("larm_spawn").transform.localPosition;
 					holder.name = newObj.name;
-					holder.tag = mLarmTag;
+					holder.tag = this.mTags.mLarmTag;
 					holder.AddComponent<Larm>();
 					mParts [1] = holder.GetComponent<Larm> ();
 					holder.transform.parent = parent;
@@ -180,7 +159,7 @@ public class Robot : MonoBehaviour {
 					Transform parent = goRarm.transform.parent;
 					GameObject holder = (GameObject)Instantiate (newObj, goRarm.transform.position, goRarm.transform.rotation);
 					holder.name = newObj.name;
-					holder.tag = mRamTag;
+					holder.tag = this.mTags.mRamTag;
 					holder.AddComponent<Rarm>();
 					mParts [2] = holder.GetComponent<Rarm> ();
 					holder.transform.parent = parent;
@@ -193,7 +172,7 @@ public class Robot : MonoBehaviour {
 					Transform parent = goCar.transform.parent;
 					GameObject holder = (GameObject)Instantiate (newObj, goCar.transform.position, goCar.transform.rotation);
 					holder.name = newObj.name;
-					holder.tag = mCarTag;
+					holder.tag = this.mTags.mCarTag;
 					holder.AddComponent<Car>();
 					mParts [3] = holder.GetComponent<Car> ();
 					holder.transform.parent = parent;
@@ -251,7 +230,7 @@ public class Robot : MonoBehaviour {
 	/// See if the player is grounded
 	/// </summary>
 	bool Grounded(){
-		return Physics.Raycast(this.transform.position, Vector3.down, mPhysics.mDistToGround, Ground);
+		return Physics.Raycast(this.transform.position, Vector3.down, mPhysics.mDistToGround, mPhysics.Ground);
 	}
 	
 	void Awake() {
@@ -262,18 +241,18 @@ public class Robot : MonoBehaviour {
 		DontDestroyOnLoad(this.goCar);
 		
 		foreach( Transform child in this.transform){
-			if (child.gameObject.tag == this.mCarTag) {
+			if (child.gameObject.tag == this.mTags.mCarTag) {
 				this.goCar = child.gameObject;
 			}
 			if(child.childCount > 0) {
 				foreach( Transform nodeChild in child){
-					if (nodeChild.gameObject.tag == this.mHeadTag) {
+					if (nodeChild.gameObject.tag == this.mTags.mHeadTag) {
 						this.goHead = nodeChild.gameObject;
 					}
 					foreach (Transform innerChild in nodeChild) {
-						if (innerChild.gameObject.tag == this.mLarmTag) {
+						if (innerChild.gameObject.tag == this.mTags.mLarmTag) {
 							this.goLarm = innerChild.gameObject;
-						}else if(innerChild.gameObject.tag == this.mRamTag){
+						}else if(innerChild.gameObject.tag == this.mTags.mRamTag){
 							this.goRarm = innerChild.gameObject;
 						}
 					}
@@ -424,11 +403,11 @@ public class Robot : MonoBehaviour {
 	/// </summary>
 	void Jump(){
 		if(mJumpInput > 0 && Grounded()){
-			this.mVelocity.y = mPhysics.mJumpVel;
+//			this.mVelocity.y = mPhysics.mJumpVel;
 		}else if(mJumpInput == 0 && Grounded()){
 			mVelocity.y = 0;
 		}else{
-			this.mVelocity.y -= mPhysics.mDownAcc;
+//			this.mVelocity.y -= mPhysics.mDownAcc;
 		}
 	}
 }
