@@ -28,6 +28,10 @@ public class Enemy : MonoBehaviour {
 	/// </summary>
 	[SerializeField]
 	private int mMass;
+	
+	private bool mGrounded = false;
+	private float mMaxSlope = 60f;
+	
 	/// <summary>
 	/// Gameobject of the parts
 	/// </summary>
@@ -41,13 +45,6 @@ public class Enemy : MonoBehaviour {
 	
 	public Part GetPart(int index){
 		return mParts[index];
-	}
-	
-	/// <summary>
-	/// See if the player is grounded
-	/// </summary>
-	bool Grounded(){
-		return Physics.Raycast(this.transform.position, Vector3.down, mPhysics.mDistToGround, mPhysics.Ground);
 	}
 	
 	void Awake(){
@@ -109,7 +106,7 @@ public class Enemy : MonoBehaviour {
 	void FixedUpdate() {
 		if(this.isControllable){
 			this.Move();
-			this.Jump();
+//			this.Jump();
 
 			this.mRigidbody.velocity = this.transform.TransformDirection(this.mVelocity);
 		}
@@ -120,6 +117,27 @@ public class Enemy : MonoBehaviour {
 	}
 	
 	void Jump(){
-		
+		if(1 > 0 && mGrounded ){ 
+			this.mVelocity.y = mPhysics.mJumpVel;
+		}else if(0 == 0 && mGrounded){
+			mVelocity.y = 0;
+		}else{
+			Debug.Log(mGrounded);
+			Vector3 vel = mVelocity;
+			vel.y -=mPhysics.mDownAcc * Time.deltaTime;
+			this.mVelocity = vel;
+		}
+	}
+	
+	void OnCollisionStay(Collision col) {
+		foreach(ContactPoint contact in col.contacts){
+			if(Vector3.Angle(contact.normal, Vector3.up) < this.mMaxSlope){
+				this.mGrounded = true;
+			}
+		}
+	}
+
+	void OnCollisionExit(Collision col){
+		this.mGrounded = false;
 	}
 }

@@ -12,15 +12,9 @@ public class HealthBar : MonoBehaviour {
 
 	public void UpdateHealthBar(){
 		if(mPart != null){
-			float h = mPart.GetHealth();
-			float m = mPart.GetMaxHealth();
-			
-			Debug.Log(h);
-			Debug.Log(m);
-			
 			float ratio = mPart.GetHealth() / mPart.GetMaxHealth();
 			this.mCurrentHealthBar.rectTransform.localScale = new Vector3(ratio , 1, 1);
-			mRatioText.text = (ratio * 100 ).ToString() + "%";
+			mRatioText.text = mPart.GetPart().ToString() + ": " + (ratio * 100 ).ToString("0") + "%";
 		}
 	}
 	
@@ -34,5 +28,4 @@ public class HealthBar : MonoBehaviour {
 	void Update () {
 	
 	}
-	
 }

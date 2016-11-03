@@ -15,6 +15,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable<float> {
 
 		this.mHealth -= damageOnHealth;
 //		tempHead.ArmorHealth -= d;
+		this.UpdateHealth();
 	}
 	
 	// Use this for initialization

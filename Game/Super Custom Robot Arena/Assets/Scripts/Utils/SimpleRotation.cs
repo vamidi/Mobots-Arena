@@ -4,7 +4,7 @@ using System.Collections;
 public class SimpleRotation : MonoBehaviour {
 
 	public float mSpeed = 5f;
-	public Robot mRobot;
+	public Player mRobot;
 
 	// Use this for initialization
 	void Start () {

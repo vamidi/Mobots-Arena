@@ -17,7 +17,7 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	/// </summary>
 	public int mRobotWegith = 75;	
 	
-	protected Robot mRobot = null;
+	protected Player mRobot = null;
 	/// <summary>
 	/// This is needed to tell the robot which part this is.
 	/// </summary>
@@ -60,7 +60,7 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	/// Damage the specified part
 	/// </summary>
 	/// <param name="d">Full damage</param>
-	public void Damage(float d){
+	public virtual void Damage(float d){
 		
 		// Damgeperround = 20;
 		// Shieldstrenght = 30;
@@ -69,13 +69,22 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 		// Damagedone = 0.7 * 20
 		// Damagedone = 14
 		
+		// Get the Head part
 		Head tempHead = (Head) this.mRobot.GetPart(0);
-		float damageOnHealth = ( (100f - tempHead.Strenght) / 100f ) * d;
+		float damageOnHealth;
+		
+		if(tempHead.ArmorHealth <= 0){
+			damageOnHealth = d;
+		}else {
+			damageOnHealth = ( (100f - tempHead.Strenght) / 100f ) * d;
+		}
 				
 		this.mHealth -= damageOnHealth;
 		tempHead.ArmorHealth -= d;
 		
+		// Update the healthbars
 		this.mHealthBar.UpdateHealthBar();
+		tempHead.UpdateShieldBar();
 		
 	}
 	
@@ -86,6 +95,10 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	public void Heal(int h){
 		this.mHealth += (this.mMaxHealth / h); // ex. h = 10% -> health += 100f / 10% = 10		
 		this.mHealthBar.UpdateHealthBar();
+		
+		// Get the Head part
+		Head tempHead = (Head) this.mRobot.GetPart(0);
+		tempHead.UpdateShieldBar();
 	}
 	
 	/// <summary>
@@ -95,6 +108,7 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	public virtual void ArmorHeal(int h){ 
 		Head tempHead = (Head) this.mRobot.GetPart(0);
 		tempHead.ArmorHeal(h);
+		tempHead.UpdateShieldBar();
 	}
 
 	public float GetMaxHealth(){
@@ -123,7 +137,7 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	
 	// Called before the Start function
 	protected void Awake(){
-		this.mRobot = GameObject.FindObjectOfType<Robot>();
+		this.mRobot = GameObject.FindObjectOfType<Player>();
 	}	
 	
 	// Use this for initialization
@@ -137,10 +151,12 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	protected virtual void Update(){
 		if( this.mHealth < 0 ){
 			this.mHealth = 0;
+			this.mHealthBar.UpdateHealthBar();
 		}
 		
 		if(this.mHealth > 100){
 			this.mHealth = 100f;
+			this.mHealthBar.UpdateHealthBar();
 		}
 	}
 	

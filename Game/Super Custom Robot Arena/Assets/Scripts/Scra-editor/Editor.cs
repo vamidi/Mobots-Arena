@@ -64,7 +64,7 @@ public class Editor : MonoBehaviour {
 	/// <summary>
 	/// The robot class
 	/// </summary>
-	private Robot mRobot = null;
+	private Player mRobot = null;
 	
 	/// <summary>
 	/// Catch the click event of the buttons
@@ -162,7 +162,7 @@ public class Editor : MonoBehaviour {
 	void Start () {
 				
 		// Get the robot of the editor
-		this.mRobot = GameObject.FindGameObjectWithTag ("Robot").GetComponent<Robot>();
+		this.mRobot = GameObject.FindGameObjectWithTag ("Robot").GetComponent<Player>();
 
 		// Add all the contents to the contents dictionary
 		this.mContents.Add("HomeScreen", GameObject.Find("HomeContent"));
@@ -200,22 +200,20 @@ public class Editor : MonoBehaviour {
 	private void GetRobots(){
 				
 		string robots = GameUtilities.ReadFile ("Robots/robots");
-		string slots = GameUtilities.ReadFile("Robots/slots");
+//		string slots = GameUtilities.ReadFile("Robots/slots");
 		
 		JSONArray jArray = JSONObject.Parse(robots).GetArray("robots");
-		JSONArray sArray = JSONObject.Parse(slots).GetArray("slots");		
+//		JSONArray sArray = JSONObject.Parse(slots).GetArray("slots");		
 		
 		Vector3 initHeadVector = new Vector3(91f, -43, 0);
 		Vector3 initLeftVector = new Vector3(91f, -43, 0);
 		Vector3 initRightVector = new Vector3(91f, -43, 0);
 		Vector3 initCarVector = new Vector3(91f, -43, 0);
 		
-		for(int i = 0; i < sArray.Length; i++){
-			JSONObject slotObj = sArray[i].Obj.GetObject("parts");
-			
-			mSlots.Add(i, slotObj);
-			
-		}
+//		for(int i = 0; i < sArray.Length; i++){
+//			JSONObject slotObj = sArray[i].Obj.GetObject("parts");
+//			mSlots.Add(i, slotObj);			
+//		}
 		
 		foreach(JSONValue o in jArray){
 					

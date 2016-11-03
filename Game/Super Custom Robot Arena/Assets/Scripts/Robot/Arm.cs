@@ -4,6 +4,7 @@ using System.Collections;
 public class Arm : Part, IShootable {
 	
 	public Transform mGunEnd;
+	public GameObject mBullet;
 	
 	/// <summary>
 	/// The damage that the robot deals to 
@@ -37,6 +38,12 @@ public class Arm : Part, IShootable {
 	protected AudioSource mGunSound;
 	protected LineRenderer mLaserLine;
 	protected bool mFire = false;
+	
+	protected float mRecoilAmount;
+	protected float mRecoilRecoverTime;
+	protected float mCurrentRecoilPos;
+	protected float mCurrentRecoilVel;
+	
 
 	public void SetDamagePerRound(float damage){
 		this.mDamagePerRound = damage;
@@ -74,8 +81,11 @@ public class Arm : Part, IShootable {
 	}
 	
 	protected virtual void LateUpdate(){
-		if(mRobot.isControllable)
+		if(mRobot.isControllable){
 			this.Turn();
+			this.Move();
+		}
+			
 	}
 	
 	/// <summary>
@@ -91,8 +101,13 @@ public class Arm : Part, IShootable {
 	protected void Turn() {     
 		this.mOrbit.mXRotation += -this.mMouseVertical * mOrbit.mVorbitSmooth;
 		this.mOrbit.mXRotation = Mathf.Clamp(this.mOrbit.mXRotation, this.mOrbit.mMinXRotation, this.mOrbit.mMaxXRotation);
-		this.currentXrotation = Mathf.SmoothDamp(this.currentXrotation, this.mOrbit.mXRotation, ref refRotateVel, dampVel);
-		this.transform.localRotation = Quaternion.Euler(this.mOrbit.mXRotation, 0, 0);
+		this.currentXrotation = Mathf.Lerp(this.currentXrotation, this.mOrbit.mXRotation, dampVel);
+		this.transform.localRotation = Quaternion.Euler(this.mOrbit.mXRotation, mOrbit.mYRotation, 0);
+	}
+	
+	protected void Move(){
+//		this.mCurrentRecoilPos -= Mathf.SmoothDamp(this.mCurrentRecoilPos, 0, ref this.mCurrentRecoilVel, this.mRecoilRecoverTime);
+//		transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.mCurrentRecoilPos);
 	}
 
 	protected IEnumerator ShotEffect(){

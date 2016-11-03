@@ -38,9 +38,8 @@ public class InputSettings {
 
 [System.Serializable]
 public class PhysicSettings {
-	public float mJumpVel = 25f;
-	public float mDownAcc = 1.25f;
-	public float mDistToGround = 0.1f;
+	public float mJumpVel = 14f;
+	public float mDownAcc = 40f;
 	/// <summary>
 	/// The ground.
 	/// </summary>
@@ -52,23 +51,23 @@ public class TagSettings {
 	/// <summary>
 	/// Tag for the head
 	/// </summary>
-	public string mHeadTag = "";                                                        
+	public string mHeadTag = "Head";                                                        
 	/// <summary>
 	/// Tag for the left arm
 	/// </summary>
-	public string mLarmTag = "";                                                   
+	public string mLarmTag = "Left";                                                   
 	/// <summary>
 	/// Tag for the right arm
 	/// </summary>
-	public string mRamTag = "";                                            
+	public string mRamTag = "Right";                                            
 	/// <summary>
 	/// Tag for the car
 	/// </summary>
-	public string mCarTag = "";                                                         
+	public string mCarTag = "Car";                                                         
 	/// <summary>
 	/// Tag for the floor
 	/// </summary>
-	public string mGroundTag = "";	
+	public string mGroundTag = "Ground";	
 }
 
 public class CameraController : MonoBehaviour {
@@ -80,7 +79,7 @@ public class CameraController : MonoBehaviour {
 	/// <summary>
 	/// The Robot script
 	/// </summary>
-	public Robot mRobot;
+	public Player mRobot;
 	/// <summary>
 	/// The position settings
 	/// </summary>
@@ -124,7 +123,7 @@ public class CameraController : MonoBehaviour {
 		if (!mTarget)
 			Debug.LogError("You dont have a target for your camera");
 
-		mRobot = (this.mTarget.GetComponent<Robot>()) ? this.mTarget.GetComponent<Robot>() : null;
+		mRobot = (this.mTarget.GetComponent<Player>()) ? this.mTarget.GetComponent<Player>() : null;
 
 		if(!mRobot)
 			Debug.LogWarning("You dont have a robot script for your camera");

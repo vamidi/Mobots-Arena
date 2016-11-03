@@ -47,7 +47,7 @@ public class Capsule : MonoBehaviour {
 	void Update () {
 	
 	}
-	
+		
 	/// <summary>
 	/// Raises the trigger enter event.
 	/// </summary>
@@ -56,15 +56,31 @@ public class Capsule : MonoBehaviour {
 		if(col.tag == "Head" || col.tag == "left" || col.tag == "right" || col.tag == "Car"){
 			switch(this.mKind){
 				case KIND.HEALTH:
-					col.SendMessage("Heal", mAmount, SendMessageOptions.DontRequireReceiver);
+					GetLowestHealthOfPart(col).SendMessage("Heal", mAmount, SendMessageOptions.DontRequireReceiver);
 					break;
-				case KIND.SHIELD:
+				case KIND.SHIELD:			
 					col.SendMessage("ArmorHeal", mAmount, SendMessageOptions.DontRequireReceiver);
 					break;
 				default:
-					col.SendMessage("Heal", mAmount, SendMessageOptions.DontRequireReceiver);
+					GetLowestHealthOfPart(col).SendMessage("Heal", mAmount, SendMessageOptions.DontRequireReceiver);
 					break;		
 			}
+			
+			this.gameObject.SetActive(false);
 		}
+	}
+	
+	private Part GetLowestHealthOfPart(Collider col){
+		Player r = col.transform.root.GetComponent<Player>();
+		Part p = null;
+		float amount = 99999;
+		for(int i = 0; i < 4; i++){
+			if(r.GetPart(i).GetHealth() < amount){
+				amount = r.GetPart(i).GetHealth();
+				p = r.GetPart(i);
+			}
+		}
+		
+		return p;
 	}
 }

@@ -8,6 +8,15 @@ public class Larm : Arm {
 		// left btn click
 		if (this.mFire && Time.time > this.mNextFire) {
 			this.mNextFire = Time.time + this.mRoundsPerSecond;
+			
+			this.mCurrentRecoilPos -= this.mRecoilAmount;
+			
+//			this.mOrbit.mXRotation += (UnityEngine.Random.value - 0.5f) * Mathf.Lerp(0f, 5f, 1f);
+//			this.mOrbit.mYRotation += (UnityEngine.Random.value - 0.5f) * Mathf.Lerp(0f, 5f, 1f);
+
+			if(this.mBullet) 
+				Instantiate(this.mBullet, this.mGunEnd.position, this.mGunEnd.rotation);
+			
 			StartCoroutine(this.ShotEffect());
 
 			Vector3 rayOrg = this.mGunEnd.position; //this.mCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f,  0));
@@ -17,13 +26,6 @@ public class Larm : Arm {
 
 			if(Physics.Raycast(rayOrg, this.mGunEnd.transform.forward, out hit, this.mRange)) {
 				this.mLaserLine.SetPosition(1, hit.point);
-				Debug.Log(hit.collider.gameObject.tag);
-				if(hit.collider.gameObject.tag == "Enemy"){
-					EnemyHealth e = hit.collider.GetComponent<EnemyHealth>();
-					if(e != null){
-						e.Damage(20f);
-					}
-				}
 			}else {
 				this.mLaserLine.SetPosition(1, rayOrg + (mGunEnd.transform.forward * this.mRange));
 			}
