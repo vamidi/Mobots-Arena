@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Rarm : Arm {
+public class EnemyRarm : Arm {
 
 	public override void Shoot(){
 		// right btn click
@@ -40,15 +40,14 @@ public class Rarm : Arm {
 	
 	// Update is called once per frame
 	protected override void Update () {
-		base.Update();
+//		base.Update();
 	}
 
 	protected override void LateUpdate () {
-		base.LateUpdate();
+//		base.LateUpdate();
 	}
 	
 	protected override void GetInput(){
-		base.GetInput();
-		this.mFire = Input.GetButtonDown(this.mInput.mFire2);
+
 	}
 }

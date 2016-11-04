@@ -2,8 +2,10 @@
 using System.Collections;
 using System;
 
+using SCRA.Humanoids;
+
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour {
+public class Player : Robot {
 
 	/****************************** PUBLIC PROPERTIES *********************/
 	
@@ -12,14 +14,6 @@ public class Player : MonoBehaviour {
 	/// </summary>
 	public bool isControllable = true;  
 	/// <summary>
-	/// Name of the robot
-	/// </summary>
-	public string mName = "Henk de tank";
-	/// <summary>
-	/// The armor of the robot
-	/// </summary>
-	public float mArmor = 100f;
-	/// <summary>
 	/// Deadzone foor the input
 	/// </summary>
 	public float mInputDelay = 0.1f;                                               
@@ -27,11 +21,7 @@ public class Player : MonoBehaviour {
 	/// The velocity of the robot
 	/// how fast he me turn.
 	/// </summary>
-	public float mRotateVel = 100f;                                                     
-	/// <summary>
-	/// The torso of the robot
-	/// </summary>
-	public Transform mTorsoTransform;                                                                                             
+	public float mRotateVel = 100f;                                                                                                                                                
 	
 	/****************************** PRIVATE PROPERTIES *********************/
 	
@@ -44,78 +34,20 @@ public class Player : MonoBehaviour {
 	/// Position settings
 	/// </summary>
 	[SerializeField]
-	public PositionSettings mPosition = new PositionSettings();                        
-	/// <summary>
-	/// Class for the orbit settings
-	/// </summary>
-	[SerializeField]
-	public OrbitSettings mOrbit = new OrbitSettings();                                  
-	/// <summary>
-	/// The m physics.
-	/// </summary>
-	[SerializeField]
-	public PhysicSettings mPhysics = new PhysicSettings();
-	/// <summary>
-	/// The Tags
-	/// </summary>
-	public TagSettings mTags = new TagSettings();
-	/// <summary>
-	/// Target rotaion variables
-	/// </summary>
-	private Quaternion mTargetRot, mTargetRotTorso;                                     
-	/// <summary>
-	/// Rigidbody of the robot
-	/// </summary>
-	[SerializeField]                    
-	private Rigidbody mRigidbody;
-	/// <summary>
-	/// The m velocity.
-	/// </summary>
-	private Vector3 mVelocity = Vector3.zero;
+	public PositionSettings mPosition = new PositionSettings();                                                                                              
 	
-	private float mMaxSlope = 60f;
-	private bool mGrounded = false;
 	/// <summary>
 	/// Forward, RotateInput calculations
 	/// </summary>
 	[SerializeField]
-	private float mForwardInput, mRotateInput, mJumpInput;                                    
-	/// <summary>
-	/// The mass of the robot
-	/// </summary>
-	[SerializeField]
-	private int mMass;                                                             
+	private float mForwardInput, mRotateInput, mJumpInput;                                                                                               
 
-	/// <summary>
-	/// Vertical velocity
-	/// </summary>
-	private float mVerticalVel;
 	/// <summary>
 	/// Input variables
 	/// </summary>
-	private float mVOrbitInput, mHOrbitInput, mOrbitSnapInput;
-
-	/// <summary>
-	/// Gameobject of the parts
-	/// </summary>
-	[SerializeField]
-	private GameObject goHead, goLarm, goRarm, goCar;                                   
-
-	/// <summary>
-	/// Classes of the parts
-	/// </summary>
-	[SerializeField]
-	private Part[] mParts= new Part[4];                                      
+	private float mVOrbitInput, mHOrbitInput, mOrbitSnapInput;                                    
 		
 	/****************************** PUBLIC METHODS *********************/
-	
-	/// <summary>
-	/// Returns the rotation.
-	/// </summary>
-	/// <value>The target rotation.</value>
-	public Quaternion TargetRotation {
-		get { return mTargetRot;  }
-	}
 
 	/// <summary>
 	/// Change the part of the robot.
@@ -193,7 +125,7 @@ public class Player : MonoBehaviour {
 	/// <param name="part">Part.</param>
 	/// <param name="method">Method.</param>
 	/// <param name="value">Value.</param>
-	public void SetValue(PART part, string method = "", object value = null) {
+	public void SetValue(PART part, string method = "", object value = null)  {
 
 		if (method == "" || value == null)
 			return;
@@ -214,86 +146,16 @@ public class Player : MonoBehaviour {
 		}
 	}
 	
-	/// <summary>
-	/// Gets the mass of the robot/
-	/// </summary>
-	/// <returns>The robot mass.</returns>
-	public int GetRobotMass(){
-		return this.mMass;
-	}
-	
-	public Part GetPart(int index){
-		return mParts[index];
-	}
-	
 	/****************************** UNITY METHODS *********************/
-	
-	void Awake() {
-		DontDestroyOnLoad(this.gameObject);
-		DontDestroyOnLoad(this.goHead);
-		DontDestroyOnLoad(this.goLarm);
-		DontDestroyOnLoad(this.goRarm);
-		DontDestroyOnLoad(this.goCar);
-		
-		foreach( Transform child in this.transform){
-			if (child.gameObject.tag == this.mTags.mCarTag) {
-				this.goCar = child.gameObject;
-			}
-			if(child.childCount > 0) {
-				foreach( Transform nodeChild in child){
-					if (nodeChild.gameObject.tag == this.mTags.mHeadTag) {
-						this.goHead = nodeChild.gameObject;
-					}
-					foreach (Transform innerChild in nodeChild) {
-						if (innerChild.gameObject.tag == this.mTags.mLarmTag) {
-							this.goLarm = innerChild.gameObject;
-						}else if(innerChild.gameObject.tag == this.mTags.mRamTag){
-							this.goRarm = innerChild.gameObject;
-						}
-					}
-				}
-			}
-		}
-	}
-	
-	// Use this for initialization
-	void Start () {
-	
-		this.mTargetRot = this.transform.rotation;
-		this.mRigidbody = this.GetComponent<Rigidbody>();
 
-		if (!mRigidbody)
-			Debug.LogError("Character needs Rigidbody");
-
-		this.mParts [0] = this.goHead.GetComponent<Head> ();
-		this.mParts [1] = this.goLarm.GetComponent<Larm> ();
-		this.mParts [2] = this.goRarm.GetComponent<Rarm> ();
-		this.mParts [3] = this.goCar.GetComponent<Car> ();
-		
-		if (this.mParts [0].GetPart () != PART.HEAD)
-			Debug.LogError ("The part is not a head part");
-		
-		if (this.mParts [1].GetPart () != PART.LARM)
-			Debug.LogError ("The part is not a left arm part");
-
-		if (this.mParts [2].GetPart () != PART.RARM)
-			Debug.LogError ("The part is not a right arm part");
-
-		if (this.mParts [3].GetPart () != PART.CAR)
-			Debug.LogError ("The part is not a car part");
-		
+	protected override void Start() {
+		base.Start();
 		mForwardInput = mRotateInput = mJumpInput = 0;	
-		
-		this.mMass =  this.mParts [0].mRobotWegith + this.mParts [1].mRobotWegith + this.mParts [2].mRobotWegith + this.mParts [3].mRobotWegith;
-		((Car)this.mParts[3]).SetSpeed(1825);
-		
 	}
-
+	
 	// Update is called once per frame
-	void Update() {
-		
-//		Screen.lockCursor = (this.isControllable);
-		
+	protected override void Update() {
+				
 		if(this.isControllable){
 			this.GetInput();
 			this.OrbitRobot();
@@ -302,7 +164,7 @@ public class Player : MonoBehaviour {
 	}
 
 	// FixedUpdate is called 
-	void FixedUpdate() {
+	protected override void FixedUpdate() {
 		if(this.isControllable){
 			this.Move();
 			this.Turn();
@@ -313,38 +175,26 @@ public class Player : MonoBehaviour {
 	}
 
 	// LateUpdate is called after each frame
-	void LateUpdate() {
+	protected override void LateUpdate() {
 		if(this.isControllable)
 			this.MoveToTarget();
 	}
 
-	/****************************** INPUT METHODS *********************/
-
-	/// <summary>
-	/// Is this method we get the input of the player
-	/// </summary>
-	void GetInput() {
-
-		// robot movement
-		this.mForwardInput = Input.GetAxis(this.mInput.mVertical);
-		this.mRotateInput = Input.GetAxis(mInput.mHorizontal);
-
-		// body + arms rotation
-		this.mVOrbitInput = Input.GetAxis(this.mInput.mMouseVertical);
-		this.mHOrbitInput = Input.GetAxis(this.mInput.mMouseHorizontal);
-		this.mOrbitSnapInput = Input.GetAxis(this.mInput.mOrbitHorizontalSnap);
-		
-		// Jump movement
-		this.mJumpInput = Input.GetAxisRaw(this.mInput.mJump);
+	protected override void OnCollisionStay(Collision col) {
+		base.OnCollisionStay(col);
 	}
 
+	protected override void OnCollisionExit(Collision col){
+		base.OnCollisionExit(col);
+	}
+	
 	/****************************** ROTATION METHODS *********************/
 
 	/// <summary>
 	/// This method is for to calculate the
 	/// orbiting of the torso
 	/// </summary>
-	void OrbitRobot() {
+	protected override void OrbitRobot() {
 		if (this.mOrbitSnapInput > 0) {
 			this.mOrbit.mYRotation = 0f;
 		}
@@ -365,7 +215,7 @@ public class Player : MonoBehaviour {
 	/// <summary>
 	/// Applying the rotation to the torso
 	/// </summary>
-	void MoveToTarget() {
+	protected override void MoveToTarget() {
 		if (this.mTorsoTransform) {
 			// this.mTargetRotTorso = Quaternion.Euler(0, -this.mOrbit.mYRotation + Camera.main.transform.eulerAngles.y, 0);
 			this.mTorsoTransform.rotation = Quaternion.Lerp(this.mTorsoTransform.rotation, Camera.main.transform.rotation, Time.deltaTime * this.mPosition.mLookSmooth);
@@ -375,7 +225,7 @@ public class Player : MonoBehaviour {
 	/// <summary>
 	/// This method is for to turn the robot
 	/// </summary>
-	void Turn() {
+	protected override void Turn() {
 		float angle = mRotateVel * mRotateInput * Time.deltaTime;
 		this.mTargetRot *= Quaternion.AngleAxis(angle, Vector3.up);
 		transform.rotation = this.mTargetRot;
@@ -386,7 +236,7 @@ public class Player : MonoBehaviour {
 	/// <summary>
 	/// Movement of the robot
 	/// </summary>
-	void Move() {
+	protected override void Move() {
 		if(Mathf.Abs(this.mForwardInput) > this.mInputDelay) {
 			// Move the player
 			this.mVelocity.z = this.mForwardInput * ((Car)this.mParts[3]).GetSpeed();
@@ -398,7 +248,7 @@ public class Player : MonoBehaviour {
 	/// <summary>
 	/// Jump this instance.
 	/// </summary>
-	void Jump(){
+	protected override void Jump(){
 //		Debug.Log(this.mGrounded);
 		if(Mathf.Abs(mJumpInput) > 0 && mGrounded ){
 			this.mVelocity.y = mPhysics.mJumpVel;
@@ -411,15 +261,23 @@ public class Player : MonoBehaviour {
 		}
 	}
 				
-	void OnCollisionStay(Collision col) {
-		foreach(ContactPoint contact in col.contacts){
-			if(Vector3.Angle(contact.normal, Vector3.up) < this.mMaxSlope){
-				this.mGrounded = true;
-			}
-		}
-	}
-	
-	void OnCollisionExit(Collision col){
-		this.mGrounded = false;
+	/****************************** INPUT METHODS *********************/
+
+	/// <summary>
+	/// Is this method we get the input of the player
+	/// </summary>
+	private void GetInput() {
+
+		// robot movement
+		this.mForwardInput = Input.GetAxis(this.mInput.mVertical);
+		this.mRotateInput = Input.GetAxis(mInput.mHorizontal);
+
+		// body + arms rotation
+		this.mVOrbitInput = Input.GetAxis(this.mInput.mMouseVertical);
+		this.mHOrbitInput = Input.GetAxis(this.mInput.mMouseHorizontal);
+		this.mOrbitSnapInput = Input.GetAxis(this.mInput.mOrbitHorizontalSnap);
+
+		// Jump movement
+		this.mJumpInput = Input.GetAxisRaw(this.mInput.mJump);
 	}
 }

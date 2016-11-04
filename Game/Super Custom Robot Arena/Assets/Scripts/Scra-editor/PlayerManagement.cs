@@ -16,7 +16,7 @@ public class PlayerManagement : MonoBehaviour {
 				mCursorOn = !mCursorOn;
 			}
 			
-//			Cursor.lockState = (mCursorOn) ? CursorLockMode.Locked : CursorLockMode.None;
+			Cursor.lockState = (mCursorOn) ? CursorLockMode.Locked : CursorLockMode.None;
 		}
 	}
 }

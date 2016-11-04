@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Head : Part {
+public class EnemyHead : Part {
 	
 	public Image mCurrentShieldBar;
 	public Text mRatioText;
@@ -23,11 +23,10 @@ public class Head : Part {
 	
 	public void UpdateShieldBar(){
 		float ratio = this.mArmorHealth / this.mMaxArmorHealth;
-		
 		if(this.mCurrentShieldBar)
 			this.mCurrentShieldBar.rectTransform.localScale = new Vector3(ratio , 1, 1);
 		
-		if(this.mRatioText)
+		if(mRatioText)
 			mRatioText.text = (ratio * 100 ).ToString("0") + "%";
 	}
 	
@@ -93,7 +92,7 @@ public class Head : Part {
 	/// </summary>
 	/// <param name="h">Health.</param>
 	public override void ArmorHeal(int h){
-		this.mArmorHealth += (this.mMaxHealth / h);
+		this.mArmorHealth += (this.mArmorHealth / h);
 		this.UpdateShieldBar();
 	}
 	

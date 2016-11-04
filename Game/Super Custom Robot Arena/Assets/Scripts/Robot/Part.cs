@@ -13,6 +13,10 @@ public enum PART {
 public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	
 	/// <summary>
+	/// The max health of the robot
+	/// </summary>
+	public float mMaxHealth = 100f;
+	/// <summary>
 	/// The weight of the part
 	/// </summary>
 	public int mRobotWegith = 75;	
@@ -31,11 +35,6 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	/// The texture of the robot
 	/// </summary>
 	protected Texture mTexture = null;
-	/// <summary>
-	/// The max health of the robot
-	/// </summary>
-	[SerializeField]
-	protected float mMaxHealth = 100f;
 	/// <summary>
 	/// The health of the robot
 	/// </summary>
@@ -83,7 +82,8 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 		tempHead.ArmorHealth -= d;
 		
 		// Update the healthbars
-		this.mHealthBar.UpdateHealthBar();
+		if(this.mHealthBar)
+			this.mHealthBar.UpdateHealthBar();
 		tempHead.UpdateShieldBar();
 		
 	}
@@ -93,8 +93,9 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	/// </summary>
 	/// <param name="h">Health.</param>
 	public void Heal(int h){
-		this.mHealth += (this.mMaxHealth / h); // ex. h = 10% -> health += 100f / 10% = 10		
-		this.mHealthBar.UpdateHealthBar();
+		this.mHealth += (this.mMaxHealth / h); // ex. h = 10% -> health += 100f / 10% = 10
+		if(this.mHealthBar)
+			this.mHealthBar.UpdateHealthBar();
 		
 		// Get the Head part
 		Head tempHead = (Head) this.mRobot.GetPart(0);
@@ -142,7 +143,7 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	
 	// Use this for initialization
 	protected virtual void Start(){
-		this.mHealth = this.mMaxHealth = 100f;
+		this.mHealth = this.mMaxHealth;
 		this.mHealthBar = this.GetComponent<HealthBar>();
 
 	}

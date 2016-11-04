@@ -33,7 +33,6 @@ public class Arm : Part, IShootable {
 	protected float currentXrotation;
 	protected float refRotateVel;
 	protected float dampVel = 0.1f;
-	protected Camera mCamera;
 	protected WaitForSeconds shotDuration = new WaitForSeconds(.07f);
 	protected AudioSource mGunSound;
 	protected LineRenderer mLaserLine;
@@ -68,7 +67,6 @@ public class Arm : Part, IShootable {
 		this.mOrbit.mMinXRotation = -30f;
 		this.mOrbit.mMaxXRotation = 30f;
 		this.mLaserLine = this.GetComponent<LineRenderer>();
-		this.mCamera = Camera.main;
 	}
 	
 	// Update is called once per frame
