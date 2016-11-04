@@ -11,6 +11,7 @@ public class Bullet : MonoBehaviour {
 	/// Speed of the bullet
 	/// </summary>
 	public float mSpeed = 60f;
+	public float mDamage = 15f;
 	/// <summary>
 	/// The rigidbody of the bullet
 	/// </summary>
@@ -34,11 +35,8 @@ public class Bullet : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter(Collider col){
-		if(col.gameObject.tag == "Enemy"){
-			EnemyHealth e = col.GetComponent<EnemyHealth>();
-			if(e != null){
-				e.Damage(20f);
-			}
+		if(col.tag == "Head" || col.tag == "Left" || col.tag == "Right" || col.tag == "Car"){
+			col.SendMessage("Damage", this.mDamage, SendMessageOptions.DontRequireReceiver);
 		}
 		
 		Destroy(this.gameObject);	

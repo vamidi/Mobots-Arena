@@ -7,14 +7,17 @@ public class HealthBar : MonoBehaviour {
 	public Image mCurrentHealthBar;
 	public Text mRatioText;
 	
+	[SerializeField]
 	private Part mPart = null;
 	
 
 	public void UpdateHealthBar(){
 		if(mPart != null){
 			float ratio = mPart.GetHealth() / mPart.GetMaxHealth();
+			string test = mPart.GetPart().ToString();
+			
 			this.mCurrentHealthBar.rectTransform.localScale = new Vector3(ratio , 1, 1);
-			mRatioText.text = mPart.GetPart().ToString() + ": " + (ratio * 100 ).ToString("0") + "%";
+			mRatioText.text = test + ": " + (ratio * 100 ).ToString("0") + "%";			
 		}
 	}
 	

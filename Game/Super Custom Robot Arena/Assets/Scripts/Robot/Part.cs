@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using System;
 
+using SCRA.Humanoids;
+
 /// <summary>
 /// The parts of the robot
 /// </summary>
@@ -20,13 +22,12 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	/// The weight of the part
 	/// </summary>
 	public int mRobotWegith = 75;	
-	
-	protected Player mRobot = null;
+	protected Robot mRobot = null;
 	/// <summary>
 	/// This is needed to tell the robot which part this is.
 	/// </summary>
 	[SerializeField]
-	protected PART mPart = PART.HEAD;
+ 	protected PART mPart = PART.HEAD;
 	/// <summary>
 	/// The model of the robot
 	/// </summary>
@@ -59,8 +60,7 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	/// Damage the specified part
 	/// </summary>
 	/// <param name="d">Full damage</param>
-	public virtual void Damage(float d){
-		
+	public virtual void Damage(float d){		
 		// Damgeperround = 20;
 		// Shieldstrenght = 30;
 		// DamageDone = ((100-Shieldstrenght)/100) * Damageperround
@@ -137,15 +137,14 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	}
 	
 	// Called before the Start function
-	protected void Awake(){
-		this.mRobot = GameObject.FindObjectOfType<Player>();
+	protected virtual void Awake(){
+		this.mRobot = this.transform.root.GetComponent<Player>();
 	}	
 	
 	// Use this for initialization
 	protected virtual void Start(){
 		this.mHealth = this.mMaxHealth;
 		this.mHealthBar = this.GetComponent<HealthBar>();
-
 	}
 	
 	// Update is called once per frame
@@ -158,16 +157,6 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 		if(this.mHealth > 100){
 			this.mHealth = 100f;
 			this.mHealthBar.UpdateHealthBar();
-		}
-	}
-	
-	/// <summary>
-	/// Raises the trigger enter event.
-	/// </summary>
-	/// <param name="col">Col.</param>
-	void OnTriggerEnter(Collider col){
-		if(col.tag == "Bullet") {
-			this.gameObject.SendMessage("Damage", 20f, SendMessageOptions.DontRequireReceiver);
 		}
 	}
 }

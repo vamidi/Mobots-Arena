@@ -11,3 +11,7 @@
 /Users/valenciohoffman/Documents/Werk/Super-Custom-Robot-Arena/Game/Super Custom Robot Arena/Temp/bin/Debug/Unity.CecilTools.dll
 /Users/valenciohoffman/Documents/Werk/Super-Custom-Robot-Arena/Game/Super Custom Robot Arena/Temp/bin/Debug/Mono.Cecil.Pdb.dll
 /Users/valenciohoffman/Documents/Werk/Super-Custom-Robot-Arena/Game/Super Custom Robot Arena/Temp/bin/Debug/Mono.Cecil.Mdb.dll
+/Users/valenciohoffman/Documents/Werk/Super-Custom-Robot-Arena/Game/Super Custom Robot Arena/Temp/bin/Debug/Assembly-CSharp.dll.mdb
+/Users/valenciohoffman/Documents/Werk/Super-Custom-Robot-Arena/Game/Super Custom Robot Arena/Temp/bin/Debug/Assembly-CSharp.dll
+/Users/valenciohoffman/Documents/Werk/Super-Custom-Robot-Arena/Game/Super Custom Robot Arena/obj/Debug/Assembly-CSharp.dll
+/Users/valenciohoffman/Documents/Werk/Super-Custom-Robot-Arena/Game/Super Custom Robot Arena/obj/Debug/Assembly-CSharp.dll.mdb

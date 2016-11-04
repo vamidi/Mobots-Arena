@@ -44,11 +44,10 @@ public class Head : Part {
 		// Damagedone = 0.7 * 20
 		// Damagedone = 14
 
-		Head tempHead = (Head) this.mRobot.GetPart(0);
-		float damageOnHealth = ( (100f - tempHead.Strenght) / 100f ) * d;
+		float damageOnHealth = ( (100f - this.Strenght) / 100f ) * d;
 
 		this.mHealth -= damageOnHealth;
-		tempHead.ArmorHealth -= d;
+		this.ArmorHealth -= d;
 
 		if(this.mHealthBar)
 			this.mHealthBar.UpdateHealthBar();

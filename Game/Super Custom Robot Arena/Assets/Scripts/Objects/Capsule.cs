@@ -7,7 +7,7 @@ public enum SIZE {
 }
 
 public enum KIND {
-	HEALTH, SHIELD
+	HEALTH, SHIELD, WEIGHT, DAMAGE
 }
 
 public class Capsule : MonoBehaviour {
@@ -53,17 +53,19 @@ public class Capsule : MonoBehaviour {
 	/// </summary>
 	/// <param name="col">Col.</param>
 	void OnTriggerEnter(Collider col){
-		if(col.tag == "Head" || col.tag == "left" || col.tag == "right" || col.tag == "Car"){
-			switch(this.mKind){
-				case KIND.HEALTH:
-					GetLowestHealthOfPart(col).SendMessage("Heal", mAmount, SendMessageOptions.DontRequireReceiver);
-					break;
-				case KIND.SHIELD:			
-					col.SendMessage("ArmorHeal", mAmount, SendMessageOptions.DontRequireReceiver);
-					break;
-				default:
-					GetLowestHealthOfPart(col).SendMessage("Heal", mAmount, SendMessageOptions.DontRequireReceiver);
-					break;		
+		if(col.tag == "Head" || col.tag == "Left" || col.tag == "Right" || col.tag == "Car"){
+			if(col.transform.root.tag == "Robot"){
+				switch(this.mKind){
+					case KIND.HEALTH:
+						GetLowestHealthOfPart(col).SendMessage("Heal", mAmount, SendMessageOptions.DontRequireReceiver);
+						break;
+					case KIND.SHIELD:			
+						col.SendMessage("ArmorHeal", mAmount, SendMessageOptions.DontRequireReceiver);
+						break;
+					default:
+						GetLowestHealthOfPart(col).SendMessage("Heal", mAmount, SendMessageOptions.DontRequireReceiver);
+						break;		
+				}
 			}
 			
 			this.gameObject.SetActive(false);

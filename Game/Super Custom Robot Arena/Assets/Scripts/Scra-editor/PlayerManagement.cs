@@ -13,10 +13,9 @@ public class PlayerManagement : MonoBehaviour {
 	void Update () {
 		if(this.mInGame){
 			if(Input.GetKeyDown(KeyCode.Escape)){
-				mCursorOn = !mCursorOn;
+				mCursorOn = false;
 			}
-			
-			Cursor.lockState = (mCursorOn) ? CursorLockMode.Locked : CursorLockMode.None;
+//			Cursor.lockState = (mCursorOn) ? CursorLockMode.Locked : CursorLockMode.None;
 		}
 	}
 }

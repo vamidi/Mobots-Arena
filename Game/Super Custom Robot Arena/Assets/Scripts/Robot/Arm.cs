@@ -72,14 +72,14 @@ public class Arm : Part, IShootable {
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
-		if(mRobot.isControllable){
+		if(((Player)mRobot).isControllable){
 			this.GetInput();
 			this.Shoot();
 		}
 	}
 	
 	protected virtual void LateUpdate(){
-		if(mRobot.isControllable){
+		if(((Player)mRobot).isControllable){
 			this.Turn();
 			this.Move();
 		}

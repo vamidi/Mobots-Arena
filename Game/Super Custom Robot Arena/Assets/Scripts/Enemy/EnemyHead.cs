@@ -43,7 +43,7 @@ public class EnemyHead : Part {
 		// Damagedone = 0.7 * 20
 		// Damagedone = 14
 
-		Head tempHead = (Head) this.mRobot.GetPart(0);
+		EnemyHead tempHead = (EnemyHead) this.mRobot.GetPart(0);
 		float damageOnHealth = ( (100f - tempHead.Strenght) / 100f ) * d;
 
 		this.mHealth -= damageOnHealth;
@@ -94,6 +94,11 @@ public class EnemyHead : Part {
 	public override void ArmorHeal(int h){
 		this.mArmorHealth += (this.mArmorHealth / h);
 		this.UpdateShieldBar();
+	}
+	
+	// Called before the Start function
+	protected override void Awake(){
+		this.mRobot = this.transform.root.GetComponent<Enemy>();
 	}
 	
 	// Use this for initialization
