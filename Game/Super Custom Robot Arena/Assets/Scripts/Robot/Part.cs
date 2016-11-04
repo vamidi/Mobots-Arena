@@ -101,7 +101,17 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 		Head tempHead = (Head) this.mRobot.GetPart(0);
 		tempHead.UpdateShieldBar();
 	}
-	
+
+	public virtual void IncreaseDamage(int x){
+		// 5%, 10%, 15% of the full weight of the robot
+
+	}
+
+	public void IncreaseMovement(int x){
+		// 1.2x, 1.4x, 1.6x, 1.8x, 2.0x of all damage done
+
+	}
+
 	/// <summary>
 	/// Heals the armor.
 	/// </summary>

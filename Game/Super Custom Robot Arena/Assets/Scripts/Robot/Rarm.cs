@@ -13,9 +13,10 @@ public class Rarm : Arm {
 //			this.mOrbit.mXRotation += (UnityEngine.Random.value - 0.5f) * Mathf.Lerp(0f, 5f, 1f);
 //			this.mOrbit.mYRotation += (UnityEngine.Random.value - 0.5f) * Mathf.Lerp(0f, 5f, 1f);
 			
-			if(this.mBullet)
-				Instantiate(this.mBullet, this.mGunEnd.position, this.mGunEnd.rotation);
-			
+			if (this.mBullet) {
+				GameObject bullet = (GameObject) Instantiate (this.mBullet, this.mGunEnd.position, this.mGunEnd.rotation);
+				bullet.GetComponent<Bullet> ().mDamage = this.mDamagePerRound;
+			}			
 			
 			StartCoroutine(this.ShotEffect());
 

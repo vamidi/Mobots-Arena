@@ -10,6 +10,7 @@ public class Arm : Part, IShootable {
 	/// The damage that the robot deals to 
 	/// the other player
 	/// </summary>
+	[SerializeField]
 	protected float mDamagePerRound = 5f;
 	/// <summary>
 	/// Rounds per second.
@@ -54,6 +55,13 @@ public class Arm : Part, IShootable {
 
 	public void SetAccuracy(float accuracy){
 		this.mAccuracy = accuracy;
+	}
+
+	public override void IncreaseDamage(int x){
+		// 1.2x, 1.4x, 1.6x, 1.8x, 2.0x of all damage done
+		// 100% => 120%
+		Debug.Log(x);
+		this.mDamagePerRound = this.mDamagePerRound / 100 * x;
 	}
 
 	public virtual void Shoot() {

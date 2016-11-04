@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 
 public enum SIZE {
-	SMALLER, SMALL, MEDIUM, BIG
+	SMALLER, SMALL, MEDIUM, BIG, ULTRA
 }
 
 public enum KIND {
@@ -24,21 +24,37 @@ public class Capsule : MonoBehaviour {
 	/// The amount of damage or recovery
 	/// </summary>
 	private int mAmount;
-	
+	private int mMultiplier;
+	private int mWeightAmount;
+	// 5%, 10%, 15% of the full weight of the robot
+
 	// Use this for initialization
 	void Start () {
 		switch(this.mSize){
 			case SIZE.SMALLER:
 				this.mAmount = 10;
+				this.mMultiplier = 120;
+				this.mWeightAmount = 5;
 				break;
 			case SIZE.SMALL:
 				this.mAmount = 15;
+				this.mMultiplier = 140;
+				this.mWeightAmount = 5;
 				break;
 			case SIZE.MEDIUM:
 				this.mAmount = 25;
+				this.mMultiplier = 160;
+				this.mWeightAmount = 10;
 				break;
-			case SIZE.BIG:
+		case SIZE.BIG:
 				this.mAmount = 50;
+				this.mMultiplier = 180;
+				this.mWeightAmount = 15;
+				break;
+			case SIZE.ULTRA:
+				this.mAmount = 50;
+				this.mMultiplier = 200;
+				this.mWeightAmount = 15;
 				break;
 		}
 	}
@@ -57,13 +73,19 @@ public class Capsule : MonoBehaviour {
 			if(col.transform.root.tag == "Robot"){
 				switch(this.mKind){
 					case KIND.HEALTH:
-						GetLowestHealthOfPart(col).SendMessage("Heal", mAmount, SendMessageOptions.DontRequireReceiver);
+						GetLowestHealthOfPart(col).SendMessage("Heal", this.mAmount, SendMessageOptions.DontRequireReceiver);
 						break;
 					case KIND.SHIELD:			
-						col.SendMessage("ArmorHeal", mAmount, SendMessageOptions.DontRequireReceiver);
+						col.SendMessage ("ArmorHeal", this.mAmount, SendMessageOptions.DontRequireReceiver);
+						break;
+				case KIND.WEIGHT:
+					col.SendMessage ("IncreaseMovement", this.mWeightAmount, SendMessageOptions.DontRequireReceiver);
+						break;
+				case KIND.DAMAGE:
+						col.SendMessage ("IncreaseDamage", this.mMultiplier, SendMessageOptions.DontRequireReceiver);
 						break;
 					default:
-						GetLowestHealthOfPart(col).SendMessage("Heal", mAmount, SendMessageOptions.DontRequireReceiver);
+						GetLowestHealthOfPart(col).SendMessage("Heal", this.mAmount, SendMessageOptions.DontRequireReceiver);
 						break;		
 				}
 			}
