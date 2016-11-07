@@ -24,7 +24,7 @@ public class Enemy : Robot {
 		if (this.mParts [3].GetPart () != PART.CAR)
 			Debug.LogError ("The part is not a car part");
 		
-		this.mMass =  this.mParts [0].mRobotWegith + this.mParts [1].mRobotWegith + this.mParts [2].mRobotWegith + this.mParts [3].mRobotWegith;
+		this.mResetMass = this.mMass = this.mParts [0].mRobotWegith + this.mParts [1].mRobotWegith + this.mParts [2].mRobotWegith + this.mParts [3].mRobotWegith;
 		((EnemyCar)this.mParts[3]).SetSpeed(1825);
 	}
 }

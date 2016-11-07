@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Arm : Part, IShootable {
@@ -12,6 +13,7 @@ public class Arm : Part, IShootable {
 	/// </summary>
 	[SerializeField]
 	protected float mDamagePerRound = 5f;
+	protected float mResetDamage;
 	/// <summary>
 	/// Rounds per second.
 	/// How often they can fire
@@ -44,6 +46,9 @@ public class Arm : Part, IShootable {
 	protected float mCurrentRecoilPos;
 	protected float mCurrentRecoilVel;
 	
+	public void ResetDamage(){
+		this.mDamagePerRound = this.mResetDamage;
+	}
 
 	public void SetDamagePerRound(float damage){
 		this.mDamagePerRound = damage;
@@ -60,13 +65,10 @@ public class Arm : Part, IShootable {
 	public override void IncreaseDamage(int x){
 		// 1.2x, 1.4x, 1.6x, 1.8x, 2.0x of all damage done
 		// 100% => 120%
-		Debug.Log(x);
 		this.mDamagePerRound = this.mDamagePerRound / 100 * x;
 	}
 
-	public virtual void Shoot() {
-
-	}
+	public virtual void Shoot() { }
 	
 	// Use this for initialization
 	protected override void Start () {
@@ -75,6 +77,7 @@ public class Arm : Part, IShootable {
 		this.mOrbit.mMinXRotation = -30f;
 		this.mOrbit.mMaxXRotation = 30f;
 		this.mLaserLine = this.GetComponent<LineRenderer>();
+		this.mResetDamage = this.mDamagePerRound;
 	}
 	
 	// Update is called once per frame
@@ -90,8 +93,7 @@ public class Arm : Part, IShootable {
 		if(((Player)mRobot).isControllable){
 			this.Turn();
 			this.Move();
-		}
-			
+		}		
 	}
 	
 	/// <summary>

@@ -39,6 +39,6 @@ public class Bullet : MonoBehaviour {
 			col.SendMessage("Damage", this.mDamage, SendMessageOptions.DontRequireReceiver);
 		}
 					
-		Destroy(this.gameObject);	
+//		Destroy(this.gameObject);	
 	}
 }

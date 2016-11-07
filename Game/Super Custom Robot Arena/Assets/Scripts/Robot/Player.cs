@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System;
 
@@ -8,7 +9,13 @@ using SCRA.Humanoids;
 public class Player : Robot {
 
 	/****************************** PUBLIC PROPERTIES *********************/
-	
+	public Image mCurrentTimerBar;
+	public Text mTimerText; 
+	public float mTimer = 30f;
+	public float mSpeedTimer = 2f;
+	public bool mStartTimer = false, mStart = false;
+
+	private float mResetTimer = 0f;
 	/// <summary>
 	/// To see if the player is controllable
 	/// </summary>
@@ -49,6 +56,25 @@ public class Player : Robot {
 		
 	/****************************** PUBLIC METHODS *********************/
 
+	/// <summary>
+	/// Increases the damage.
+	/// </summary>
+	/// <param name="x">The x coordinate.</param>
+	public void IncreaseDamage(int x){
+		this.mStartTimer = true;
+		((Arm)this.mParts[1]).IncreaseDamage(x);
+		((Arm)this.mParts[2]).IncreaseDamage(x);
+	}
+	
+	public void IncreaseMovement(int x){ 
+		/* 5%, 10%, 15% of the full weight of the robot */ 
+		float check = 100 - x;
+		check = check / 100;
+		this.mMass = this.mMass * check;
+		this.mStart = true;
+		((Car)this.mParts[3]).SetSpeed(1825);
+	}	
+	
 	/// <summary>
 	/// Change the part of the robot.
 	/// </summary>
@@ -146,6 +172,7 @@ public class Player : Robot {
 		}
 	}
 	
+	#region UNITYMETHODS
 	/****************************** UNITY METHODS *********************/
 
 	protected override void Start() {
@@ -168,10 +195,13 @@ public class Player : Robot {
 		if (this.mParts [3].GetPart () != PART.CAR)
 			Debug.LogError ("The part is not a car part");
 
-		this.mMass =  this.mParts [0].mRobotWegith + this.mParts [1].mRobotWegith + this.mParts [2].mRobotWegith + this.mParts [3].mRobotWegith;
+		this.mResetMass = this.mMass =  this.mParts [0].mRobotWegith + this.mParts [1].mRobotWegith + this.mParts [2].mRobotWegith + this.mParts [3].mRobotWegith;
 		((Car)this.mParts[3]).SetSpeed(1825);
 		
-		mForwardInput = mRotateInput = mJumpInput = 0;	
+		this.mForwardInput = this.mRotateInput = this.mJumpInput = 0;
+		
+		this.mResetTimer = this.mTimer;
+		this.mStartTimer = false;
 	}
 	
 	// Update is called once per frame
@@ -180,7 +210,7 @@ public class Player : Robot {
 		if(this.isControllable){
 			this.GetInput();
 			this.OrbitRobot();
-			
+			this.ActivateTimer();
 		}
 	}
 
@@ -208,6 +238,10 @@ public class Player : Robot {
 	protected override void OnCollisionExit(Collision col){
 		base.OnCollisionExit(col);
 	}
+	
+	#endregion
+	
+	#region ROTATIONMETHODS
 	
 	/****************************** ROTATION METHODS *********************/
 
@@ -252,6 +286,9 @@ public class Player : Robot {
 		transform.rotation = this.mTargetRot;
 	}
 
+	#endregion
+	
+	#region MOVEMENTMETHODS
 	/****************************** MOVEMENT METHODS *********************/
 	
 	/// <summary>
@@ -281,7 +318,10 @@ public class Player : Robot {
 			this.mVelocity = vel;
 		}
 	}
-				
+	
+	#endregion
+	
+	#region INPUT METHODS
 	/****************************** INPUT METHODS *********************/
 
 	/// <summary>
@@ -301,4 +341,44 @@ public class Player : Robot {
 		// Jump movement
 		this.mJumpInput = Input.GetAxisRaw(this.mInput.mJump);
 	}
+
+	#endregion
+	
+	/// <summary>
+	/// Activates the timer.
+	/// </summary>
+	private void ActivateTimer(){
+		if(this.mStartTimer || mStart){
+			this.mTimer -= Time.deltaTime * this.mSpeedTimer;
+
+			if(this.mTimer <= 0){
+				this.mTimer = this.mResetTimer;
+				
+				if(this.mStartTimer){
+					((Arm)this.mParts[1]).ResetDamage();
+					((Arm)this.mParts[2]).ResetDamage();
+					this.mStartTimer = false;
+				}
+				
+				if(this.mStart){
+					this.mMass = this.mResetMass;
+					((Car)this.mParts[3]).SetSpeed(1825);
+					this.mStart = false;
+				}
+			}
+			
+			this.mTimerText.text = "Timer: 00:" + this.mTimer.ToString("F2");
+			this.UpdateTimerBar();
+		}
+	}
+	
+	/// <summary>
+	/// Updates the timer bar.
+	/// </summary>
+	private void UpdateTimerBar(){
+		float ratio = this.mTimer / 30f;
+//		Debug.Log(ratio);
+		this.mCurrentTimerBar.rectTransform.localScale = new Vector3(ratio , 1, 1);
+	}
+
 }

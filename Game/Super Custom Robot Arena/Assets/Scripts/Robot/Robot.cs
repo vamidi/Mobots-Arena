@@ -57,8 +57,8 @@ namespace SCRA {
 			/// The mass of the robot
 			/// </summary>
 			[SerializeField]
-			protected int mMass;                                                             
-		
+			protected float mMass;                                                             
+			protected float mResetMass;
 			/// <summary>
 			/// Gameobject of the parts
 			/// </summary>
@@ -86,7 +86,7 @@ namespace SCRA {
 			/// Gets the mass of the robot/
 			/// </summary>
 			/// <returns>The robot mass.</returns>
-			public int GetRobotMass(){
+			public float GetRobotMass(){
 				return this.mMass;
 			}
 		

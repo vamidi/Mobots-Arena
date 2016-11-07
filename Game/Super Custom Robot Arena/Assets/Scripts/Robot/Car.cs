@@ -34,7 +34,6 @@ public class Car : Part {
 	
 	public void SetSpeed(float speed){
 		this.mSpeed = speed/this.mRobot.GetRobotMass();
-		
 	}
 
 	public void SetJumpStrength(float strength){

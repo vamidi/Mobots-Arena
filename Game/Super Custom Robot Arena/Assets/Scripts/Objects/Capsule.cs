@@ -60,9 +60,7 @@ public class Capsule : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
-	}
+	void Update () { }
 		
 	/// <summary>
 	/// Raises the trigger enter event.
@@ -79,10 +77,10 @@ public class Capsule : MonoBehaviour {
 						col.SendMessage ("ArmorHeal", this.mAmount, SendMessageOptions.DontRequireReceiver);
 						break;
 				case KIND.WEIGHT:
-					col.SendMessage ("IncreaseMovement", this.mWeightAmount, SendMessageOptions.DontRequireReceiver);
+						col.transform.root.SendMessage ("IncreaseMovement", this.mWeightAmount, SendMessageOptions.DontRequireReceiver);
 						break;
 				case KIND.DAMAGE:
-						col.SendMessage ("IncreaseDamage", this.mMultiplier, SendMessageOptions.DontRequireReceiver);
+						col.transform.root.SendMessage ("IncreaseDamage", this.mMultiplier, SendMessageOptions.DontRequireReceiver);
 						break;
 					default:
 						GetLowestHealthOfPart(col).SendMessage("Heal", this.mAmount, SendMessageOptions.DontRequireReceiver);

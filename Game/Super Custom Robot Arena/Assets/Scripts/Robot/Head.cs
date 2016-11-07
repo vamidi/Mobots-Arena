@@ -25,10 +25,10 @@ public class Head : Part {
 		float ratio = this.mArmorHealth / this.mMaxArmorHealth;
 		
 		if(this.mCurrentShieldBar)
-			this.mCurrentShieldBar.rectTransform.localScale = new Vector3(ratio , 1, 1);
+			this.mCurrentShieldBar.fillAmount = ratio;
 		
-		if(this.mRatioText)
-			mRatioText.text = (ratio * 100 ).ToString("0") + "%";
+//		if(this.mRatioText)
+//			mRatioText.text = (ratio * 100 ).ToString("0") + "%";
 	}
 	
 	/// <summary>
