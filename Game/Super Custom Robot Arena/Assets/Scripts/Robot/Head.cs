@@ -5,7 +5,7 @@ using System.Collections;
 public class Head : Part {
 	
 	public Image mCurrentShieldBar;
-	public Text mRatioText;
+	public float mColorLerpSpeed = 2f;
 	
 	/// <summary>
 	/// The health of the armor
@@ -22,11 +22,10 @@ public class Head : Part {
 	private float mArmorStrength = 15f;
 	
 	public void UpdateShieldBar(){
-		float ratio = this.mArmorHealth / this.mMaxArmorHealth;
-		
-		if(this.mCurrentShieldBar)
-			this.mCurrentShieldBar.fillAmount = ratio;
-		
+		float ratio = Map( this.mArmorHealth, 0, this.mMaxArmorHealth, 0, 1);		
+		if(this.mCurrentShieldBar && this.mCurrentShieldBar.fillAmount != ratio){
+			this.mCurrentShieldBar.fillAmount = Mathf.Lerp(this.mCurrentShieldBar.fillAmount, ratio, Time.deltaTime * this.mColorLerpSpeed);
+		}
 //		if(this.mRatioText)
 //			mRatioText.text = (ratio * 100 ).ToString("0") + "%";
 	}
@@ -48,9 +47,6 @@ public class Head : Part {
 
 		this.mHealth -= damageOnHealth;
 		this.ArmorHealth -= d;
-
-		if(this.mHealthBar)
-			this.mHealthBar.UpdateHealthBar();
 
 	}
 	
@@ -93,7 +89,6 @@ public class Head : Part {
 	/// <param name="h">Health.</param>
 	public override void ArmorHeal(int h){
 		this.mArmorHealth += (this.mMaxHealth / h);
-		this.UpdateShieldBar();
 	}
 	
 	// Use this for initialization
@@ -108,12 +103,17 @@ public class Head : Part {
 		base.Update();
 		if( this.mArmorHealth < 0 ){
 			this.mArmorHealth = 0f;
-			this.UpdateShieldBar();
 		}
 		
 		if(this.mArmorHealth > 100){
 			this.mArmorHealth = 100f;
-			this.UpdateShieldBar();
 		}
+		
+		this.UpdateShieldBar(); 
 	}
+	
+	private float Map(float value, float inMin, float inMax, float outMin, float outMax){
+		return ( value - inMin ) * ( outMax - outMin) / ( inMax - inMin ) + outMin;
+	}
+	
 }

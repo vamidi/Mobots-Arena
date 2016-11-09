@@ -4,10 +4,12 @@ using System.Collections;
 namespace SCRA {
 	
 	namespace Humanoids {
-
+		
+		[RequireComponent(typeof(Rigidbody))]
 		public abstract class Robot : MonoBehaviour {
 		
 			/****************************** PUBLIC PROPERTIES *********************/ 
+			
 			/// <summary>
 			/// Name of the robot
 			/// </summary>
@@ -19,10 +21,12 @@ namespace SCRA {
 			/// <summary>
 			/// The torso of the robot
 			/// </summary>
-			public Transform mTorsoTransform;                                                                                             
-		
-			/****************************** PRIVATE PROPERTIES *********************/
-		                       
+			public Transform mTorsoTransform; 
+			/// <summary>
+			/// The velocity of the robot
+			/// how fast he me turn.
+			/// </summary>
+			public float mRotateVel = 100f;  		                       
 			/// <summary>
 			/// Class for the orbit settings
 			/// </summary>
@@ -37,6 +41,9 @@ namespace SCRA {
 			/// The Tags
 			/// </summary>
 			public TagSettings mTags = new TagSettings();
+			
+			/****************************** PRIVATE PROPERTIES *********************/
+			
 			/// <summary>
 			/// Target rotaion variables
 			/// </summary>
@@ -94,6 +101,8 @@ namespace SCRA {
 				return mParts[index];
 			}
 		
+			#region UNITYMETHODS
+			
 			/****************************** UNITY METHODS *********************/
 		
 			protected virtual void Awake() {
@@ -164,6 +173,10 @@ namespace SCRA {
 				this.mGrounded = false;
 			}
 			
+			#endregion
+			
+			#region ROTATIONMETHODS
+			
 			/****************************** ROTATION METHODS *********************/
 		
 			/// <summary>
@@ -207,35 +220,23 @@ namespace SCRA {
 				transform.rotation = this.mTargetRot; */
 			}
 		
+			#endregion
+			
+			#region MOVEMENTMETHODS
+			
 			/****************************** MOVEMENT METHODS *********************/
 		
 			/// <summary>
 			/// Movement of the robot
 			/// </summary>
-			protected virtual void Move() {
-				/*if(Mathf.Abs(this.mForwardInput) > this.mInputDelay) {
-					// Move the player
-					this.mVelocity.z = this.mForwardInput * ((Car)this.mParts[3]).GetSpeed();
-				} else {
-					this.mVelocity.z = 0;
-				}*/
-			}
+			protected abstract void Move();
 		
 			/// <summary>
 			/// Jump this instance.
 			/// </summary>
-			protected virtual void Jump(){
-				/* //		Debug.Log(this.mGrounded);
-				if(Mathf.Abs(mJumpInput) > 0 && mGrounded ){
-					this.mVelocity.y = mPhysics.mJumpVel;
-				}else if(mJumpInput == 0 && mGrounded){
-					mVelocity.y = 0;
-				}else{
-					Vector3 vel = mVelocity;
-					vel.y -=mPhysics.mDownAcc * Time.deltaTime;
-					this.mVelocity = vel;
-				}*/
-			}
+			protected abstract void Jump();
+			
+			#endregion
 		}
 	}
 }

@@ -12,6 +12,7 @@ public enum PART {
 	HEAD, CAR, LARM, RARM, UNASSIGNED
 }
 
+[RequireComponent(typeof(HealthBar))]
 public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	
 	/// <summary>
@@ -79,13 +80,7 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 		}
 				
 		this.mHealth -= damageOnHealth;
-		tempHead.ArmorHealth -= d;
-		
-		// Update the healthbars
-		if(this.mHealthBar)
-			this.mHealthBar.UpdateHealthBar();
-		tempHead.UpdateShieldBar();
-		
+		tempHead.ArmorHealth -= d;		
 	}
 	
 	/// <summary>
@@ -94,12 +89,6 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	/// <param name="h">Health.</param>
 	public void Heal(int h){
 		this.mHealth += (this.mMaxHealth / h); // ex. h = 10% -> health += 100f / 10% = 10
-		if(this.mHealthBar)
-			this.mHealthBar.UpdateHealthBar();
-		
-		// Get the Head part
-		Head tempHead = (Head) this.mRobot.GetPart(0);
-		tempHead.UpdateShieldBar();
 	}
 
 	public virtual void IncreaseDamage(int x){ /* 1.2x, 1.4x, 1.6x, 1.8x, 2.0x of all damage done */ }
@@ -111,7 +100,6 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	public virtual void ArmorHeal(int h){ 
 		Head tempHead = (Head) this.mRobot.GetPart(0);
 		tempHead.ArmorHeal(h);
-		tempHead.UpdateShieldBar();
 	}
 
 	public float GetMaxHealth(){
@@ -153,12 +141,10 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	protected virtual void Update(){
 		if( this.mHealth < 0 ){
 			this.mHealth = 0;
-			this.mHealthBar.UpdateHealthBar();
 		}
 		
 		if(this.mHealth > 100){
 			this.mHealth = 100f;
-			this.mHealthBar.UpdateHealthBar();
 		}
 	}
 }

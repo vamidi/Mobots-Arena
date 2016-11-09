@@ -36,7 +36,7 @@ public class RobotBtn : MonoBehaviour {
 	}
 
 	private void OnClickListener(string name){
-		Editor editor = GameObject.FindObjectOfType<Editor>();
+		SCRAEditor editor = GameObject.FindObjectOfType<SCRAEditor>();
 
 		if(editor != null)
 			editor.ChangeRobotByName(name);

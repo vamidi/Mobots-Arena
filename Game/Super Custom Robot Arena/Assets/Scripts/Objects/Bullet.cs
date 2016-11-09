@@ -35,10 +35,13 @@ public class Bullet : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter(Collider col){
+		if(col.tag == "Bullet")
+			return;
+		
 		if(col.tag == "Head" || col.tag == "Left" || col.tag == "Right" || col.tag == "Car" || col.tag == "Target"){
 			col.SendMessage("Damage", this.mDamage, SendMessageOptions.DontRequireReceiver);
 		}
 					
-//		Destroy(this.gameObject);	
+		Destroy(this.gameObject);	
 	}
 }

@@ -14,7 +14,7 @@ public delegate void mAssignValues (PART part, string name);
 /// Editor class.
 /// 
 /// </summary>
-public class Editor : MonoBehaviour {
+public class SCRAEditor : MonoBehaviour {
 
 	/// <summary>
 	/// The prefab to load the buttons of the robot parts

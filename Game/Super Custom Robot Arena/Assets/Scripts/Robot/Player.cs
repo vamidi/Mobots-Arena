@@ -5,17 +5,16 @@ using System;
 
 using SCRA.Humanoids;
 
-[RequireComponent(typeof(Rigidbody))]
 public class Player : Robot {
 
 	/****************************** PUBLIC PROPERTIES *********************/
-	public Image mCurrentTimerBar;
-	public Text mTimerText; 
-	public float mTimer = 30f;
+	public Image mCurrentDamageBar, mCurrentWeightBar;
+	public Text mTimerText, mWeightTimerText; 
+	public float mTimer = 30f, mWeightTimer = 30f;
 	public float mSpeedTimer = 2f;
-	public bool mStartTimer = false, mStart = false;
+	public bool mStartTimer, mStart;
 
-	private float mResetTimer = 0f;
+	private float mResetTimer = 0f, mResetWeightTimer = 0f;
 	/// <summary>
 	/// To see if the player is controllable
 	/// </summary>
@@ -23,12 +22,7 @@ public class Player : Robot {
 	/// <summary>
 	/// Deadzone foor the input
 	/// </summary>
-	public float mInputDelay = 0.1f;                                               
-	/// <summary>
-	/// The velocity of the robot
-	/// how fast he me turn.
-	/// </summary>
-	public float mRotateVel = 100f;                                                                                                                                                
+	public float mInputDelay = 0.1f;                                                                                                                                                                                             
 	
 	/****************************** PRIVATE PROPERTIES *********************/
 	
@@ -201,7 +195,9 @@ public class Player : Robot {
 		this.mForwardInput = this.mRotateInput = this.mJumpInput = 0;
 		
 		this.mResetTimer = this.mTimer;
+		this.mResetWeightTimer = this.mWeightTimer;
 		this.mStartTimer = false;
+		this.mStart = false;
 	}
 	
 	// Update is called once per frame
@@ -348,37 +344,49 @@ public class Player : Robot {
 	/// Activates the timer.
 	/// </summary>
 	private void ActivateTimer(){
-		if(this.mStartTimer || mStart){
+		if(this.mStartTimer){
 			this.mTimer -= Time.deltaTime * this.mSpeedTimer;
 
 			if(this.mTimer <= 0){
 				this.mTimer = this.mResetTimer;
-				
-				if(this.mStartTimer){
-					((Arm)this.mParts[1]).ResetDamage();
-					((Arm)this.mParts[2]).ResetDamage();
-					this.mStartTimer = false;
-				}
-				
-				if(this.mStart){
-					this.mMass = this.mResetMass;
-					((Car)this.mParts[3]).SetSpeed(1825);
-					this.mStart = false;
-				}
+				((Arm)this.mParts[1]).ResetDamage();
+				((Arm)this.mParts[2]).ResetDamage();
+				this.mStartTimer = false;
 			}
 			
-			this.mTimerText.text = "Timer: 00:" + this.mTimer.ToString("F2");
-			this.UpdateTimerBar();
+			this.mTimerText.text = "Damage Timer: 00:" + this.mTimer.ToString("F2");
 		}
+		
+		if(this.mStart){
+			this.mWeightTimer -= Time.deltaTime * this.mSpeedTimer;
+
+			if(this.mWeightTimer <= 0){
+				this.mWeightTimer = this.mResetWeightTimer;
+				this.mMass = this.mResetMass;
+				((Car)this.mParts[3]).SetSpeed(1825);
+				this.mStart = false;
+			}
+
+			this.mWeightTimerText.text = "Weight Timer: 00:" + this.mWeightTimer.ToString("F2");
+		}
+		
+		this.UpdateTimerBar();
 	}
 	
 	/// <summary>
 	/// Updates the timer bar.
 	/// </summary>
 	private void UpdateTimerBar(){
-		float ratio = this.mTimer / 30f;
-//		Debug.Log(ratio);
-		this.mCurrentTimerBar.rectTransform.localScale = new Vector3(ratio , 1, 1);
+		float ratio;
+		if(this.mStartTimer){
+			ratio = this.mTimer / 30f;
+			this.mCurrentDamageBar.rectTransform.localScale = new Vector3(ratio, 1, 1);
+		}
+		
+		if(this.mStart){
+			ratio = this.mWeightTimer / 30f;
+			this.mCurrentWeightBar.rectTransform.localScale = new Vector3(ratio , 1, 1);
+		}
 	}
 
 }
