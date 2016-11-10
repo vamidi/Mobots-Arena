@@ -4,6 +4,8 @@ using System;
 
 public class EnemyLarm : Arm { 
 	
+	public Turret mTurret;
+	
 	public override void Shoot(){
 		this.mNextFire = Time.time + this.mRoundsPerSecond;
 		
@@ -13,8 +15,8 @@ public class EnemyLarm : Arm {
 //			this.mOrbit.mYRotation += (UnityEngine.Random.value - 0.5f) * Mathf.Lerp(0f, 5f, 1f);
 
 		if(this.mBullet){
-			var direction = this.transform.root.GetComponent<Turret>().target.position - this.mGunEnd.position;
-			direction.y = this.transform.root.GetComponent<Turret>().target.position.y;
+			var direction = this.mTurret.target.position - this.mGunEnd.position;
+			direction.y = this.mTurret.target.position.y;
 			Instantiate(this.mBullet, this.mGunEnd.position, Quaternion.LookRotation(direction));
 		}
 		
@@ -25,7 +27,7 @@ public class EnemyLarm : Arm {
 
 		mLaserLine.SetPosition(0, this.mGunEnd.position);
 
-		if(Physics.Raycast(rayOrg, this.transform.root.GetComponent<Turret>().target.position, out hit, this.mRange)) {
+		if(Physics.Raycast(rayOrg, this.mTurret.target.position, out hit, this.mRange)) {
 			this.mLaserLine.SetPosition(1, hit.point);
 		}else {
 			this.mLaserLine.SetPosition(1, rayOrg + (mGunEnd.transform.forward * this.mRange));
