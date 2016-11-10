@@ -142,6 +142,8 @@ public class FieldOfView : MonoBehaviour {
 				float distanceToTarget = Vector3.Distance(this.transform.position, t.position);
 
 				if(!Physics.Raycast(this.transform.position, direction, distanceToTarget, this.mObstaclesMask)){
+					Debug.Log(t);
+					Debug.Log(this.mTurret);
 					this.mTurret.target = t;
 					this.mTurret.hasTarget = true;
 				}
