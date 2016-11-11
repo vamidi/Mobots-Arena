@@ -6,6 +6,7 @@ public class Car : Part {
 	/// <summary>
 	/// The speed of the robot
 	/// </summary>
+	[SerializeField]
 	private float mSpeed;
 
 	/// <summary>
@@ -33,6 +34,7 @@ public class Car : Part {
 	}
 	
 	public void SetSpeed(float speed){
+		speed = 2800f;
 		this.mSpeed = speed/this.mRobot.GetRobotMass();
 	}
 
