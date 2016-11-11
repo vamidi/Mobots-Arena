@@ -12,10 +12,64 @@ public class Turret : MonoBehaviour {
 	public float time,lTime;
 	public float resetTime;
 	
+	public float mMass;
+	public float mResetMass;
+	public Part[] mParts = new Part[4];
+	
+	public GameObject goHead, goLarm, goRarm, goCar;
+	public TagSettings mTags = new TagSettings();
+	
+	public Part GetPart(int index){
+		return this.mParts[index];
+	}
+	
+	void Awake(){
+
+		foreach( Transform child in this.transform){
+			if (child.gameObject.tag == this.mTags.mCarTag) {
+				this.goCar = child.gameObject;
+			}
+			if(child.childCount > 0) {
+				foreach( Transform nodeChild in child){
+					if (nodeChild.gameObject.tag == this.mTags.mHeadTag) {
+						this.goHead = nodeChild.gameObject;
+					}
+					foreach (Transform innerChild in nodeChild) {
+						if (innerChild.gameObject.tag == this.mTags.mLarmTag) {
+							this.goLarm = innerChild.gameObject;
+						}else if(innerChild.gameObject.tag == this.mTags.mRamTag){
+							this.goRarm = innerChild.gameObject;
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	// Use this for initialization
 	void Start () {
 		this.time = this.lTime = resetTime;
 		this.fov = this.GetComponent<FieldOfView>();
+		
+		this.mParts [0] = this.goHead.GetComponent<EnemyHead> ();
+		this.mParts [1] = this.goLarm.GetComponent<EnemyLarm> ();
+		this.mParts [2] = this.goRarm.GetComponent<EnemyRarm> ();
+		this.mParts [3] = this.goCar.GetComponent<EnemyCar> ();
+
+		if (this.mParts [0].GetPart () != PART.HEAD)
+			Debug.LogError ("The part is not a head part");
+
+		if (this.mParts [1].GetPart () != PART.LARM)
+			Debug.LogError ("The part is not a left arm part");
+
+		if (this.mParts [2].GetPart () != PART.RARM)
+			Debug.LogError ("The part is not a right arm part");
+
+		if (this.mParts [3].GetPart () != PART.CAR)
+			Debug.LogError ("The part is not a car part");
+
+		this.mResetMass = this.mMass = this.mParts [0].mRobotWegith + this.mParts [1].mRobotWegith + this.mParts [2].mRobotWegith + this.mParts [3].mRobotWegith;
+//		((EnemyCar)this.mParts[3]).SetSpeed(1825);
 	}
 	
 	// Update is called once per frame

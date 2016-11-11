@@ -3,6 +3,8 @@ using System.Collections;
 
 public class EnemyCar : Part {
 	
+	
+	public Turret mTurret;
 	/// <summary>
 	/// The speed of the robot
 	/// </summary>
@@ -43,7 +45,7 @@ public class EnemyCar : Part {
 		// Damagedone = 14
 
 		// Get the Head part
-		EnemyHead tempHead = (EnemyHead) this.mRobot.GetPart(0);
+		EnemyHead tempHead = (EnemyHead) this.mTurret.GetPart(0);
 		float damageOnHealth;
 
 		if(tempHead.ArmorHealth <= 0){

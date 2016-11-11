@@ -4,6 +4,7 @@ using System.Collections;
 
 public class EnemyHead : Part {
 	
+	public Turret mTurret;
 	public Image mCurrentShieldBar;
 	public Text mRatioText;
 	
@@ -43,7 +44,7 @@ public class EnemyHead : Part {
 		// Damagedone = 0.7 * 20
 		// Damagedone = 14
 
-		EnemyHead tempHead = (EnemyHead) this.mRobot.GetPart(0);
+		EnemyHead tempHead = (EnemyHead) this.mTurret.GetPart(0);
 		float damageOnHealth = ( (100f - tempHead.Strenght) / 100f ) * d;
 
 		this.mHealth -= damageOnHealth;

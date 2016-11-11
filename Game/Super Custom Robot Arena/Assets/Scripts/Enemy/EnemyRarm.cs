@@ -49,7 +49,7 @@ public class EnemyRarm : Arm {
 		// Damagedone = 14
 
 		// Get the Head part
-		EnemyHead tempHead = (EnemyHead) this.mRobot.GetPart(0);
+		EnemyHead tempHead = (EnemyHead)mTurret.GetPart(0);
 		float damageOnHealth;
 
 		if(tempHead.ArmorHealth <= 0){

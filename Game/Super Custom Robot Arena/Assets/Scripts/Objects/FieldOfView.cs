@@ -1,10 +1,16 @@
 ﻿using UnityEngine;
+// Runtime code here
+#if UNITY_EDITOR
+// Editor specific code here
 using UnityEditor;
+#endif
+// Runtime code here
 using System.Collections;
 using System.Collections.Generic;
 
 public class FieldOfView : MonoBehaviour {
 	
+	public Color mRadiusColor = Color.black, mTargetColor = Color.red;
 	public Turret mTurret;
 	public float mViewRadius;
 	[Range(0, 360)]
@@ -142,8 +148,6 @@ public class FieldOfView : MonoBehaviour {
 				float distanceToTarget = Vector3.Distance(this.transform.position, t.position);
 
 				if(!Physics.Raycast(this.transform.position, direction, distanceToTarget, this.mObstaclesMask)){
-					Debug.Log(t);
-					Debug.Log(this.mTurret);
 					this.mTurret.target = t;
 					this.mTurret.hasTarget = true;
 				}

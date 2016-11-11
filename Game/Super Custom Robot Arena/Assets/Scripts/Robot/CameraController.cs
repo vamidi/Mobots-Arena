@@ -14,7 +14,7 @@ public class PositionSettings {
 [System.Serializable]
 public class OrbitSettings {
 	public float mXRotation = -34f;
-	public float mYRotation = 180f;
+	public float mYRotation = 0f;
 	public float mMaxXRotation = 25f;
 	public float mMinXRotation = -85f;
 	public float mVorbitSmooth = 150f;
@@ -172,7 +172,7 @@ public class CameraController : MonoBehaviour {
 	/// </summary>
 	void MoveToTarget() {
 		this.mTargetPos = this.mTarget.position + this.mPosition.mTargetPosOffset;
-		this.mDestination = Quaternion.Euler(this.mOrbit.mXRotation, this.mOrbit.mYRotation + this.mTarget.eulerAngles.y, 0) * -Vector3.forward * this.mPosition.mDistanceFromTarget;
+		this.mDestination = Quaternion.Euler(this.mOrbit.mXRotation, this.mOrbit.mYRotation, 0) * -Vector3.forward * this.mPosition.mDistanceFromTarget;
 		this.mDestination += this.mTarget.position;
 		this.transform.position = this.mDestination;
 	}
@@ -191,7 +191,7 @@ public class CameraController : MonoBehaviour {
 	/// </summary>
 	void OrbitTarget() {
 		if(mOrbitSnapInput > 0) {
-			mOrbit.mYRotation = -180f;
+			mOrbit.mYRotation = 0f;
 		}
 
 		mOrbit.mXRotation += mMouseInputVertical * mOrbit.mVorbitSmooth * Time.deltaTime;

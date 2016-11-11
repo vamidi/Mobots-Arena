@@ -6,7 +6,8 @@ public class PlayerManagement : MonoBehaviour {
 	public Texture2D mTexture2D;
 
 	private bool mInGame = true;
-//	private bool mCursorOn = true;
+	private bool mCursorOn = true;
+	
 	// Use this for initialization
 	void Start () {
 	}
@@ -15,10 +16,10 @@ public class PlayerManagement : MonoBehaviour {
 	void Update () {
 		if(this.mInGame){
 			if(Input.GetKeyDown(KeyCode.Escape)){
-//				mCursorOn = false;
+				mCursorOn = false;
 			}
 //			Cursor.SetCursor (mTexture2D, new Vector2 (0.5f, 0.5f), CursorMode.Auto);
-//			Cursor.lockState = (mCursorOn) ? CursorLockMode.Locked : CursorLockMode.None;
+			Cursor.lockState = (mCursorOn) ? CursorLockMode.Locked : CursorLockMode.None;
 		}
 	}
 }
