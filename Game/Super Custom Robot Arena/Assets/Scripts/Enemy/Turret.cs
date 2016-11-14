@@ -4,6 +4,7 @@ using System.Collections;
 
 public class Turret : MonoBehaviour {
 
+	public float mRotateSpeed = 2f;
 	public bool isAlive = true;
 	public bool mDebug;
 	public Image mCurrentHealthBar;
@@ -144,6 +145,9 @@ public class Turret : MonoBehaviour {
 		Vector3 viewAngleA, viewAngleB; 
 		switch(mState){
 			case STATES.PATROL:
+				if(!target){
+					this.transform.Rotate(Vector3.up * this.mRotateSpeed);
+				}
 				if(target){
 					direction = this.target.position - this.transform.position;
 					this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * this.mRotateVel);	
@@ -164,7 +168,7 @@ public class Turret : MonoBehaviour {
 				
 				if(lTime <= 0){
 					((EnemyRarm)rarm).Shoot();
-					this.lTime = Random.Range(0.5f, resetTime);
+					this.lTime = Random.Range(.5f, resetTime);
 				}
 								
 				viewAngleA = fov.DirectionFromAngle(-15f, false); 
