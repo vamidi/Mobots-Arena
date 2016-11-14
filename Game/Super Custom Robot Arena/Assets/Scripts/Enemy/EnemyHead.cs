@@ -44,11 +44,12 @@ public class EnemyHead : Part {
 		// Damagedone = 0.7 * 20
 		// Damagedone = 14
 
-		EnemyHead tempHead = (EnemyHead) this.mTurret.GetPart(0);
-		float damageOnHealth = ( (100f - tempHead.Strenght) / 100f ) * d;
+		StartCoroutine(Flash());
+		
+		float damageOnHealth = ( (100f - this.mArmorStrength) / 100f ) * d;
 
 		this.mHealth -= damageOnHealth;
-		tempHead.ArmorHealth -= d;
+		this.mArmorHealth -= d;
 
 		if(this.mHealthBar)
 			this.mHealthBar.UpdateHealthBar();
@@ -107,6 +108,7 @@ public class EnemyHead : Part {
 		base.Start();
 		this.mPart = PART.HEAD;
 		this.mArmorHealth = this.mMaxHealth;
+	
 	}
 	
 	// Update is called once per frame

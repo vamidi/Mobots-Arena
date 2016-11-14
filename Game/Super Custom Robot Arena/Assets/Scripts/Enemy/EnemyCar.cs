@@ -44,6 +44,8 @@ public class EnemyCar : Part {
 		// Damagedone = 0.7 * 20
 		// Damagedone = 14
 
+		StartCoroutine(Flash());
+		
 		// Get the Head part
 		EnemyHead tempHead = (EnemyHead) this.mTurret.GetPart(0);
 		float damageOnHealth;

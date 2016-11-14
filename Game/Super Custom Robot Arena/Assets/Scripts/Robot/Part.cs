@@ -32,7 +32,8 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	/// <summary>
 	/// The model of the robot
 	/// </summary>
-	protected GameObject fbx = null;
+	protected Material mMaterial = null;
+	protected Material mFlashMaterial = null;
 	/// <summary>
 	/// The texture of the robot
 	/// </summary>
@@ -48,6 +49,8 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	protected GameObject weapon = null;
 	
 	protected HealthBar mHealthBar = null;
+	
+	public bool isFlashing = false;
 	
 	/// <summary>
 	/// Returns the part
@@ -68,6 +71,8 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 		// Damagedone = ((100-30)/100) * 20
 		// Damagedone = 0.7 * 20
 		// Damagedone = 14
+		
+		StartCoroutine(Flash());
 		
 		// Get the Head part
 		Head tempHead = (Head) this.mRobot.GetPart(0);
@@ -135,6 +140,8 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	protected virtual void Start(){
 		this.mHealth = this.mMaxHealth;
 		this.mHealthBar = this.GetComponent<HealthBar>();
+		this.mMaterial = this.GetComponent<Renderer>().material;
+		this.mFlashMaterial = new Material(Shader.Find("Mobile/Particles/Additive"));
 	}
 	
 	// Update is called once per frame
@@ -146,5 +153,27 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 		if(this.mHealth > 100){
 			this.mHealth = 100f;
 		}
+	}
+	
+	
+	protected IEnumerator Flash(){
+		if(this.isFlashing)
+			yield return null;
+		
+		this.isFlashing = true;
+		yield return new  WaitForSeconds(0.1F);
+		gameObject.GetComponent<Renderer>().material = this.mFlashMaterial;
+		yield return new  WaitForSeconds(0.1F);
+		gameObject.GetComponent<Renderer>().material = this.mMaterial;
+		yield return new  WaitForSeconds(0.1F);
+		gameObject.GetComponent<Renderer>().material = this.mFlashMaterial;
+		yield return new  WaitForSeconds(0.1F);
+		gameObject.GetComponent<Renderer>().material = this.mMaterial;
+		yield return new  WaitForSeconds(0.1F);
+		gameObject.GetComponent<Renderer>().material = this.mFlashMaterial;
+		yield return new  WaitForSeconds(0.1F);
+		gameObject.GetComponent<Renderer>().material = this.mMaterial;
+		yield return new  WaitForSeconds(0.1F);
+		this.isFlashing = false;
 	}
 }

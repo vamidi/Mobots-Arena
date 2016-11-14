@@ -43,6 +43,9 @@ public class Head : Part {
 		// Damagedone = 0.7 * 20
 		// Damagedone = 14
 
+		StartCoroutine(Flash());
+		
+		
 		float damageOnHealth = ( (100f - this.Strenght) / 100f ) * d;
 
 		this.mHealth -= damageOnHealth;
