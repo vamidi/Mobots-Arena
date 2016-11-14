@@ -48,7 +48,8 @@ public class EnemyRarm : Arm {
 		// Damagedone = 0.7 * 20
 		// Damagedone = 14
 
-		StartCoroutine(Flash());
+		if(!this.isFlashing)
+			StartCoroutine(Flash());
 		
 		// Get the Head part
 		EnemyHead tempHead = (EnemyHead)mTurret.GetPart(0);

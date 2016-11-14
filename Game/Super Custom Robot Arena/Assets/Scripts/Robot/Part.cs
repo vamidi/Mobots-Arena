@@ -23,6 +23,7 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	/// The weight of the part
 	/// </summary>
 	public int mRobotWegith = 75;	
+	public Color mDownColor = new Color(153f, 153f, 153f, 1f);
 	protected Robot mRobot = null;
 	/// <summary>
 	/// This is needed to tell the robot which part this is.
@@ -71,8 +72,9 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 		// Damagedone = ((100-30)/100) * 20
 		// Damagedone = 0.7 * 20
 		// Damagedone = 14
-		
-		StartCoroutine(Flash());
+
+		if(!this.isFlashing)
+			StartCoroutine(Flash());
 		
 		// Get the Head part
 		Head tempHead = (Head) this.mRobot.GetPart(0);
@@ -142,12 +144,15 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 		this.mHealthBar = this.GetComponent<HealthBar>();
 		this.mMaterial = this.GetComponent<Renderer>().material;
 		this.mFlashMaterial = new Material(Shader.Find("Mobile/Particles/Additive"));
+		float gray = 153f/255f;
+		this.mDownColor = new Color(gray, gray, gray, 1f);
 	}
 	
 	// Update is called once per frame
 	protected virtual void Update(){
 		if( this.mHealth < 0 ){
 			this.mHealth = 0;
+			this.GetComponent<Renderer>().material.color = this.mDownColor;
 		}
 		
 		if(this.mHealth > 100){
@@ -155,11 +160,7 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 		}
 	}
 	
-	
 	protected IEnumerator Flash(){
-		if(this.isFlashing)
-			yield return null;
-		
 		this.isFlashing = true;
 		yield return new  WaitForSeconds(0.1F);
 		gameObject.GetComponent<Renderer>().material = this.mFlashMaterial;

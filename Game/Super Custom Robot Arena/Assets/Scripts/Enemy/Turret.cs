@@ -4,6 +4,8 @@ using System.Collections;
 
 public class Turret : MonoBehaviour {
 
+	public bool isAlive = true;
+	public bool mDebug;
 	public Image mCurrentHealthBar;
 	public Text mRatioText;
 	public float mHealth;
@@ -30,6 +32,8 @@ public class Turret : MonoBehaviour {
 	public Part GetPart(int index){
 		return this.mParts[index];
 	}
+	
+	#region UNITYMETHODS
 	
 	void Awake(){
 
@@ -92,31 +96,41 @@ public class Turret : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		this.DebugEnemy();
-		this.UpdateHealthBar();
+		if(this.isAlive){
+			if(this.mDebug)
+				this.DebugEnemy();
+			
+			this.UpdateHealthBar();
+			
+			if(this.mHealth <= 0) {
+				this.isAlive = false;
+				this.mCurrentHealthBar.fillAmount = 0f;
+			}
+		}
+		
 	}
 	
 	void FixedUpdate(){
-		this.Turn();
+		if(this.isAlive)
+			this.Turn();
 	}
+	
+	#endregion
 	
 	private void UpdateHealthBar(){
 		this.mHealth = 0;
 		for(int i = 0; i < this.mParts.Length; i++){
 			this.mHealth += mParts[i].GetHealth();
 		}
-		if(this.mOldHealth != this.mHealth){
-//			Debug.Log(this.mHealth);
-			this.mOldHealth = this.mHealth;
-		}
-		float ratio = Map( this.mHealth, 0, this.mMaxHealth, 0, 1);
-		if(this.mCurrentHealthBar && this.mCurrentHealthBar.fillAmount != ratio){
+				
+		if(this.mCurrentHealthBar){
+			float ratio = Map( this.mHealth, 0, this.mMaxHealth, 0, 1);
 			this.mCurrentHealthBar.fillAmount = Mathf.Lerp(this.mCurrentHealthBar.fillAmount, ratio, Time.deltaTime * this.mColorLerpSpeed);
 			this.mCurrentHealthBar.color = Color.Lerp(this.mColorArr[0], this.mColorArr[1], ratio);
-		}
 
-		if(mRatioText)
-			mRatioText.text = (ratio * 100 ).ToString("0") + "%";			
+			if(mRatioText)
+				mRatioText.text = (ratio * 100 ).ToString("0") + "%";			
+		}
 		
 	}
 	
@@ -177,16 +191,16 @@ public class Turret : MonoBehaviour {
 		}
 	}
 	
+	private float Map(float value, float inMin, float inMax, float outMin, float outMax){
+		return ( value - inMin ) * ( outMax - outMin) / ( inMax - inMin ) + outMin;
+	}
+	
 	private void DebugEnemy(){
 		Vector3 viewAngleA = fov.DirectionFromAngle(-15f, false); 
 		Vector3 viewAngleB = fov.DirectionFromAngle(15f, false); 
-		
+
 		Debug.DrawLine(fov.transform.position, fov.transform.position + viewAngleA * fov.mViewRadius, Color.yellow);
 		Debug.DrawLine(fov.transform.position, fov.transform.position + viewAngleB * fov.mViewRadius, Color.yellow);
-		
-	}
-	
-	private float Map(float value, float inMin, float inMax, float outMin, float outMax){
-		return ( value - inMin ) * ( outMax - outMin) / ( inMax - inMin ) + outMin;
+
 	}
 }
