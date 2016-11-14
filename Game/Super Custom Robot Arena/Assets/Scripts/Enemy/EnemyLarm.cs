@@ -72,7 +72,8 @@ public class EnemyLarm : Arm {
 	
 	// Called before the Start function
 	protected override void Awake(){
-		this.mRobot = this.transform.root.GetComponent<Enemy>();
+		this.mRobot = this.transform.parent.parent.parent.GetComponent<Enemy>();
+		
 	}
 	
 	// Use this for initialization

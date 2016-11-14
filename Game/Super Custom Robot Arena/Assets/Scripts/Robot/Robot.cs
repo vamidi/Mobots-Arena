@@ -45,6 +45,11 @@ namespace SCRA {
 			/****************************** PRIVATE PROPERTIES *********************/
 			
 			/// <summary>
+			/// To see if the player/enemy is alive
+			/// </summary>
+			protected bool mIsAlive = true;
+			
+			/// <summary>
 			/// Target rotaion variables
 			/// </summary>
 			protected Quaternion mTargetRot, mTargetRotTorso;                                     

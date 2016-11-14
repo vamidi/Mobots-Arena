@@ -148,8 +148,8 @@ public class FieldOfView : MonoBehaviour {
 				float distanceToTarget = Vector3.Distance(this.transform.position, t.position);
 
 				if(!Physics.Raycast(this.transform.position, direction, distanceToTarget, this.mObstaclesMask)){
-					this.mTurret.target = t;
-					this.mTurret.hasTarget = true;
+//					this.mTurret.target = t;
+//					this.mTurret.hasTarget = true;
 				}
 			}
 		}		

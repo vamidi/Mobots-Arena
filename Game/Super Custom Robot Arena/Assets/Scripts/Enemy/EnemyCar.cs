@@ -2,9 +2,7 @@
 using System.Collections;
 
 public class EnemyCar : Part {
-	
-	
-	public Turret mTurret;
+		
 	/// <summary>
 	/// The speed of the robot
 	/// </summary>
@@ -25,7 +23,6 @@ public class EnemyCar : Part {
 
 	public void SetSpeed(float speed){
 		this.mSpeed = speed/this.mRobot.GetRobotMass();
-
 	}
 
 	public void SetJumpStrength(float strength){
@@ -48,7 +45,7 @@ public class EnemyCar : Part {
 			StartCoroutine(Flash());
 		
 		// Get the Head part
-		EnemyHead tempHead = (EnemyHead) this.mTurret.GetPart(0);
+		EnemyHead tempHead = (EnemyHead) this.mRobot.GetPart(0);
 		float damageOnHealth;
 
 		if(tempHead.ArmorHealth <= 0){
@@ -69,7 +66,7 @@ public class EnemyCar : Part {
 	
 	// Called before the Start function
 	protected override void Awake(){
-		this.mRobot = this.transform.root.GetComponent<Enemy>();
+		this.mRobot = this.transform.parent.GetComponent<Enemy>();
 	}
 	
 	// Use this for initialization
