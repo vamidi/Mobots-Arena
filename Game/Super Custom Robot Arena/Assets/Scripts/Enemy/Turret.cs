@@ -1,8 +1,18 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Turret : MonoBehaviour {
 
+	public float mRotateSpeed = 2f;
+	public bool isAlive = true;
+	public bool mDebug;
+	public Image mCurrentHealthBar;
+	public Text mRatioText;
+	public float mHealth;
+	public float mMaxHealth;
+	public float mOldHealth;
+	public float mColorLerpSpeed = .2f;
 	public Part larm, rarm;
 	public STATES mState = STATES.PATROL;
 	public FieldOfView fov;
@@ -15,6 +25,7 @@ public class Turret : MonoBehaviour {
 	public float mMass;
 	public float mResetMass;
 	public Part[] mParts = new Part[4];
+	public Color[] mColorArr = new Color[2];
 	
 	public GameObject goHead, goLarm, goRarm, goCar;
 	public TagSettings mTags = new TagSettings();
@@ -22,6 +33,8 @@ public class Turret : MonoBehaviour {
 	public Part GetPart(int index){
 		return this.mParts[index];
 	}
+	
+	#region UNITYMETHODS
 	
 	void Awake(){
 
@@ -70,27 +83,71 @@ public class Turret : MonoBehaviour {
 
 		this.mResetMass = this.mMass = this.mParts [0].mRobotWegith + this.mParts [1].mRobotWegith + this.mParts [2].mRobotWegith + this.mParts [3].mRobotWegith;
 //		((EnemyCar)this.mParts[3]).SetSpeed(1825);
+		
+		this.mColorArr[0] = new Color(1f, .007f, .007f);
+		this.mColorArr[1] = new Color(.17f, .96f, 0f);
+		
+		for(int i = 0; i < this.mParts.Length; i++){
+//			Debug.Log("Part: " + this.mParts[i].GetPart() + " Health " + this.mParts[i].GetHealth());
+			this.mMaxHealth += mParts[i].GetMaxHealth();
+		}
+		
+		this.mOldHealth = this.mHealth = this.mMaxHealth;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		this.DebugEnemy();
+		if(this.isAlive){
+			if(this.mDebug)
+				this.DebugEnemy();
+			
+			this.UpdateHealthBar();
+			
+			if(this.mHealth <= 0) {
+				this.isAlive = false;
+				this.mCurrentHealthBar.fillAmount = 0f;
+			}
+		}
+		
 	}
 	
 	void FixedUpdate(){
-		this.Turn();
+		if(this.isAlive)
+			this.Turn();
+	}
+	
+	#endregion
+	
+	private void UpdateHealthBar(){
+		this.mHealth = 0;
+		for(int i = 0; i < this.mParts.Length; i++){
+			this.mHealth += mParts[i].GetHealth();
+		}
+				
+		if(this.mCurrentHealthBar){
+			float ratio = Map( this.mHealth, 0, this.mMaxHealth, 0, 1);
+			this.mCurrentHealthBar.fillAmount = Mathf.Lerp(this.mCurrentHealthBar.fillAmount, ratio, Time.deltaTime * this.mColorLerpSpeed);
+			this.mCurrentHealthBar.color = Color.Lerp(this.mColorArr[0], this.mColorArr[1], ratio);
+
+			if(mRatioText)
+				mRatioText.text = (ratio * 100 ).ToString("0") + "%";			
+		}
+		
 	}
 	
 	/// <summary>
 	/// This method is for to turn the robot
 	/// </summary>
-	protected void Turn() {
+	private void Turn() {
 		// Rotate 
 		Vector3 direction = Vector3.zero; 
 		float distanceToTarget = 0;
 		Vector3 viewAngleA, viewAngleB; 
 		switch(mState){
 			case STATES.PATROL:
+				if(!target){
+					this.transform.Rotate(Vector3.up * this.mRotateSpeed);
+				}
 				if(target){
 					direction = this.target.position - this.transform.position;
 					this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * this.mRotateVel);	
@@ -111,7 +168,7 @@ public class Turret : MonoBehaviour {
 				
 				if(lTime <= 0){
 					((EnemyRarm)rarm).Shoot();
-					this.lTime = Random.Range(0.5f, resetTime);
+					this.lTime = Random.Range(.5f, resetTime);
 				}
 								
 				viewAngleA = fov.DirectionFromAngle(-15f, false); 
@@ -138,12 +195,16 @@ public class Turret : MonoBehaviour {
 		}
 	}
 	
-	void DebugEnemy(){
+	private float Map(float value, float inMin, float inMax, float outMin, float outMax){
+		return ( value - inMin ) * ( outMax - outMin) / ( inMax - inMin ) + outMin;
+	}
+	
+	private void DebugEnemy(){
 		Vector3 viewAngleA = fov.DirectionFromAngle(-15f, false); 
 		Vector3 viewAngleB = fov.DirectionFromAngle(15f, false); 
-		
+
 		Debug.DrawLine(fov.transform.position, fov.transform.position + viewAngleA * fov.mViewRadius, Color.yellow);
 		Debug.DrawLine(fov.transform.position, fov.transform.position + viewAngleB * fov.mViewRadius, Color.yellow);
-		
+
 	}
 }

@@ -47,6 +47,9 @@ public class EnemyLarm : Arm {
 		// Damagedone = 0.7 * 20
 		// Damagedone = 14
 
+		if(!this.isFlashing)
+			StartCoroutine(Flash());		
+		
 		// Get the Head part
 		EnemyHead tempHead = (EnemyHead) mTurret.GetPart(0);
 		float damageOnHealth;
@@ -69,7 +72,8 @@ public class EnemyLarm : Arm {
 	
 	// Called before the Start function
 	protected override void Awake(){
-		this.mRobot = this.transform.root.GetComponent<Enemy>();
+		this.mRobot = this.transform.parent.parent.parent.GetComponent<Enemy>();
+		
 	}
 	
 	// Use this for initialization

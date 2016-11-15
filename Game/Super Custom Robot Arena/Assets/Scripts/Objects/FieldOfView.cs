@@ -144,12 +144,12 @@ public class FieldOfView : MonoBehaviour {
 			Transform t = target.transform;
 			Vector3 direction = (t.position - this.transform.position).normalized;
 
-			if(Vector3.Angle( this.transform.forward, direction ) < 360f){
+			if(Vector3.Angle( this.transform.forward, direction ) < this.mViewAngle / 2){
 				float distanceToTarget = Vector3.Distance(this.transform.position, t.position);
 
 				if(!Physics.Raycast(this.transform.position, direction, distanceToTarget, this.mObstaclesMask)){
-					this.mTurret.target = t;
-					this.mTurret.hasTarget = true;
+//					this.mTurret.target = t;
+//					this.mTurret.hasTarget = true;
 				}
 			}
 		}		
