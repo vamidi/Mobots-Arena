@@ -24,6 +24,10 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	/// </summary>
 	public int mRobotWegith = 75;	
 	public Color mDownColor = new Color(153f, 153f, 153f, 1f);
+	
+	/// <summary>
+	/// The root of the part
+	/// </summary>
 	protected Robot mRobot = null;
 	/// <summary>
 	/// This is needed to tell the robot which part this is.
@@ -34,6 +38,9 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	/// The model of the robot
 	/// </summary>
 	protected Material mMaterial = null;
+	/// <summary>
+	/// The flash material.
+	/// </summary>
 	protected Material mFlashMaterial = null;
 	/// <summary>
 	/// The texture of the robot
@@ -48,10 +55,14 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	/// The weapon of the robot
 	/// </summary>
 	protected GameObject weapon = null;
-	
+	/// <summary>
+	/// Health bar of the part
+	/// </summary>
 	protected HealthBar mHealthBar = null;
-	
-	public bool isFlashing = false;
+	/// <summary>
+	/// To see if the part is flashing
+	/// </summary>
+	protected bool isFlashing = false;
 	
 	/// <summary>
 	/// Returns the part
@@ -61,6 +72,12 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 		return this.mPart;
 	}
 
+	public Robot GetParent(){
+		return this.mRobot;
+	}
+	
+	#region INTERFACEMETHODS
+	
 	/// <summary>
 	/// Damage the specified part
 	/// </summary>
@@ -98,8 +115,6 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 		this.mHealth += (this.mMaxHealth / h); // ex. h = 10% -> health += 100f / 10% = 10
 	}
 
-	public virtual void IncreaseDamage(int x){ /* 1.2x, 1.4x, 1.6x, 1.8x, 2.0x of all damage done */ }
-
 	/// <summary>
 	/// Heals the armor.
 	/// </summary>
@@ -108,7 +123,11 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 		Head tempHead = (Head) this.mRobot.GetPart(0);
 		tempHead.ArmorHeal(h);
 	}
+	
+	public virtual void IncreaseDamage(int x){ /* 1.2x, 1.4x, 1.6x, 1.8x, 2.0x of all damage done */ }
 
+	#endregion
+	
 	public float GetMaxHealth(){
 		return this.mMaxHealth;
 	}
@@ -132,6 +151,8 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	public void SetWeight(int weight){
 		this.mRobotWegith = weight;
 	}
+	
+	#region UNITYMETHOD
 	
 	// Called before the Start function
 	protected virtual void Awake(){
@@ -159,6 +180,8 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 			this.mHealth = 100f;
 		}
 	}
+	
+	#endregion
 	
 	protected IEnumerator Flash(){
 		this.isFlashing = true;

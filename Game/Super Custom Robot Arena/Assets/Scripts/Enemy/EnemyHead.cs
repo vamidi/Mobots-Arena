@@ -53,6 +53,9 @@ public class EnemyHead : Part {
 
 		if(this.mHealthBar)
 			this.mHealthBar.UpdateHealthBar();
+		
+		// Always trigger the enemy when shot
+		((Enemy)this.mRobot).TriggerEnemy();
 
 	}
 	

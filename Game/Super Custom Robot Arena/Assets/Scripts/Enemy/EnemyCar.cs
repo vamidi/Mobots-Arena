@@ -61,6 +61,9 @@ public class EnemyCar : Part {
 		if(this.mHealthBar)
 			this.mHealthBar.UpdateHealthBar();
 		tempHead.UpdateShieldBar();
+		
+		// Always trigger the enemy when shot
+		((Enemy)this.mRobot).TriggerEnemy();
 
 	}
 	

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System;
+using System.Collections;
 
 public enum SIZE {
 	SMALLER, SMALL, MEDIUM, BIG, ULTRA
@@ -68,32 +68,30 @@ public class Capsule : MonoBehaviour {
 	/// <param name="col">Col.</param>
 	void OnTriggerEnter(Collider col){
 		if(col.tag == "Head" || col.tag == "Left" || col.tag == "Right" || col.tag == "Car"){
-			if(col.transform.root.tag == "Robot"){
-				switch(this.mKind){
-					case KIND.HEALTH:
-						GetLowestHealthOfPart(col).SendMessage("Heal", this.mAmount, SendMessageOptions.DontRequireReceiver);
-						break;
-					case KIND.SHIELD:			
-						col.SendMessage ("ArmorHeal", this.mAmount, SendMessageOptions.DontRequireReceiver);
-						break;
-				case KIND.WEIGHT:
-						col.transform.root.SendMessage ("IncreaseMovement", this.mWeightAmount, SendMessageOptions.DontRequireReceiver);
-						break;
-				case KIND.DAMAGE:
-						col.transform.root.SendMessage ("IncreaseDamage", this.mMultiplier, SendMessageOptions.DontRequireReceiver);
-						break;
-					default:
-						GetLowestHealthOfPart(col).SendMessage("Heal", this.mAmount, SendMessageOptions.DontRequireReceiver);
-						break;		
-				}
-			}
+			switch(this.mKind){
+				case KIND.HEALTH:
+					GetLowestHealthOfPart(col).SendMessage("Heal", this.mAmount, SendMessageOptions.DontRequireReceiver);
+					break;
+				case KIND.SHIELD:			
+					col.SendMessage ("ArmorHeal", this.mAmount, SendMessageOptions.DontRequireReceiver);
+					break;
+			case KIND.WEIGHT:
+					col.transform.root.SendMessage ("IncreaseMovement", this.mWeightAmount, SendMessageOptions.DontRequireReceiver);
+					break;
+			case KIND.DAMAGE:
+					col.transform.root.SendMessage ("IncreaseDamage", this.mMultiplier, SendMessageOptions.DontRequireReceiver);
+					break;
+				default:
+					GetLowestHealthOfPart(col).SendMessage("Heal", this.mAmount, SendMessageOptions.DontRequireReceiver);
+					break;		
+			}			
 			
 			this.gameObject.SetActive(false);
 		}
 	}
 	
 	private Part GetLowestHealthOfPart(Collider col){
-		Player r = col.transform.root.GetComponent<Player>();
+		SCRA.Humanoids.Robot r = col.transform.GetComponent<Part>().GetParent();
 		Part p = null;
 		float amount = 99999;
 		for(int i = 0; i < 4; i++){

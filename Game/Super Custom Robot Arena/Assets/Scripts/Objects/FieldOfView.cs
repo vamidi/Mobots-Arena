@@ -10,19 +10,19 @@ using System.Collections.Generic;
 
 public class FieldOfView : MonoBehaviour {
 	
+	public List<Transform> mVisibleTargets = new List<Transform>();
 	public Color mRadiusColor = Color.black, mTargetColor = Color.red;
 	public Turret mTurret;
 	public float mViewRadius;
 	[Range(0, 360)]
 	public float mViewAngle;
 	public LayerMask mTargetMask, mObstaclesMask, mPowerUpsMask, mPlayerMask;
-	public List<Transform> mVisibleTargets = new List<Transform>(); 
-	public Transform player;
 	public float mMeshResolution;
 	public MeshFilter mMeshFilter;
 	public int mEdgeResolveIteration;
 	public float mEdgeDstTreshold;
-	
+
+	private Enemy mEnemy;
 	private Mesh mViewMesh;
 	
 	public Vector3 DirectionFromAngle(float angleInDegrees, bool angleIsGlobal){
@@ -32,6 +32,26 @@ public class FieldOfView : MonoBehaviour {
 		return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
 	}
 
+	public Transform FindTarget(){
+
+		Collider[] targetsInViewRadius = Physics.OverlapSphere(this.transform.position, this.mViewRadius, this.mPlayerMask);
+
+		foreach(Collider target in targetsInViewRadius){
+			Transform t = target.transform;
+			Vector3 direction = (t.position - this.transform.position).normalized;
+
+			if(Vector3.Angle( this.transform.forward, direction ) < this.mViewAngle / 2){
+				float distanceToTarget = Vector3.Distance(this.transform.position, t.position);
+
+				if(!Physics.Raycast(this.transform.position, direction, distanceToTarget, this.mObstaclesMask)){
+					return t;
+				}
+			}
+		}		
+		
+		return null;
+	}
+	
 	public struct ViewCastInfo {
 		public bool hit;
 		public Vector3 point;
@@ -62,10 +82,8 @@ public class FieldOfView : MonoBehaviour {
 		this.mViewMesh.name = "View Mesh";
 		this.mMeshFilter.mesh = this.mViewMesh;
 		StartCoroutine(this.FindTargetsWithDelay(.2f));
+		this.mEnemy = this.GetComponent<Enemy>();
 	}
-	
-	// Update is called once per frame
-	void Update () { }
 	
 	void LateUpdate(){
 		DrawFieldOfView(); 
@@ -135,8 +153,9 @@ public class FieldOfView : MonoBehaviour {
 	}
 	
 	private void FindPlayerTarget(){
-		if(this.mTurret != null && this.mTurret.hasTarget)
+		if(this.mEnemy && this.mEnemy.mPlayer)
 			return;
+		
 		
 		Collider[] targetsInViewRadius = Physics.OverlapSphere(this.transform.position, this.mViewRadius, this.mPlayerMask);
 	
@@ -148,12 +167,12 @@ public class FieldOfView : MonoBehaviour {
 				float distanceToTarget = Vector3.Distance(this.transform.position, t.position);
 
 				if(!Physics.Raycast(this.transform.position, direction, distanceToTarget, this.mObstaclesMask)){
-//					this.mTurret.target = t;
-//					this.mTurret.hasTarget = true;
+					this.mEnemy.mPlayer = t;
 				}
 			}
 		}		
 	}
+	
 	
 	private void DrawFieldOfView(){
 		int stepCount = Mathf.RoundToInt(this.mViewAngle * this.mMeshResolution);

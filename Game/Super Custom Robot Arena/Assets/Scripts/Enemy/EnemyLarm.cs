@@ -3,34 +3,32 @@ using System.Collections;
 using System;
 
 public class EnemyLarm : Arm { 
-	
-	public Turret mTurret;
-	
+		
 	public override void Shoot(){
-		this.mNextFire = Time.time + this.mRoundsPerSecond;
-		
-		this.mCurrentRecoilPos -= this.mRecoilAmount;
-		
-//			this.mOrbit.mXRotation += (UnityEngine.Random.value - 0.5f) * Mathf.Lerp(0f, 5f, 1f);
-//			this.mOrbit.mYRotation += (UnityEngine.Random.value - 0.5f) * Mathf.Lerp(0f, 5f, 1f);
+		if (Time.time > this.mNextFire) {
+			this.mNextFire = Time.time + this.mRoundsPerSecond;
+			this.mCurrentRecoilPos -= this.mRecoilAmount;
+			//	public float shootTimer = 2f, mReset = 2f;
+			Enemy e = ((Enemy)this.mRobot);
+			if(this.mBullet){
+				var direction = e.mPlayer.position - this.mGunEnd.position;
+				direction.y = e.mPlayer.position.y;
+				Instantiate(this.mBullet, this.mGunEnd.position, Quaternion.LookRotation(direction));
+			}
 
-		if(this.mBullet){
-			var direction = this.mTurret.target.position - this.mGunEnd.position;
-			direction.y = this.mTurret.target.position.y;
-			Instantiate(this.mBullet, this.mGunEnd.position, Quaternion.LookRotation(direction));
-		}
-		
-		StartCoroutine(this.ShotEffect());
 
-		Vector3 rayOrg = this.mGunEnd.position; //this.mCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f,  0));
-		RaycastHit hit;
+			StartCoroutine(this.ShotEffect());
 
-		mLaserLine.SetPosition(0, this.mGunEnd.position);
+			Vector3 rayOrg = this.mGunEnd.position; //this.mCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f,  0));
+			RaycastHit hit;
 
-		if(Physics.Raycast(rayOrg, this.mTurret.target.position, out hit, this.mRange)) {
-			this.mLaserLine.SetPosition(1, hit.point);
-		}else {
-			this.mLaserLine.SetPosition(1, rayOrg + (mGunEnd.transform.forward * this.mRange));
+			mLaserLine.SetPosition(0, this.mGunEnd.position);
+
+			if(Physics.Raycast(rayOrg, e.mPlayer.position, out hit, this.mRange)) {
+				this.mLaserLine.SetPosition(1, hit.point);				
+			}else {
+				this.mLaserLine.SetPosition(1, rayOrg + (mGunEnd.transform.forward * this.mRange));
+			}
 		}
 	}
 	
@@ -51,7 +49,7 @@ public class EnemyLarm : Arm {
 			StartCoroutine(Flash());		
 		
 		// Get the Head part
-		EnemyHead tempHead = (EnemyHead) mTurret.GetPart(0);
+		EnemyHead tempHead = (EnemyHead) mRobot.GetPart(0);
 		float damageOnHealth;
 
 		if(tempHead.ArmorHealth <= 0){
@@ -67,6 +65,9 @@ public class EnemyLarm : Arm {
 		if(this.mHealthBar)
 			this.mHealthBar.UpdateHealthBar();
 		tempHead.UpdateShieldBar();
+		
+		// Always trigger the enemy when shot
+		((Enemy)this.mRobot).TriggerEnemy();
 
 	}
 	
@@ -80,6 +81,7 @@ public class EnemyLarm : Arm {
 	protected override void Start () {
 		base.Start();
 		this.mPart = PART.LARM;
+		this.mRoundsPerSecond = 0.8f;
 	}
 	
 	// Update is called once per frame

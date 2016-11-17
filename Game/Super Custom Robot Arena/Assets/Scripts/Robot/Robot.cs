@@ -5,6 +5,13 @@ namespace SCRA {
 	
 	namespace Humanoids {
 		
+		[System.Serializable]
+		public class Speed {
+			public float mPatrolSpeed = 6f;
+			
+			public float mChaseSpeed = 6f;			
+		}
+		
 		[RequireComponent(typeof(Rigidbody))]
 		public abstract class Robot : MonoBehaviour {
 		
