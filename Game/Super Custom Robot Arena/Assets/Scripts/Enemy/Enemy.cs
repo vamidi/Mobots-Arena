@@ -4,19 +4,17 @@ using System.Collections;
 
 using SCRA.Humanoids;
 
-public enum STATES {
-	PATROL, CHASE, ATTACK
-}
-
 public enum PRIORITY {
-	RUN, COVER, SEARCH, NOTHING
+	FindArmor, FindHealth, SeekCover, RUNAWAY
 }
 
 public class Enemy : Robot {
 	
 	public Transform mPlayer = null;
+	public NavMeshAgent Agent { get { return this.mAgent; } set { this.mAgent = value; } }
 	public Image mCurrentHealthBar;
 	public Text mRatioText;
+	public Speed mSpeed = new Speed();
 	public bool mDebug = true;
 	public bool canShoot = false;
 	public bool isAlive = true;
@@ -26,19 +24,43 @@ public class Enemy : Robot {
 	public int mPrevWP = -1;
 	public float mAccWP = 5f;
 	public GameObject[] mWaypoints;
-	
-	private Speed mSpeed = new Speed();
+
 	private NavMeshAgent mAgent = null;
 	private FieldOfView fov = null;
-	public STATES mState = STATES.PATROL;
-	private PRIORITY mPriority = PRIORITY.NOTHING;
+	[SerializeField]
+	private State<Enemy> mState;
+	private PRIORITY mPriority = PRIORITY.FindHealth;
 	private float mHealth;
 	private float mMaxHealth;
 	private Color[] mColorArr = new Color[2];
 	
+	public FieldOfView GetFieldOfView () {
+		return this.fov;
+	}
+	
 	public void TriggerEnemy(){
 		this.mPlayer = GameObject.FindGameObjectWithTag("Robot").transform;
-		this.mState = STATES.ATTACK;
+		this.ChangeState(AttackState.Instance());
+//		this.mState = STATES.ATTACK;
+	}
+	
+	public void ChangeState(State<Enemy> newState){
+				
+		/// <summary>
+		/// Make sure both states are valid before attempting to
+		/// call their methods
+		/// </summary>
+//		Debug.Assert(this.mState && newState);
+		
+		// Call the exit method of the existing state
+		this.mState.Exit(this);
+		
+		// Change state to the new state
+		this.mState = newState;
+		
+		// Call the entry method of the new state
+		this.mState.Start(this);
+		
 	}
 	
 	#region UNITYMETHODS
@@ -55,7 +77,7 @@ public class Enemy : Robot {
 			Debug.LogError("There is no field of view script attached to this gameobject");
 		
 		this.mWaypoints = GameObject.FindGameObjectsWithTag("Target");
-		if(this.mWaypoints && this.mWaypoints.Length == 0)
+		if(this.mWaypoints != null && this.mWaypoints.Length == 0)
 			Debug.LogError("There are no waypoints set in the map");
 		
 		this.mParts [0] = this.goHead.GetComponent<EnemyHead> ();
@@ -91,43 +113,44 @@ public class Enemy : Robot {
 		this.mHealth = this.mMaxHealth;
 		
 		this.mResetArea = this.researchArea;
+		
+		this.mState = PatrolState.Instance();
 	}
 	
 	protected override void Update(){
 		base.Update();
 		
 		if(this.mIsAlive){
-			switch(this.mState){
-				case STATES.PATROL:
-					this.Patrol();
-					break;
-				case STATES.CHASE:
-					this.Chase();
-					break;
-				case STATES.ATTACK:
-					this.Attack();
-					break;
-				default:
-					this.Patrol();
-					break;
+			this.mState.Update(this);
+			
+			if(this.mHealth <= 0f){
+				this.mHealth = 0;
+				this.mIsAlive = false;
 			}
 			
 			if(mDebug)
 				this.DebugEnemy();
 		}
 		
+		this.UpdateHealthBar();
+		
 	}
 	
 	// FixedUpdate is called 
 	protected override void FixedUpdate() {
-		this.Move();
-		this.Turn();
-//		this.Jump();
+		base.FixedUpdate();
+		if(this.mIsAlive){
+			this.mState.FixedUpdate(this);
 		
-		float healthPercentage = (this.mHealth / 100 ) * 50;
+			this.Move();
+			this.Turn();
+//			this.Jump();
 		
-		if(this.mHealth < healthPercentage)
-			this.mPriority = PRIORITY.SEARCH;
+			float healthPercentage = (this.mHealth / 100 ) * 50;
+			
+			if(this.mHealth < healthPercentage)
+				this.mPriority = PRIORITY.FindHealth;
+		}
 	}
 	
 	protected override void LateUpdate() {
@@ -136,111 +159,13 @@ public class Enemy : Robot {
 	
 	#endregion
 	
-	protected override void Move(){
-		switch(mState){
-			case STATES.PATROL:
-				/*if(this.mPriority == PRIORITY.SEARCH){
-					if(this.fov.mVisibleTargets.Count > 0){
-						foreach(Transform target in this.fov.mVisibleTargets){
-							if(target.GetComponent<Capsule>().mKind == KIND.HEALTH){
-								this.mAgent.SetDestination(target.position);
-								break;
-							}
-						}
-					}
-				}else */
-				if(this.mAgent.destination != this.mWaypoints[this.mCurrentWP].transform.position)
-					this.mAgent.SetDestination(this.mWaypoints[this.mCurrentWP].transform.position);
-				break;
-			case STATES.CHASE:
-				this.mAgent.speed = mSpeed.mChaseSpeed;
-				if(this.mPlayer != null){
-					if(this.mAgent.destination != this.mPlayer.position)
-						this.mAgent.SetDestination(this.mPlayer.position);
-				}
-				break;
-			case STATES.ATTACK:
-				this.mAgent.speed = 0;
-				break;
-		}
-	}
+	#region OVERRIDE METHODS
 	
-	protected override void Turn(){
-		Vector3 direction = Vector3.zero; 
-		Vector3 viewAngleA, viewAngleB; 
-		switch(this.mState){
-			case STATES.PATROL:
-				break;
-			case STATES.CHASE:
-				direction = this.mPlayer.position - this.transform.position;
-				this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), 0.1f);
-				break;
-			case STATES.ATTACK:
-				if(this.mPlayer){
-					direction = this.mPlayer.position - this.transform.position;
-					this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * this.mRotateVel);	
-
-					if(Vector3.Angle( this.transform.forward, direction ) < 5f){
-						this.mState = STATES.ATTACK;
-					}
-				}
-				
-				viewAngleA = fov.DirectionFromAngle(-15f, false); 
-				viewAngleB = fov.DirectionFromAngle(15f, false); 
-				//				Debug.Log(Vector3.Distance(target.transform.position, viewAngleA) > 15f );
-				//				Debug.Log(Vector3.Distance(target.transform.position, viewAngleB) > 5f );
-				if(Vector3.Distance(this.mPlayer.transform.position, viewAngleA) > 15f ||
-					Vector3.Distance(this.mPlayer.transform.position, viewAngleB) > 0 ){
-					direction = this.mPlayer.position - this.transform.position;
-					this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * this.mRotateVel);	
-				}
-				break;
-		}
-	}
+	protected override void Move () { }
 	
-	protected override void Jump() { }
+	protected override void Turn () { }
 	
-	#region ENEMYSTATES
-
-	private void Patrol(){
-		if(this.mWaypoints && this.mWaypoints.Length > 0){
-			if(Vector3.Distance(this.mWaypoints[this.mCurrentWP].transform.position, this.transform.position) < this.mAccWP){
-				this.mCurrentWP++;
-				if(this.mCurrentWP >= this.mWaypoints.Length){
-					this.mCurrentWP = 0;
-				}
-			}
-		}
-
-		if(this.mPlayer)
-			this.mState = STATES.CHASE;
-	}
-	
-	private void Chase(){
-		if(this.mPlayer != null && Vector3.Distance(this.transform.position, this.mPlayer.position) < this.fov.mViewRadius ){
-			this.researchArea = this.mResetArea;
-			this.mState = STATES.ATTACK;
-		}
-		
-		// do the timer to see if the player is behind a wall
-		this.researchArea -= Time.deltaTime;
-		if(this.researchArea <= 0){
-			this.researchArea = this.mResetArea;
-			this.mPlayer = this.fov.FindTarget();
-			if(!this.mPlayer){
-				this.mState = STATES.PATROL;
-			}
-		}
-	}
-	
-	private void Attack(){
-		((EnemyLarm)this.mParts[1]).Shoot();
-		((EnemyRarm)this.mParts[2]).Shoot();
-		
-		if(this.mPlayer != null && Vector3.Distance(this.transform.position, this.mPlayer.position) > this.fov.mViewRadius){
-			this.mState = STATES.CHASE;
-		}	
-	}
+	protected override void Jump () { }
 	
 	#endregion
 	
