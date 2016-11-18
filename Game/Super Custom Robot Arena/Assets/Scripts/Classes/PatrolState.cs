@@ -28,8 +28,9 @@ public class PatrolState : State<Enemy> {
 			}
 		}
 
-		if(mEnemy.mPlayer)
-			mEnemy.ChangeState(ChaseState.Instance());
+		if (mEnemy.mPlayer) {
+			mEnemy.GetFSM ().ChangeState (ChaseState.Instance ());
+		}
 	}
 	
 	public override void FixedUpdate (Enemy mEnemy) {

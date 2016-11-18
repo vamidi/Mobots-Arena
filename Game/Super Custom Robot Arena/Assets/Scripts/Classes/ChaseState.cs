@@ -21,7 +21,7 @@ public class ChaseState : State<Enemy> {
 	public override void Update (Enemy mEnemy) {
 		if(mEnemy.mPlayer != null && Vector3.Distance(mEnemy.transform.position, mEnemy.mPlayer.position) < mEnemy.GetFieldOfView().mViewRadius ){
 			mEnemy.researchArea = mEnemy.mResetArea;
-			mEnemy.ChangeState(AttackState.Instance());
+			mEnemy.GetFSM().ChangeState(AttackState.Instance());
 		}
 
 		// do the timer to see if the player is behind a wall
@@ -30,7 +30,7 @@ public class ChaseState : State<Enemy> {
 			mEnemy.researchArea = mEnemy.mResetArea;
 			mEnemy.mPlayer = mEnemy.GetFieldOfView().FindTarget();
 			if(!mEnemy.mPlayer){
-				mEnemy.ChangeState(PatrolState.Instance());
+				mEnemy.GetFSM().ChangeState(PatrolState.Instance());
 			}
 		}
 	}

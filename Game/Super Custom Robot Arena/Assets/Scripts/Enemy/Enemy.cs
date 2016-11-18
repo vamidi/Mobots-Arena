@@ -4,10 +4,6 @@ using System.Collections;
 
 using SCRA.Humanoids;
 
-public enum PRIORITY {
-	FindArmor, FindHealth, SeekCover, RUNAWAY
-}
-
 public class Enemy : Robot {
 	
 	public Transform mPlayer = null;
@@ -28,8 +24,7 @@ public class Enemy : Robot {
 	private NavMeshAgent mAgent = null;
 	private FieldOfView fov = null;
 	[SerializeField]
-	private State<Enemy> mState;
-	private PRIORITY mPriority = PRIORITY.FindHealth;
+	private StateMachine mStateMachine = null;
 	private float mHealth;
 	private float mMaxHealth;
 	private Color[] mColorArr = new Color[2];
@@ -37,30 +32,18 @@ public class Enemy : Robot {
 	public FieldOfView GetFieldOfView () {
 		return this.fov;
 	}
-	
+
+	public StateMachine GetFSM (){
+		return this.mStateMachine;
+	}
+
+	public float GetHealth () {
+		return this.mHealth;
+	}
+
 	public void TriggerEnemy(){
 		this.mPlayer = GameObject.FindGameObjectWithTag("Robot").transform;
-		this.ChangeState(AttackState.Instance());
-//		this.mState = STATES.ATTACK;
-	}
-	
-	public void ChangeState(State<Enemy> newState){
-				
-		/// <summary>
-		/// Make sure both states are valid before attempting to
-		/// call their methods
-		/// </summary>
-//		Debug.Assert(this.mState && newState);
-		
-		// Call the exit method of the existing state
-		this.mState.Exit(this);
-		
-		// Change state to the new state
-		this.mState = newState;
-		
-		// Call the entry method of the new state
-		this.mState.Start(this);
-		
+		this.mStateMachine.ChangeState(AttackState.Instance());
 	}
 	
 	#region UNITYMETHODS
@@ -113,15 +96,16 @@ public class Enemy : Robot {
 		this.mHealth = this.mMaxHealth;
 		
 		this.mResetArea = this.researchArea;
-		
-		this.mState = PatrolState.Instance();
+	
+		this.mStateMachine = new StateMachine (this);
+		this.mStateMachine.SetCurrentState(PatrolState.Instance());
+//		this.mStateMachine.SetGlobalState (PatrolState.Instance ());
 	}
 	
-	protected override void Update(){
-		base.Update();
-		
+	protected override void Update(){		
 		if(this.mIsAlive){
-			this.mState.Update(this);
+			base.Update();
+			this.mStateMachine.Update();
 			
 			if(this.mHealth <= 0f){
 				this.mHealth = 0;
@@ -138,18 +122,13 @@ public class Enemy : Robot {
 	
 	// FixedUpdate is called 
 	protected override void FixedUpdate() {
-		base.FixedUpdate();
 		if(this.mIsAlive){
-			this.mState.FixedUpdate(this);
+			base.FixedUpdate();
+			this.mStateMachine.FixedUpdate();
 		
 			this.Move();
 			this.Turn();
 //			this.Jump();
-		
-			float healthPercentage = (this.mHealth / 100 ) * 50;
-			
-			if(this.mHealth < healthPercentage)
-				this.mPriority = PRIORITY.FindHealth;
 		}
 	}
 	

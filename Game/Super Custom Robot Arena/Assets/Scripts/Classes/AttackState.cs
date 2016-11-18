@@ -19,9 +19,8 @@ public class AttackState : State<Enemy> {
 	public override void Update (Enemy mEnemy) {
 		((EnemyLarm)mEnemy.GetPart(1)).Shoot();
 		((EnemyRarm)mEnemy.GetPart(2)).Shoot();
-
 		if(mEnemy.mPlayer != null && Vector3.Distance(mEnemy.transform.position, mEnemy.mPlayer.position) > mEnemy.GetFieldOfView().mViewRadius){
-			mEnemy.ChangeState(ChaseState.Instance());
+			mEnemy.GetFSM().ChangeState(ChaseState.Instance());
 		}
 	}
 	
@@ -47,7 +46,7 @@ public class AttackState : State<Enemy> {
 			mEnemy.transform.rotation = Quaternion.Slerp(mEnemy.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * mEnemy.mRotateVel);	
 
 			if(Vector3.Angle( mEnemy.transform.forward, direction ) < 5f){
-				mEnemy.ChangeState(AttackState.Instance());
+				mEnemy.GetFSM().ChangeState(AttackState.Instance());
 			}
 		}
 
