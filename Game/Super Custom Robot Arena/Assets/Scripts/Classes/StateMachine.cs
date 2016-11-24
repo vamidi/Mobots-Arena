@@ -9,9 +9,9 @@ public class StateMachine {
 	private State<Enemy> mGlobalState;
 
 	// Use these methods to initialize the FSM
-	public void SetPreviousState(State<Enemy> s){ this.mPreviousState = s; }
+	public void SetPreviousState(State<Enemy> s){ this.mPreviousState = s; this.mPreviousState.Start(this.mEnemy); }
 	public void SetCurrentState(State<Enemy> s){ this.mCurrentState = s; }
-	public void SetGlobalState(State<Enemy> s){ this.mGlobalState = s; }
+	public void SetGlobalState(State<Enemy> s){ this.mGlobalState = s; this.mGlobalState.Start(this.mEnemy); }
 
 	// Accessors
 	public State<Enemy> GetCurrentState () { return this.mCurrentState; }
@@ -32,6 +32,11 @@ public class StateMachine {
 	public void FixedUpdate(){
 		if(this.mCurrentState != null)
 			this.mCurrentState.FixedUpdate (this.mEnemy);
+	}
+	
+	public void LateUpdate(){
+		if(this.mCurrentState != null)
+			this.mCurrentState.LateUpdate(this.mEnemy);
 	}
 
 	// Change to a new state

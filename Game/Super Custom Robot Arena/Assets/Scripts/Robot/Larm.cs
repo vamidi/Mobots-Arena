@@ -5,6 +5,8 @@ using System;
 public class Larm : Arm { 
 	
 	public override void Shoot(){
+		base.Shoot();
+		
 		// left btn click
 		if (this.mFire && Time.time > this.mNextFire) {
 			this.mNextFire = Time.time + this.mRoundsPerSecond;

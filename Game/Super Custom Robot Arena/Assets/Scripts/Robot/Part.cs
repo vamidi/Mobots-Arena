@@ -13,7 +13,7 @@ public enum PART {
 }
 
 [RequireComponent(typeof(HealthBar))]
-public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
+public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<double> {
 	
 	/// <summary>
 	/// The max health of the robot
@@ -111,20 +111,20 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<int> {
 	/// Heal the specified part.
 	/// </summary>
 	/// <param name="h">Health.</param>
-	public void Heal(int h){
-		this.mHealth += (this.mMaxHealth / h); // ex. h = 10% -> health += 100f / 10% = 10
+	public void Heal(double h){
+		this.mHealth += (float)(this.mMaxHealth * h); // ex 265 * .1 == 10% = 39,75
 	}
 
 	/// <summary>
 	/// Heals the armor.
 	/// </summary>
 	/// <param name="h">Health.</param>
-	public virtual void ArmorHeal(int h){ 
+	public virtual void ArmorHeal(double h){ 
 		Head tempHead = (Head) this.mRobot.GetPart(0);
 		tempHead.ArmorHeal(h);
 	}
 	
-	public virtual void IncreaseDamage(int x){ /* 1.2x, 1.4x, 1.6x, 1.8x, 2.0x of all damage done */ }
+	public virtual void IncreaseDamage(double x){ /* 1.2x, 1.4x, 1.6x, 1.8x, 2.0x of all damage done */ }
 
 	#endregion
 	

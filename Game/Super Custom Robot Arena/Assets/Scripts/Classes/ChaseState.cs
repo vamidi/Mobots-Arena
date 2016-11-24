@@ -14,36 +14,43 @@ public class ChaseState : State<Enemy> {
 
 	// Use this for initialization
 	public override void Start (Enemy mEnemy) {
-
+		this.mPriority = PRIORITY.MEDIUM;
 	}
 
 	// Update is called once per frame
 	public override void Update (Enemy mEnemy) {
-		if(mEnemy.mPlayer != null && Vector3.Distance(mEnemy.transform.position, mEnemy.mPlayer.position) < mEnemy.GetFieldOfView().mViewRadius ){
-			mEnemy.researchArea = mEnemy.mResetArea;
-			mEnemy.GetFSM().ChangeState(AttackState.Instance());
-		}
+		if(this.mPriority > mEnemy.GetFSM().GetGlobalState().GetPriority()){
+			if(mEnemy.mPlayer != null && Vector3.Distance(mEnemy.transform.position, mEnemy.mPlayer.position) < mEnemy.GetFieldOfView().mViewRadius ){
+				mEnemy.researchArea = mEnemy.mResetArea;
+				mEnemy.GetFSM().ChangeState(AttackState.Instance());
+			}
 
-		// do the timer to see if the player is behind a wall
-		mEnemy.researchArea -= Time.deltaTime;
-		if(mEnemy.researchArea <= 0){
-			mEnemy.researchArea = mEnemy.mResetArea;
-			mEnemy.mPlayer = mEnemy.GetFieldOfView().FindTarget();
-			if(!mEnemy.mPlayer){
-				mEnemy.GetFSM().ChangeState(PatrolState.Instance());
+			// do the timer to see if the player is behind a wall
+			mEnemy.researchArea -= Time.deltaTime;
+			if(mEnemy.researchArea <= 0){
+				mEnemy.researchArea = mEnemy.mResetArea;
+				mEnemy.mPlayer = mEnemy.GetFieldOfView().FindTarget();
+				if(!mEnemy.mPlayer){
+					mEnemy.GetFSM().ChangeState(PatrolState.Instance());
+				}
 			}
 		}
 	}
 	
 	public override void FixedUpdate (Enemy mEnemy) {
-		this.Move(mEnemy);
-		this.Turn(mEnemy);
+		if(this.mPriority > mEnemy.GetFSM().GetGlobalState().GetPriority()){
+			this.Move(mEnemy);
+		}
 	}
 
+	public override void LateUpdate(Enemy mEnemy){
+		if(this.mPriority > mEnemy.GetFSM().GetGlobalState().GetPriority()){
+			this.Turn(mEnemy);
+		}
+	}
+	
 	// Exit is called once the state is exitted
-	public override void Exit (Enemy mEnemy) {
-
-	}
+	public override void Exit (Enemy mEnemy) { }
 
 	protected ChaseState () { }
 	

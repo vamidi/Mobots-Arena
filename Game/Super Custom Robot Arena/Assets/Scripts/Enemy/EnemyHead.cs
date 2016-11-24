@@ -96,8 +96,8 @@ public class EnemyHead : Part {
 	/// Heals the armor.
 	/// </summary>
 	/// <param name="h">Health.</param>
-	public override void ArmorHeal(int h){
-		this.mArmorHealth += (this.mArmorHealth / h);
+	public override void ArmorHeal(double h){
+		this.mArmorHealth += (float)(this.mArmorHealth / h);
 		this.UpdateShieldBar();
 	}
 	

@@ -12,6 +12,7 @@ public enum KIND {
 
 public class Capsule : MonoBehaviour {
 	
+	public GameObject mParticlePrefab;
 	/// <summary>
 	/// The size of the capsule.
 	/// </summary>
@@ -23,43 +24,43 @@ public class Capsule : MonoBehaviour {
 	/// <summary>
 	/// The amount of damage or recovery
 	/// </summary>
-	private int mAmount;
+	private double mAmount;
 	private int mMultiplier;
-	private int mWeightAmount;
+	private double mWeightAmount;
 	// 5%, 10%, 15% of the full weight of the robot
 
 	// Use this for initialization
 	void Start () {
 		switch(this.mSize){
 			case SIZE.SMALLER:
-				this.mAmount = 10;
+				this.mAmount = 0.1;
 				this.mMultiplier = 120;
-				this.mWeightAmount = 5;
+				this.mWeightAmount = 0.5;
 				break;
 			case SIZE.SMALL:
-				this.mAmount = 15;
+				this.mAmount = 0.15;
 				this.mMultiplier = 140;
-				this.mWeightAmount = 5;
+				this.mWeightAmount = 0.5;
 				break;
 			case SIZE.MEDIUM:
-				this.mAmount = 25;
+				this.mAmount = 0.25;
 				this.mMultiplier = 160;
-				this.mWeightAmount = 10;
+				this.mWeightAmount = 0.1;
 				break;
 		case SIZE.BIG:
-				this.mAmount = 50;
+				this.mAmount = 0.5;
 				this.mMultiplier = 180;
-				this.mWeightAmount = 15;
+				this.mWeightAmount = 0.15;
 				break;
 			case SIZE.ULTRA:
-				this.mAmount = 50;
+				this.mAmount = 0.5;
 				this.mMultiplier = 200;
-				this.mWeightAmount = 15;
+				this.mWeightAmount = 0.15;
 				break;
 		}
 	}
 	
-	// Update is called once per frame
+	// Update is called once per frame ( not necc
 	void Update () { }
 		
 	/// <summary>
@@ -86,6 +87,11 @@ public class Capsule : MonoBehaviour {
 					break;		
 			}			
 			
+			if(mParticlePrefab){
+				GameObject m = (GameObject) Instantiate(mParticlePrefab, this.transform.position, this.transform.rotation);
+				m.SendMessage("mParticleSystem", SendMessageOptions.DontRequireReceiver);
+			}
+				
 			this.gameObject.SetActive(false);
 		}
 	}

@@ -6,7 +6,10 @@ public class Arm : Part, IShootable {
 	
 	public Transform mGunEnd;
 	public GameObject mBullet;
+	public LayerMask mObstacle;
 	
+	[SerializeField]
+	protected InputSettings mInput = new InputSettings();
 	/// <summary>
 	/// The damage that the robot deals to 
 	/// the other player
@@ -24,18 +27,11 @@ public class Arm : Part, IShootable {
 	/// Range of how far the player can shoot
 	/// </summary>
 	protected float mRange = 50f;
+	protected float mSmallRange = 5f;
 	/// <summary>
 	/// The Robot accuracy.
 	/// </summary>
 	protected float mAccuracy = 3f;
-	protected float mMouseVertical;
-	[SerializeField]
-	protected InputSettings mInput = new InputSettings();
-	[SerializeField]
-	protected OrbitSettings mOrbit = new OrbitSettings();
-	protected float currentXrotation;
-	protected float refRotateVel;
-	protected float dampVel = 0.1f;
 	protected WaitForSeconds shotDuration = new WaitForSeconds(.07f);
 	protected AudioSource mGunSound;
 	protected LineRenderer mLaserLine;
@@ -62,20 +58,24 @@ public class Arm : Part, IShootable {
 		this.mAccuracy = accuracy;
 	}
 
-	public override void IncreaseDamage(int x){
+	public override void IncreaseDamage(double x){
 		// 1.2x, 1.4x, 1.6x, 1.8x, 2.0x of all damage done
 		// 100% => 120%
-		this.mDamagePerRound = this.mDamagePerRound / 100 * x;
+		this.mDamagePerRound = this.mDamagePerRound / 100 * (float)x;
 	}
 
-	public virtual void Shoot() { }
+	public virtual void Shoot() {
+		Vector3 rayOrg = this.mGunEnd.position; //this.mCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f,  0));
+		RaycastHit hit;
+
+		if(Physics.Raycast(rayOrg, this.mGunEnd.transform.forward, out hit, this.mSmallRange, this.mObstacle)) {
+			Debug.Log("Wall");
+		}
+	}
 	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
-		this.mOrbit.mVorbitSmooth = 5f;
-		this.mOrbit.mMinXRotation = -30f;
-		this.mOrbit.mMaxXRotation = 30f;
 		this.mLaserLine = this.GetComponent<LineRenderer>();
 		this.mResetDamage = this.mDamagePerRound;
 	}
@@ -89,7 +89,7 @@ public class Arm : Part, IShootable {
 		}
 	}
 	
-	protected virtual void LateUpdate(){
+	protected virtual void LateUpdate () {
 		if(((Player)mRobot).isControllable){
 			this.Turn();
 			this.Move();
@@ -99,26 +99,16 @@ public class Arm : Part, IShootable {
 	/// <summary>
 	/// Is this method we get the input of the player
 	/// </summary>
-	protected virtual void GetInput() {
-		this.mMouseVertical = Input.GetAxisRaw(this.mInput.mMouseVertical);
-	}
+	protected virtual void GetInput () { }
 	
 	/// <summary>
 	/// This method is for to turn the robot
 	/// </summary>
-	protected void Turn() {     
-		this.mOrbit.mXRotation += -this.mMouseVertical * mOrbit.mVorbitSmooth;
-		this.mOrbit.mXRotation = Mathf.Clamp(this.mOrbit.mXRotation, this.mOrbit.mMinXRotation, this.mOrbit.mMaxXRotation);
-		this.currentXrotation = Mathf.Lerp(this.currentXrotation, this.mOrbit.mXRotation, dampVel);
-		this.transform.localRotation = Quaternion.Euler(this.mOrbit.mXRotation, mOrbit.mYRotation, 0);
-	}
+	protected void Turn () { }
 	
-	protected void Move(){
-//		this.mCurrentRecoilPos -= Mathf.SmoothDamp(this.mCurrentRecoilPos, 0, ref this.mCurrentRecoilVel, this.mRecoilRecoverTime);
-//		transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.mCurrentRecoilPos);
-	}
+	protected void Move () { }
 
-	protected IEnumerator ShotEffect(){
+	protected IEnumerator ShotEffect () {
 		this.mLaserLine.enabled = true;
 		yield return shotDuration;
 		this.mLaserLine.enabled = false;

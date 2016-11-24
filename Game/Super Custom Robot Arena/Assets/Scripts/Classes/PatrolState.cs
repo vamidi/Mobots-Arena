@@ -14,14 +14,14 @@ public class PatrolState : State<Enemy> {
 
 	// Use this for initialization
 	public override void Start (Enemy mEnemy) {
-	
+		this.mPriority = PRIORITY.MEDIUM;
 	}
 	
 	// Update is called once per frame
 	public override void Update (Enemy mEnemy) {
 		if(mEnemy.mWaypoints != null && mEnemy.mWaypoints.Length > 0){
 			if(Vector3.Distance(mEnemy.mWaypoints[mEnemy.mCurrentWP].transform.position, mEnemy.transform.position) < mEnemy.mAccWP){
-				mEnemy.mCurrentWP++;
+				mEnemy.mCurrentWP = Random.Range(0, mEnemy.mWaypoints.Length - 1);
 				if(mEnemy.mCurrentWP >= mEnemy.mWaypoints.Length){
 					mEnemy.mCurrentWP = 0;
 				}
@@ -30,6 +30,12 @@ public class PatrolState : State<Enemy> {
 
 		if (mEnemy.mPlayer) {
 			mEnemy.GetFSM ().ChangeState (ChaseState.Instance ());
+			Collider[] targetsInViewRadius = Physics.OverlapSphere(mEnemy.transform.position, mEnemy.GetFieldOfView().mViewRadius);
+			foreach(Collider col in targetsInViewRadius){
+				if(col.tag == "Enemy"){
+					col.SendMessage("AlertEnemy", mEnemy.mPlayer, SendMessageOptions.DontRequireReceiver);
+				}
+			}
 		}
 	}
 	
@@ -37,9 +43,13 @@ public class PatrolState : State<Enemy> {
 		Move(mEnemy);
 	}
 	
+	public override void LateUpdate (Enemy mEnemy) {
+		this.Turn(mEnemy);
+	}
+	
 	// Exit is called once the state is exitted
 	public override void Exit (Enemy mEnemy) {
-	
+		
 	}
 	
 	protected PatrolState () { }

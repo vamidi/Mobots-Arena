@@ -4,12 +4,7 @@ using System.Collections;
 namespace SCRA {
 	
 	namespace Humanoids {
-
-		[System.Serializable]
-		public enum PRIORITY {
-			FindArmor, FindHealth, SeekCover, RUNAWAY
-		}
-
+		
 		[System.Serializable]
 		public class Speed {
 			public float mPatrolSpeed = 6f;
@@ -123,7 +118,7 @@ namespace SCRA {
 			/****************************** UNITY METHODS *********************/
 		
 			protected virtual void Awake() {
-				DontDestroyOnLoad(this.gameObject);
+//				DontDestroyOnLoad(this.gameObject);
 				DontDestroyOnLoad(this.goHead);
 				DontDestroyOnLoad(this.goLarm);
 				DontDestroyOnLoad(this.goRarm);

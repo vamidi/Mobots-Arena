@@ -12,7 +12,6 @@ public class FieldOfView : MonoBehaviour {
 	
 	public List<Transform> mVisibleTargets = new List<Transform>();
 	public Color mRadiusColor = Color.black, mTargetColor = Color.red;
-	public Turret mTurret;
 	public float mViewRadius;
 	[Range(0, 360)]
 	public float mViewAngle;
@@ -52,6 +51,20 @@ public class FieldOfView : MonoBehaviour {
 		return null;
 	}
 	
+	public List<Transform> FindNearestCapsule(){
+
+		List<Transform>mPoints = new List<Transform>();
+		Collider[] targetsInViewRadius = Physics.OverlapSphere(this.transform.position, this.mViewRadius, this.mPowerUpsMask);
+
+		foreach(Collider target in targetsInViewRadius){
+			mPoints.Add(target.transform);
+		}		
+
+		return mPoints;
+	}
+	
+	#region PUBLICSTRUCTS
+	
 	public struct ViewCastInfo {
 		public bool hit;
 		public Vector3 point;
@@ -76,6 +89,10 @@ public class FieldOfView : MonoBehaviour {
 		}
 	}
 	
+	#endregion
+	
+	#region UNITYMETHODS
+	
 	// Use this for initialization
 	void Start () { 
 		this.mViewMesh = new Mesh();
@@ -89,14 +106,7 @@ public class FieldOfView : MonoBehaviour {
 		DrawFieldOfView(); 
 	}
 	
-	private IEnumerator FindTargetsWithDelay( float delay ){
-		while(true){
-			yield return new WaitForSeconds(delay);
-			this.FindVisibleTargets();
-			this.FindPlayerTarget();
-		}
-		
-	}
+	#endregion
 	
 	private ViewCastInfo ViewCast(float globalAngle){
 		Vector3 direction = DirectionFromAngle(globalAngle, true);
@@ -132,6 +142,17 @@ public class FieldOfView : MonoBehaviour {
 		
 		return new EdgeInfo(minPoint, maxPoint);
 		
+	}
+	
+	#region SEARCHMETHODS
+	
+	private IEnumerator FindTargetsWithDelay( float delay ){
+		while(true){
+			yield return new WaitForSeconds(delay);
+			this.FindVisibleTargets();
+			this.FindPlayerTarget();
+		}
+
 	}
 	
 	private void FindVisibleTargets(){
@@ -172,8 +193,7 @@ public class FieldOfView : MonoBehaviour {
 			}
 		}		
 	}
-	
-	
+		
 	private void DrawFieldOfView(){
 		int stepCount = Mathf.RoundToInt(this.mViewAngle * this.mMeshResolution);
 		float stepAngleSize = this.mViewAngle / stepCount;
@@ -221,4 +241,6 @@ public class FieldOfView : MonoBehaviour {
 		this.mViewMesh.triangles = triangles;
 		this.mViewMesh.RecalculateNormals();
 	}
+
+	#endregion
 }

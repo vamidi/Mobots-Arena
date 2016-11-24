@@ -7,6 +7,7 @@ using SCRA.Humanoids;
 public class Enemy : Robot {
 	
 	public Transform mPlayer = null;
+	public CoverBase mCurrentCoverBase;
 	public NavMeshAgent Agent { get { return this.mAgent; } set { this.mAgent = value; } }
 	public Image mCurrentHealthBar;
 	public Text mRatioText;
@@ -20,6 +21,7 @@ public class Enemy : Robot {
 	public int mPrevWP = -1;
 	public float mAccWP = 5f;
 	public GameObject[] mWaypoints;
+	public Transform[] mEvadePoints;
 
 	private NavMeshAgent mAgent = null;
 	private FieldOfView fov = null;
@@ -36,14 +38,31 @@ public class Enemy : Robot {
 	public StateMachine GetFSM (){
 		return this.mStateMachine;
 	}
+	
+	public Rigidbody GetRigidbody(){
+		return this.mRigidbody;
+	}
 
 	public float GetHealth () {
 		return this.mHealth;
 	}
+	
+	public float GetMaxHealth () {
+		return this.mMaxHealth;
+	}
 
+	public void AlertEnemy(Transform t){
+		if( this.mStateMachine.GetCurrentState().Equals(typeof(ChaseState)) || this.mStateMachine.GetCurrentState().Equals(typeof(AttackState)) ){
+			if(t.tag == this.mTags.mRobotTag){
+				this.mPlayer = t;
+				this.mStateMachine.ChangeState(ChaseState.Instance());
+			}
+		}
+	}
+	
 	public void TriggerEnemy(){
 		this.mPlayer = GameObject.FindGameObjectWithTag("Robot").transform;
-		this.mStateMachine.ChangeState(AttackState.Instance());
+		this.mStateMachine.ChangeState(ChaseState.Instance());
 	}
 	
 	#region UNITYMETHODS
@@ -59,6 +78,15 @@ public class Enemy : Robot {
 		if(!this.fov)
 			Debug.LogError("There is no field of view script attached to this gameobject");
 		
+		this.mEvadePoints = new Transform[4];
+		int j = 0;
+		for( int i = 0; i < transform.childCount; i++){
+			Transform child = this.transform.GetChild(i);
+			if (child.gameObject.name.ToLower() == "evadespot") {
+				this.mEvadePoints[j] = child;
+				j++;
+			}
+		}	
 		this.mWaypoints = GameObject.FindGameObjectsWithTag("Target");
 		if(this.mWaypoints != null && this.mWaypoints.Length == 0)
 			Debug.LogError("There are no waypoints set in the map");
@@ -81,8 +109,8 @@ public class Enemy : Robot {
 			Debug.LogError ("The part is not a car part");
 		
 		this.mResetMass = this.mMass = this.mParts [0].mRobotWegith + this.mParts [1].mRobotWegith + this.mParts [2].mRobotWegith + this.mParts [3].mRobotWegith;
-		((EnemyCar)this.mParts[3]).SetSpeed(1825);
 		
+		((EnemyCar)this.mParts[3]).SetSpeed(2200);
 		this.mAgent.speed = this.mSpeed.mChaseSpeed = ((EnemyCar)this.mParts[3]).GetSpeed();
 		
 		this.mColorArr[0] = new Color(1f, .007f, .007f);
@@ -94,12 +122,12 @@ public class Enemy : Robot {
 		}
 
 		this.mHealth = this.mMaxHealth;
-		
 		this.mResetArea = this.researchArea;
+		this.mCurrentWP = Random.Range(0, this.mWaypoints.Length - 1);
 	
 		this.mStateMachine = new StateMachine (this);
 		this.mStateMachine.SetCurrentState(PatrolState.Instance());
-//		this.mStateMachine.SetGlobalState (PatrolState.Instance ());
+		this.mStateMachine.SetGlobalState (GlobalState.Instance ());
 	}
 	
 	protected override void Update(){		
@@ -129,11 +157,16 @@ public class Enemy : Robot {
 			this.Move();
 			this.Turn();
 //			this.Jump();
+			
+//			this.mRigidbody.velocity = this.transform.TransformDirection(this.mVelocity);
 		}
 	}
 	
 	protected override void LateUpdate() {
-		base.LateUpdate();
+		if(this.mIsAlive){
+			base.LateUpdate();
+			this.mStateMachine.LateUpdate();
+		}
 	}
 	
 	#endregion

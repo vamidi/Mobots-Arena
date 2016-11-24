@@ -169,13 +169,16 @@ public class Player : Robot {
 	#region UNITYMETHODS
 	/****************************** UNITY METHODS *********************/
 
-	protected override void Start() {
-		base.Start();
-		
+	protected override void Awake() {
+		base.Awake();
 		this.mParts [0] = this.goHead.GetComponent<Head> ();
 		this.mParts [1] = this.goLarm.GetComponent<Larm> ();
 		this.mParts [2] = this.goRarm.GetComponent<Rarm> ();
 		this.mParts [3] = this.goCar.GetComponent<Car> ();
+	}
+	
+	protected override void Start() {
+		base.Start();
 
 		if (this.mParts [0].GetPart () != PART.HEAD)
 			Debug.LogError ("The part is not a head part");
@@ -268,8 +271,8 @@ public class Player : Robot {
 	/// </summary>
 	protected override void MoveToTarget() {
 		if (this.mTorsoTransform) {
-			// this.mTargetRotTorso = Quaternion.Euler(0, -this.mOrbit.mYRotation + Camera.main.transform.eulerAngles.y, 0);
-			this.mTorsoTransform.rotation = Quaternion.Lerp(this.mTorsoTransform.rotation, Camera.main.transform.rotation, Time.deltaTime * this.mPosition.mLookSmooth);
+			this.mTargetRotTorso = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, Camera.main.transform.eulerAngles.z);
+			this.mTorsoTransform.rotation = Quaternion.Lerp(this.mTorsoTransform.rotation, this.mTargetRotTorso , Time.deltaTime * this.mPosition.mLookSmooth);
 		}
 	}
 	

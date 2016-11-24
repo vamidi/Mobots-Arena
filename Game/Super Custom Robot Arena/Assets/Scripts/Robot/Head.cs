@@ -90,8 +90,8 @@ public class Head : Part {
 	/// Heals the armor.
 	/// </summary>
 	/// <param name="h">Health.</param>
-	public override void ArmorHeal(int h){
-		this.mArmorHealth += (this.mMaxHealth / h);
+	public override void ArmorHeal(double h){
+		this.mHealth += (float)(this.mMaxHealth * h); // ex 265 * .1 == 10% = 39,75
 	}
 	
 	// Use this for initialization

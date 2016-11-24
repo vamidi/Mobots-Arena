@@ -3,7 +3,9 @@ using System.Collections;
 
 public class Rarm : Arm {
 
-	public override void Shoot(){
+	public override void Shoot () {
+		base.Shoot();
+		
 		// right btn click
 		if (this.mFire && Time.time > this.mNextFire) {
 			this.mNextFire = Time.time + this.mRoundsPerSecond;
