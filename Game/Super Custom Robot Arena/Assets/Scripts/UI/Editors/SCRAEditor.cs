@@ -6,11 +6,6 @@ using System.Collections.Generic;
 using Boomlagoon.JSON;
 
 /// <summary>
-/// Call back for when the robot is done with building
-/// </summary>
-public delegate void mAssignValues (PART part, string name);
-
-/// <summary>
 /// Editor class.
 /// 
 /// </summary>
@@ -48,7 +43,7 @@ public class SCRAEditor : MonoBehaviour {
 	/// The manager to assign values to
 	/// a particular robot part
 	/// </summary>
-	private mAssignValues mAssign;
+	private SCRA.UI.mAssignValues mAssign;
 	/// <summary>
 	/// The current location
 	/// </summary>
@@ -181,7 +176,7 @@ public class SCRAEditor : MonoBehaviour {
 		}
 			
 		this.mManager = new mContentManager (Home);
-		this.mAssign = new mAssignValues (ChangeStats);
+		this.mAssign = new SCRA.UI.mAssignValues (ChangeStats);
 
 		this.GetRobots();	
 		
@@ -228,7 +223,7 @@ public class SCRAEditor : MonoBehaviour {
 			if(check.GetObject("parts").GetObject("head").GetBoolean("owned")){
 			 	button = (GameObject)Instantiate(mButtonPrefab, initHeadVector, Quaternion.identity);
 				button.transform.SetParent(this.mContents["Heads"].transform, false);
-				RobotBtn btn = button.GetComponent<RobotBtn>();
+				SCRA.UI.RobotBtn btn = button.GetComponent<SCRA.UI.RobotBtn>();
 				btn.SetName(check.GetString("robotname"));
 				initHeadVector += new Vector3(0, -34f, 0);
 			}
@@ -236,7 +231,7 @@ public class SCRAEditor : MonoBehaviour {
 			if(check.GetObject("parts").GetObject("left").GetBoolean("owned")){
 			 	button = (GameObject)Instantiate(mButtonPrefab, initLeftVector, Quaternion.identity);
 				button.transform.SetParent(this.mContents["LeftArms"].transform, false);
-				RobotBtn btn = button.GetComponent<RobotBtn>();
+				SCRA.UI.RobotBtn btn = button.GetComponent<SCRA.UI.RobotBtn>();
 				btn.SetName(check.GetString("robotname"));
 				initLeftVector += new Vector3(0, -34f, 0);
 			}
@@ -244,7 +239,7 @@ public class SCRAEditor : MonoBehaviour {
 			if(check.GetObject("parts").GetObject("right").GetBoolean("owned")){
 			 	button = (GameObject)Instantiate(mButtonPrefab, initRightVector, Quaternion.identity);
 				button.transform.SetParent(this.mContents["RightArms"].transform, false);
-				RobotBtn btn = button.GetComponent<RobotBtn>();
+				SCRA.UI.RobotBtn btn = button.GetComponent<SCRA.UI.RobotBtn>();
 				btn.SetName(check.GetString("robotname"));
 				initRightVector += new Vector3(0, -34f, 0);
 			}
@@ -252,7 +247,7 @@ public class SCRAEditor : MonoBehaviour {
 			if(check.GetObject("parts").GetObject("car").GetBoolean("owned")){
 			 	button = (GameObject)Instantiate(mButtonPrefab, initCarVector, Quaternion.identity);
 				button.transform.SetParent(this.mContents["Cars"].transform, false);
-				RobotBtn btn = button.GetComponent<RobotBtn>();
+				SCRA.UI.RobotBtn btn = button.GetComponent<SCRA.UI.RobotBtn>();
 				btn.SetName(check.GetString("robotname"));
 				initCarVector += new Vector3(0, -34f, 0);
 			}

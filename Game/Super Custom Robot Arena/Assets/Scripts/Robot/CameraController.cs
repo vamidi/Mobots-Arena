@@ -311,7 +311,7 @@ public class CameraController : MonoBehaviour {
 	public class CollisionHandler {
 		public LayerMask mCollisionLayer;
 		[HideInInspector]
-		public bool mColliding = false;
+ 		public bool mColliding = false;
 		[HideInInspector]
 		public Vector3[] mAdjustedCameraClipPoints; 
 		[HideInInspector]

@@ -176,8 +176,7 @@ public class FieldOfView : MonoBehaviour {
 	private void FindPlayerTarget(){
 		if(this.mEnemy && this.mEnemy.mPlayer)
 			return;
-		
-		
+				
 		Collider[] targetsInViewRadius = Physics.OverlapSphere(this.transform.position, this.mViewRadius, this.mPlayerMask);
 	
 		foreach(Collider target in targetsInViewRadius){
@@ -187,7 +186,7 @@ public class FieldOfView : MonoBehaviour {
 			if(Vector3.Angle( this.transform.forward, direction ) < this.mViewAngle / 2){
 				float distanceToTarget = Vector3.Distance(this.transform.position, t.position);
 
-				if(!Physics.Raycast(this.transform.position, direction, distanceToTarget, this.mObstaclesMask)){
+				if(!Physics.Raycast(this.transform.position, direction, distanceToTarget, this.mPlayerMask)){
 					this.mEnemy.mPlayer = t;
 				}
 			}

@@ -113,17 +113,15 @@ namespace SCRA {
 				return mParts[index];
 			}
 		
+			public bool IsAlive(){
+				return this.mIsAlive;
+			}
+			
 			#region UNITYMETHODS
 			
 			/****************************** UNITY METHODS *********************/
 		
-			protected virtual void Awake() {
-//				DontDestroyOnLoad(this.gameObject);
-				DontDestroyOnLoad(this.goHead);
-				DontDestroyOnLoad(this.goLarm);
-				DontDestroyOnLoad(this.goRarm);
-				DontDestroyOnLoad(this.goCar);
-		
+			protected virtual void Awake() {		
 				foreach( Transform child in this.transform){
 					if (child.gameObject.tag == this.mTags.mCarTag) {
 						this.goCar = child.gameObject;

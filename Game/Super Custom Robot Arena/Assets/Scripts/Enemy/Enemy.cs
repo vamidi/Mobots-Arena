@@ -14,7 +14,6 @@ public class Enemy : Robot {
 	public Speed mSpeed = new Speed();
 	public bool mDebug = true;
 	public bool canShoot = false;
-	public bool isAlive = true;
 	public float researchArea = 10f, mResetArea = 0f;
 	public float mColorLerpSpeed = .2f;
 	public int mCurrentWP = 0;

@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using System;
+using System.Collections;
 
+using SCRA.UI;
 using SCRA.Humanoids;
 
 public class Player : Robot {
@@ -170,6 +171,11 @@ public class Player : Robot {
 	/****************************** UNITY METHODS *********************/
 
 	protected override void Awake() {
+		//				DontDestroyOnLoad(this.gameObject);
+		DontDestroyOnLoad(this.goHead);
+		DontDestroyOnLoad(this.goLarm);
+		DontDestroyOnLoad(this.goRarm);
+		DontDestroyOnLoad(this.goCar);
 		base.Awake();
 		this.mParts [0] = this.goHead.GetComponent<Head> ();
 		this.mParts [1] = this.goLarm.GetComponent<Larm> ();

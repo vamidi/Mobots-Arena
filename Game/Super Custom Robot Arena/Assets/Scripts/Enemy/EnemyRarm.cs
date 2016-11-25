@@ -12,7 +12,8 @@ public class EnemyRarm : Arm {
 			if(this.mBullet){
 				var direction = e.mPlayer.position - this.mGunEnd.position;
 				direction.y = e.mPlayer.position.y;
-				Instantiate(this.mBullet, this.mGunEnd.position, Quaternion.LookRotation(direction));
+				GameObject bullet = (GameObject) Instantiate(this.mBullet, this.mGunEnd.position, Quaternion.LookRotation(direction));
+				bullet.GetComponent<Bullet>().mDamage = this.mDamagePerRound;
 			}
 		
 		
