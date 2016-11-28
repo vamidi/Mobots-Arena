@@ -40,10 +40,18 @@ namespace SCRA {
 				GameObject p = Instantiate(page as GameObject);
 				
 				p.transform.SetParent(this.transform);
+<<<<<<< HEAD
 				RectTransform tr = p.GetComponent<RectTransform>();
 //				 Transition t = p.GetComponent<Transition>();
 //				tr.offsetMax = (0);
 //				tr.offsetMin = (0);
+=======
+				RectTransform rt = p.GetComponent<RectTransform>();
+				Transition t = p.GetComponent<Transition>();
+				rt.offsetMax = new Vector2(t.mSpawnPoint.x, t.mSpawnPoint.y);
+				rt.offsetMin = new Vector2(t.mSpawnPoint.x, t.mSpawnPoint.y);
+				p.transform.localScale = Vector3.one;
+>>>>>>> b66872e24469b1df876197e24d6619927e6aa0ac
 				this.mCurrentPage = p;
 				
 			}

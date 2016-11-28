@@ -141,7 +141,7 @@ namespace SCRA {
 							break;
 						case RevealSettings.REVEALOPTION.CIRCULAR:
 							switch(this.mCircularSpawner.mRevealStyle){
-								case CircularSpawner.REVEALSTYLE.SLIDETOPOSITION: this.RevealCicularNormal(); break;									
+								case CircularSpawner.REVEALSTYLE.SLIDETOPOSITION: this.RevealCircularNormal(); break;									
 								case CircularSpawner.REVEALSTYLE.FADEINATPOSITION: this.RevealCircularFade();break;									
 							}
 							break;
