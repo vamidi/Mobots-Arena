@@ -13,6 +13,10 @@ public class ArmController : MonoBehaviour {
 	private OrbitSettings mOrbit = new OrbitSettings();
 	private float mMouseVertical, currentXrotation;
 	private float dampVel = 0.1f;
+	
+	public float GetXRotation () {
+		return this.mOrbit.mXRotation;
+	}
 
 	// Use this for initialization
 	void Start () {

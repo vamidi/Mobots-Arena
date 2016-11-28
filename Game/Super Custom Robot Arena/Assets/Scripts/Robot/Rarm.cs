@@ -54,4 +54,10 @@ public class Rarm : Arm {
 		base.GetInput();
 		this.mFire = Input.GetButtonDown(this.mInput.mFire2);
 	}
+	
+	void OnDrawGizmosSelected() {
+		Gizmos.color = Color.yellow;
+		Vector3 direction = this.mGunEnd.transform.forward * this.mRange;
+		Gizmos.DrawRay(this.mGunEnd.position, direction);
+	}
 }

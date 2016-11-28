@@ -40,28 +40,31 @@ namespace SCRA {
 				GameObject p = Instantiate(page as GameObject);
 				
 				p.transform.SetParent(this.transform);
-<<<<<<< HEAD
-				RectTransform tr = p.GetComponent<RectTransform>();
-//				 Transition t = p.GetComponent<Transition>();
-//				tr.offsetMax = (0);
-//				tr.offsetMin = (0);
-=======
 				RectTransform rt = p.GetComponent<RectTransform>();
 				Transition t = p.GetComponent<Transition>();
-				rt.offsetMax = new Vector2(t.mSpawnPoint.x, t.mSpawnPoint.y);
-				rt.offsetMin = new Vector2(t.mSpawnPoint.x, t.mSpawnPoint.y);
+				rt.offsetMax = new Vector2(t.mSpawnPosition.x, t.mSpawnPosition.y);
+				rt.offsetMin = new Vector2(t.mSpawnPosition.x, t.mSpawnPosition.y);
 				p.transform.localScale = Vector3.one;
->>>>>>> b66872e24469b1df876197e24d6619927e6aa0ac
 				this.mCurrentPage = p;
 				
 			}
 			
-			private void SetNextPage () {
-				
+			private void SetNextPage (string PAGE_CODE) {
+				for(int i = 0; i < this.mPageNames.Length; i++){
+					if(PAGE_CODE == this.mPageNames[i]){
+						this.RevealPageInUI(i);
+					}
+				}
 			}
 			
-			private void RevealNewPage () {
-				
+			private void RevealPageInUI (int index) {
+				Transition t = this.mCurrentPage.GetComponent<Transition>();
+				t.StartTransition();
+				this.mCurrentPage = t.InitializeTransitionPage(this.mPages[index]);
+				RectTransform rt = this.mCurrentPage.GetComponent<RectTransform>();
+				t = this.mCurrentPage.GetComponent<Transition>();
+				rt.offsetMax = new Vector2(t.mSpawnPosition.x, t.mSpawnPosition.y);
+				rt.offsetMin = new Vector2(t.mSpawnPosition.x, t.mSpawnPosition.y);
 			}
 		}
 	}

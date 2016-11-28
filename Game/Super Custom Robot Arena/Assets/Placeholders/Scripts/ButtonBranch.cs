@@ -7,6 +7,7 @@ namespace SCRA {
 	
 	namespace UI {
 		
+		public enum SCALEMODE { MATCHWIDTHHEIGHT, INDEPENDENTWIDTHHEIGHT }
 		public class ButtonBranch : MonoBehaviour {
 		
 			public class ButtonScaler {
@@ -239,7 +240,7 @@ namespace SCRA {
 				}
 			}
 
-			void RevealCicularNormal () {
+			void RevealCircularNormal () {
 				for (int i = 0; i < this.mButtons.Count; i++) {
 					//find angle
 					float angleDist = Mathf.Abs(this.mCircularSpawner.mAngle.mMaxAngle - this.mCircularSpawner.mAngle.mMinAngle);
