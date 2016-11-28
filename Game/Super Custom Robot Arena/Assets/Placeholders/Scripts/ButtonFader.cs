@@ -30,7 +30,7 @@ namespace SCRA {
 				
 				// increase alpha component of the colors
 				this.mButtonColor.a += rate;
-				this.mImage = this.mButtonColor;
+				this.mImage.color = this.mButtonColor;
 				// text color
 				if(this.mText){
 					this.mTextColor.a += rate;

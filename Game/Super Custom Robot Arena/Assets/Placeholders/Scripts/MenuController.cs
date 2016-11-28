@@ -41,8 +41,9 @@ namespace SCRA {
 				
 				p.transform.SetParent(this.transform);
 				RectTransform tr = p.GetComponent<RectTransform>();
-				// Transition t = p.GetComponent<Transition>();
-				
+//				 Transition t = p.GetComponent<Transition>();
+//				tr.offsetMax = (0);
+//				tr.offsetMin = (0);
 				this.mCurrentPage = p;
 				
 			}
