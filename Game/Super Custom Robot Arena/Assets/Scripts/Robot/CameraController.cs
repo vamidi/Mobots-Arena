@@ -89,6 +89,22 @@ public class TagSettings {
 	/// The enemy tag.
 	/// </summary>
 	public string mEnemyTag = "Enemy";
+	/// <summary>
+	/// The head UI tag
+	/// </summary>
+	public string mHeadUI = "HeadUI";
+	/// <summary>
+	/// The right UI tag
+	/// </summary>
+	public string mRightUI = "RightUI";
+	/// <summary>
+	/// The left UI tag
+	/// </summary>
+	public string mLeftUI = "LeftUI";
+	/// <summary>
+	/// Thecar UI tag
+	/// </summary>
+	public string mCarUI = "CarUI";
 }
 
 public class CameraController : MonoBehaviour {

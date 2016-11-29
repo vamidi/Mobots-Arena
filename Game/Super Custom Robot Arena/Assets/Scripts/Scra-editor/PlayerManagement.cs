@@ -2,9 +2,7 @@
 using System.Collections;
 
 public class PlayerManagement : MonoBehaviour {
-
-	public Texture2D mTexture2D;
-
+	
 	private bool mInGame = true;
 	private bool mCursorOn = true;
 	
@@ -18,7 +16,6 @@ public class PlayerManagement : MonoBehaviour {
 			if(Input.GetKeyDown(KeyCode.Escape)){
 				mCursorOn = !mCursorOn;
 			}
-//			Cursor.SetCursor (mTexture2D, new Vector2 (0.5f, 0.5f), CursorMode.Auto);
 			Cursor.lockState = (mCursorOn) ? CursorLockMode.Locked : CursorLockMode.None;
 		}
 	}
