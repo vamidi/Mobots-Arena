@@ -5,7 +5,7 @@ using System.Collections;
 public class PositionSettings {
 	public Vector3 mTargetPosOffset = new Vector3(0, 3.4f, 0);
 	public float mLookSmooth = 500f;
-	public float mDistanceFromTarget = -10f;
+	public float mDistanceFromTarget = -7f;
 	public float mZoomSmooth = 10f;
 	public float mMaxZoom = -2f;
 	public float mMinZoom = -15f;
@@ -27,10 +27,10 @@ public class DebugSettings {
 [System.Serializable]
 public class OrbitSettings {
 	public float mXRotation = -34f;
-	public float mYRotation = 0f;
-	public float mMaxXRotation = 25f;
-	public float mMinXRotation = -85f;
-	public float mVorbitSmooth = 150f;
+	public float mYRotation = 180f;
+	public float mMaxXRotation = -34f;
+	public float mMinXRotation = -65f;
+	public float mVorbitSmooth = 50f;
 	public float mHorbitSmooth = 150f;
 }
 

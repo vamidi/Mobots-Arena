@@ -10,17 +10,20 @@ public class EnemySpawner : MonoBehaviour {
 	
 	private Enemy mEnemyScript;
 	
+	void Init(){
+		this.mCurrentEnemy = GameObject.FindGameObjectWithTag("Enemy");
+		this.mEnemyScript = mCurrentEnemy.GetComponent<Enemy>();
+	}
 
 	// Use this for initialization
 	void Start () {
-		if(mCurrentEnemy)
-			mEnemyScript = mCurrentEnemy.GetComponent<Enemy>();
+		this.Init();	
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if(!mEnemyScript.IsAlive()){
-			if(this.mExplosionPrefab)
+			if(this.mExplosionPrefab && this.mCurrentEnemy)
 				Instantiate(mExplosionPrefab, mCurrentEnemy.transform.position, Quaternion.identity);
 			
 			Destroy(mCurrentEnemy.gameObject);

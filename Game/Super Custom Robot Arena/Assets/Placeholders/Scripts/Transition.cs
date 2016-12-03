@@ -14,7 +14,7 @@ public class Transition : MonoBehaviour {
 	public float mFadeSpeed = 2f;
 	public float mFlickerRate = 0.025f;
 	
-	private bool mTransitionInitialized = false;
+//	private bool mTransitionInitialized = false;
 	private bool mStartTransition = false;
 	private float mInColorAlpha = 0f;
 	private float mOutColorAlpha = 0f;
@@ -36,7 +36,7 @@ public class Transition : MonoBehaviour {
 		foreach(Image i in this.mTransitionImages )
 			i.color = new Vector4(i.color.r, i.color.g, i.color.b, 0);		
 		 
-		this.mTransitionInitialized = true;
+//		this.mTransitionInitialized = true;
 		
 		return this.mTransitionPage.gameObject;
 	}

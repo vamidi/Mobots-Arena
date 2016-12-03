@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 
-
 public class DynamicListener : MonoBehaviour {
 
 	public string mObjectListeningTag = "Enter Gameobject's tag";
@@ -11,7 +10,6 @@ public class DynamicListener : MonoBehaviour {
 	public bool mParameter = false;
 	public string mSendMassage = "Enter GameObject's method name";
 	public string mMessageParameter;
-	
 	private Button b;
 	private GameObject mObjectListening;
 	

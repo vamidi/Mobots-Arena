@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-namespace SCRA {
+namespace MBA {
 
 	namespace UI {
 	

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using SCRA.Humanoids;
+using MBA.Humanoids;
 
 public class EvadeState : State<Enemy> {
 	

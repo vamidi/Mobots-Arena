@@ -186,7 +186,7 @@ public class FieldOfView : MonoBehaviour {
 			if(Vector3.Angle( this.transform.forward, direction ) < this.mViewAngle / 2){
 				float distanceToTarget = Vector3.Distance(this.transform.position, t.position);
 
-				if(!Physics.Raycast(this.transform.position, direction, distanceToTarget, this.mPlayerMask)){
+				if(!Physics.Raycast(this.transform.position, direction, distanceToTarget, this.mObstaclesMask)){
 					this.mEnemy.mPlayer = t;
 				}
 			}

@@ -128,6 +128,92 @@
           "owned": true
         }
       }
+    },
+    {
+      "robotname": "Knight",
+      "parts": {
+        "head": {
+          "stats": {
+            "hitpoints": 160,
+            "shieldhitpoints": 100,
+            "shieldstrength": 35,
+            "weight": 125
+          },
+          "owned": true
+        },
+        "left": {
+          "stats": {
+            "hitpoints": 130,
+            "weight": 95,
+            "damageperround": 30,
+            "roundspersecond": 1.5,
+            "accuracy": 0.95
+          },
+          "owned": true
+        },
+        "right": {
+          "stats": {
+            "hitpoints": 130,
+            "weight": 95,
+            "damageperround": 30, 
+            "roundspersecond": 1.5, 
+            "accuracy": 0.95
+          },
+          "owned": true
+        },
+        "car": {
+          "stats": {
+            "hitpoints": 145,
+            "weight": 120, 
+            "speed":1750,
+            "jumpstrength":1750
+          },
+          "owned": true
+        }
+      }
+    },
+    {
+      "robotname": "MKVII",
+      "parts": {
+        "head": {
+          "stats": {
+            "hitpoints": 115,
+            "shieldhitpoints": 65,
+            "shieldstrength": 30,
+            "weight": 75
+          },
+          "owned": true
+        },
+        "left": {
+          "stats": {
+            "hitpoints": 95,
+            "weight": 70,
+            "damageperround": 7,
+            "roundspersecond": 1.8,
+            "accuracy": 0.8
+          },
+          "owned": true
+        },
+        "right": {
+          "stats": {
+            "hitpoints": 95,
+            "weight": 70,
+            "damageperround": 7, 
+            "roundspersecond": 1.8, 
+            "accuracy": 0.8
+          },
+          "owned": true
+        },
+        "car": {
+          "stats": {
+            "hitpoints": 105,
+            "weight": 60, 
+            "speed":1875,
+            "jumpstrength":1875
+          },
+          "owned": true
+        }
+      }
     }
   ]
 }

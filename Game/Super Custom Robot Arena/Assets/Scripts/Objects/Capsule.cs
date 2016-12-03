@@ -97,7 +97,7 @@ public class Capsule : MonoBehaviour {
 	}
 	
 	private Part GetLowestHealthOfPart(Collider col){
-		SCRA.Humanoids.Robot r = col.transform.GetComponent<Part>().GetParent();
+		MBA.Humanoids.Robot r = col.transform.GetComponent<Part>().GetParent();
 		Part p = null;
 		float amount = 99999;
 		for(int i = 0; i < 4; i++){

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-// Own namespace
-using SCRA.Humanoids;
+
+// Our namespaces
+using MBA.Humanoids;
 
 public class ArmController : MonoBehaviour {
 	

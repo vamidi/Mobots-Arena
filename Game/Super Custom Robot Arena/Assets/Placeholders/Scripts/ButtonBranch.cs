@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SCRA {
+namespace MBA {
 	
 	namespace UI {
 		
@@ -89,6 +89,7 @@ namespace SCRA {
 			}
 			
 			public GameObject[] mButtonRefs;
+			public RectTransform mParent;
 			[HideInInspector]
 			public List<GameObject>mButtons;
 			public SCALEMODE mScaleMode;
@@ -101,6 +102,19 @@ namespace SCRA {
 			private ButtonScaler mButtonScaler = new ButtonScaler();
 			private float mLastScreenWidth = 0;
 			private float mLastScreenHeight = 0;
+			
+			public void OpenClose () {
+				if(!this.mRevealSettings.mOpening)
+					this.SpawnButtons();
+				else{
+					for(int i = 0; i < mButtons.Count; i ++)
+						Destroy(this.mButtons[i]);
+					
+					this.mButtons.Clear();
+					
+					this.mRevealSettings.mOpening = false;
+				}
+			}
 			
 			#region UNITYMETHODS
 			
@@ -130,8 +144,9 @@ namespace SCRA {
 				}
 				
 				if(this.mRevealSettings.mOpening){
-					if(!this.mRevealSettings.mSpawned)
+					if(!this.mRevealSettings.mSpawned){
 						this.SpawnButtons();
+					}
 
 					switch(this.mRevealSettings.mRevealOption){
 						case RevealSettings.REVEALOPTION.LINEAR:
@@ -171,7 +186,10 @@ namespace SCRA {
 				
 				for(int i = 0; i < this.mButtonRefs.Length; i++){
 					GameObject b = Instantiate(this.mButtonRefs[i] as GameObject);
-					b.transform.SetParent(this.transform);
+					if(this.mParent)
+						b.transform.SetParent(this.mParent);
+					else
+						b.transform.SetParent(this.transform);
 					b.transform.position = this.transform.position;
 					if(this.mLinearSpawner.mRevealStyle == LinearSpawner.REVEALSTYLE.FADEINATPOSITION || this.mCircularSpawner.mRevealStyle == CircularSpawner.REVEALSTYLE.FADEINATPOSITION){
 						Color c = b.GetComponent<Image>().color;
@@ -199,10 +217,11 @@ namespace SCRA {
 					// set size
 					buttonRect.sizeDelta = new Vector2(this.mButtonScaler.mNewButtonSize.x, this.mButtonScaler.mNewButtonSize.y);
 					targetPos.x = this.mLinearSpawner.mDirection.x * ( (i + this.mLinearSpawner.mButtonOffset) * ( buttonRect.sizeDelta.x + this.mLinearSpawner.mButtonSpacing) ) + this.transform.position.x;
-					targetPos.y = this.mLinearSpawner.mDirection.y * ( (i + this.mLinearSpawner.mButtonOffset) * ( buttonRect.sizeDelta.y + this.mLinearSpawner.mButtonSpacing) ) + this.transform.position.y;
+					targetPos.y = this.mLinearSpawner.mDirection.y * ( (i + this.mLinearSpawner.mButtonOffset) * ( buttonRect.sizeDelta.y + this.mLinearSpawner.mButtonSpacing) );
 					targetPos.z = 0;
-					buttonRect.position = Vector3.Lerp(buttonRect.position, targetPos, this.mRevealSettings.mTranslateSmooth * Time.deltaTime);				
-				}
+					buttonRect.localPosition = Vector3.Lerp(buttonRect.localPosition, targetPos, this.mRevealSettings.mTranslateSmooth * Time.deltaTime);
+					buttonRect.localScale = Vector3.one;
+				}				
 			}
 			
 			void RevealLinearlyFade () {

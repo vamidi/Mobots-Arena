@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace SCRA {
+namespace MBA {
 	
 	namespace Humanoids {
 		
@@ -14,7 +14,7 @@ namespace SCRA {
 		
 		[RequireComponent(typeof(Rigidbody))]
 		public abstract class Robot : MonoBehaviour {
-		
+			
 			/****************************** PUBLIC PROPERTIES *********************/ 
 			
 			/// <summary>
@@ -121,7 +121,7 @@ namespace SCRA {
 			
 			/****************************** UNITY METHODS *********************/
 		
-			protected virtual void Awake() {		
+			protected virtual void Awake() {	
 				foreach( Transform child in this.transform){
 					if (child.gameObject.tag == this.mTags.mCarTag) {
 						this.goCar = child.gameObject;

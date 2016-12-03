@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-using SCRA.Humanoids;
+using MBA.Humanoids;
 
 public class Enemy : Robot {
 	

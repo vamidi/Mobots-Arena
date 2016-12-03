@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-namespace SCRA {
+namespace MBA {
 
 	namespace UI {
 
@@ -44,6 +44,7 @@ namespace SCRA {
 				Transition t = p.GetComponent<Transition>();
 				rt.offsetMax = new Vector2(t.mSpawnPosition.x, t.mSpawnPosition.y);
 				rt.offsetMin = new Vector2(t.mSpawnPosition.x, t.mSpawnPosition.y);
+				rt.transform.localPosition = Vector3.zero;
 				p.transform.localScale = Vector3.one;
 				this.mCurrentPage = p;
 				
@@ -65,6 +66,7 @@ namespace SCRA {
 				t = this.mCurrentPage.GetComponent<Transition>();
 				rt.offsetMax = new Vector2(t.mSpawnPosition.x, t.mSpawnPosition.y);
 				rt.offsetMin = new Vector2(t.mSpawnPosition.x, t.mSpawnPosition.y);
+				rt.transform.localPosition = Vector3.zero;
 			}
 		}
 	}
