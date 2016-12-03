@@ -3,18 +3,42 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class Crosshair : MonoBehaviour {
-	
-	private Camera mCameraFacing;	
 
+	public LayerMask mLayer;
+	public Transform mGunEnd, mOldPos;
+	
+	private Player mPlayer;
+	
 	// Use this for initialization
 	void Start () {
-		this.mCameraFacing = Camera.main;
-		
+		this.mPlayer = this.transform.root.GetComponent<Player>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		this.transform.LookAt(this.mCameraFacing.transform.position);
-		this.transform.Rotate(0, 180f, 0);
+		if(this.mPlayer.isControllable){
+			this.gameObject.SetActive(true);
+			Vector3 rayOrg = this.mGunEnd.position;
+			RaycastHit hit;
+			Vector3 pos = mOldPos.position;
+			float distance = Vector3.Distance(rayOrg, this.mOldPos.position);
+			float compareDistance = 0f;
+			if(Physics.Raycast(rayOrg, this.mGunEnd.transform.forward, out hit, this.mLayer) ) {
+				if(hit.collider.tag != "Bullet"){
+					compareDistance = Vector3.Distance(rayOrg, hit.point);
+					if(distance > compareDistance ){
+						pos = hit.point;
+					}
+				}
+			}
+			this.transform.position = pos;
+			if(distance > compareDistance )
+				this.transform.localPosition += new Vector3(0,0,-.3f);
+				
+			this.transform.LookAt(Camera.main.transform.position);
+			this.transform.Rotate(0, 180f, 0);	
+		}else{
+			this.gameObject.SetActive(false);
+		}
 	}
 }

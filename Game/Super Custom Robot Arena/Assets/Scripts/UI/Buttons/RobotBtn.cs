@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 
-namespace SCRA {
+namespace MBA {
 	
 	namespace UI {
 	
@@ -14,7 +14,7 @@ namespace SCRA {
 			private string mRobotName = "";
 			private Button mButton = null;
 			private Transform mCurrentObj = null;
-			private UIEditor mEditor;
+			private MBAEditor mEditor;
 		
 			public void SetName(string name){
 				this.mRobotName = name;
@@ -26,15 +26,15 @@ namespace SCRA {
 		
 			void Awake () {
 				this.mCurrentObj = this.GetComponentInChildren<Transform>();
-				this.mEditor = GameObject.FindObjectOfType<UIEditor>();
+				this.mEditor = GameObject.FindObjectOfType<MBAEditor>();
 				mButton = GetComponent<Button>();
 				if(mButton != null)
 				 	mButton.GetComponent<Button>().onClick.AddListener(() => { OnClickListener(mRobotName); }); 
 			}
 		
 			private void OnClickListener(string name){		
-				if(this.mEditor != null)
-					this.mEditor.ChangeRobotByName(name);
+//				if(this.mEditor != null)
+//					this.mEditor.ChangeRobotByName(name);
 			}
 		}
 	}

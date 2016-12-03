@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System;
 
-using SCRA.Humanoids;
+using MBA.Humanoids;
 
 /// <summary>
 /// The parts of the robot
@@ -150,6 +150,10 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<double
 	/// <param name="weight">Weight.</param>
 	public void SetWeight(int weight){
 		this.mRobotWegith = weight;
+	}
+	
+	public void Init(){
+		this.mRobot = this.transform.root.GetComponent<Player>();
 	}
 	
 	#region UNITYMETHOD
