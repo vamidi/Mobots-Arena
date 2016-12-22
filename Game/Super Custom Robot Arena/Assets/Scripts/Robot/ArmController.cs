@@ -37,7 +37,22 @@ public class ArmController : MonoBehaviour {
 		if(mRobot.isControllable){
 			this.GetInput();
 		}
-	}
+
+        if (Input.GetAxis("Mouse ScrollWheel") > 0f && mOrbit.mYRotation <= 15)
+        {
+            mOrbit.mYRotation = mOrbit.mYRotation + 0.5f;
+        }
+
+        if (Input.GetAxis("Mouse ScrollWheel") < 0f && mOrbit.mYRotation >= 0)
+        {
+            mOrbit.mYRotation = mOrbit.mYRotation - 0.5f;
+        }
+
+        if (Input.GetMouseButtonDown(2))
+        {
+            mOrbit.mYRotation = 2.5f;
+        }
+    }
 		
 	protected virtual void LateUpdate(){
 		if(mRobot.isControllable){
