@@ -33,8 +33,9 @@ namespace MBA {
 			}
 		
 			private void OnClickListener(string name){		
-//				if(this.mEditor != null)
-//					this.mEditor.ChangeRobotByName(name);
+				if(this.mEditor != null){
+					//					this.mEditor.ChangeRobotByName(name);					
+				}
 			}
 		}
 	}

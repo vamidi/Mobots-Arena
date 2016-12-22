@@ -28,6 +28,7 @@ namespace MBA {
 			
 			// Use this for initialization
 			void Start () {
+				DontDestroyOnLoad(this.gameObject);
 				this.SetCurrentPage(this.mPages[0]);
 			}
 			

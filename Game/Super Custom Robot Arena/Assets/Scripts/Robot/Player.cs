@@ -50,6 +50,28 @@ public class Player : Robot {
 	private float mVOrbitInput, mHOrbitInput, mOrbitSnapInput;                                    
 		
 	/****************************** PUBLIC METHODS *********************/
+	
+	public void Initialize(){
+		this.mParts [0] = this.goHead.GetComponent<Head> ();
+		this.mParts [1] = this.goLarm.GetComponent<Larm> ();
+		this.mParts [2] = this.goRarm.GetComponent<Rarm> ();
+		this.mParts [3] = this.goCar.GetComponent<Car> ();
+		
+		if (this.mParts [0].GetPart () != PART.HEAD)
+			Debug.LogError ("The part is not a head part");
+
+		if (this.mParts [1].GetPart () != PART.LARM)
+			Debug.LogError ("The part is not a left arm part");
+
+		if (this.mParts [2].GetPart () != PART.RARM)
+			Debug.LogError ("The part is not a right arm part");
+
+		if (this.mParts [3].GetPart () != PART.CAR)
+			Debug.LogError ("The part is not a car part");
+
+		this.mResetMass = this.mMass =  this.mParts [0].mRobotWegith + this.mParts [1].mRobotWegith + this.mParts [2].mRobotWegith + this.mParts [3].mRobotWegith;
+		((Car)this.mParts[3]).SetSpeed(1825);
+	}
 
 	/// <summary>
 	/// Increases the damage.
@@ -70,39 +92,48 @@ public class Player : Robot {
 		((Car)this.mParts[3]).SetSpeed(1825);
 	}	
 	
+	
+	/// <summary>
+	/// Sets the correct values to the right part
+	/// </summary>
+	/// <param name="part">Part.</param>
+	/// <param name="method">Method.</param>
+	/// <param name="value">Value.</param>
+	public void SetValue(PART part, string method = "", object value = null)  {
+		
+		if (method == "" || value == null)
+			return;
+
+		switch (part) {
+			case PART.HEAD:
+				mParts [0].SendMessage (method, value, SendMessageOptions.DontRequireReceiver);
+				break;
+			case PART.LARM:
+				mParts [1].SendMessage (method, value, SendMessageOptions.DontRequireReceiver);
+				break;
+			case PART.RARM:
+				mParts [2].SendMessage (method, value, SendMessageOptions.DontRequireReceiver);
+				break;
+			case PART.CAR:
+				mParts [3].SendMessage (method, value, SendMessageOptions.DontRequireReceiver);
+				break;
+		}
+	}
+	
 	#region UNITYMETHODS
 	/****************************** UNITY METHODS *********************/
 
 	protected override void Awake() {
 		//				DontDestroyOnLoad(this.gameObject);
-		DontDestroyOnLoad(this.goHead);
-		DontDestroyOnLoad(this.goLarm);
-		DontDestroyOnLoad(this.goRarm);
-		DontDestroyOnLoad(this.goCar);
+//		DontDestroyOnLoad(this.goHead);
+//		DontDestroyOnLoad(this.goLarm);
+//		DontDestroyOnLoad(this.goRarm);
+//		DontDestroyOnLoad(this.goCar);
 		base.Awake();
-		this.mParts [0] = this.goHead.GetComponent<Head> ();
-		this.mParts [1] = this.goLarm.GetComponent<Larm> ();
-		this.mParts [2] = this.goRarm.GetComponent<Rarm> ();
-		this.mParts [3] = this.goCar.GetComponent<Car> ();
 	}
 	
 	protected override void Start() {
 		base.Start();
-
-		if (this.mParts [0].GetPart () != PART.HEAD)
-			Debug.LogError ("The part is not a head part");
-
-		if (this.mParts [1].GetPart () != PART.LARM)
-			Debug.LogError ("The part is not a left arm part");
-
-		if (this.mParts [2].GetPart () != PART.RARM)
-			Debug.LogError ("The part is not a right arm part");
-
-		if (this.mParts [3].GetPart () != PART.CAR)
-			Debug.LogError ("The part is not a car part");
-
-		this.mResetMass = this.mMass =  this.mParts [0].mRobotWegith + this.mParts [1].mRobotWegith + this.mParts [2].mRobotWegith + this.mParts [3].mRobotWegith;
-		((Car)this.mParts[3]).SetSpeed(1825);
 		
 		this.mForwardInput = this.mRotateInput = this.mJumpInput = 0;
 		
@@ -114,7 +145,6 @@ public class Player : Robot {
 	
 	// Update is called once per frame
 	protected override void Update() {
-				
 		if(this.isControllable){
 			this.GetInput();
 			this.OrbitRobot();

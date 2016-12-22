@@ -21,7 +21,7 @@ public class Transition : MonoBehaviour {
 	private Text[] mTransitionTxts, mTxts;
 	private Image[] mTransitionImages, mImages;
 	private RectTransform mTransitionPage;
-	private RectTransform mThisPage;
+//	private RectTransform mThisPage;
 	
 	public GameObject InitializeTransitionPage (GameObject transition) {
 		GameObject go = Instantiate(transition as GameObject);
@@ -50,7 +50,7 @@ public class Transition : MonoBehaviour {
 		if(this.mOutTransitionType == OUTTRANSITIONTYPE.FADE)
 			this.mOutColorAlpha = 1f;
 		
-		this.mThisPage = this.GetComponent<RectTransform>();
+//		this.mThisPage = this.GetComponent<RectTransform>();
 		//
 		this.mImages = this.GetComponentsInChildren<Image>();
 		this.mTxts = this.GetComponentsInChildren<Text>();
