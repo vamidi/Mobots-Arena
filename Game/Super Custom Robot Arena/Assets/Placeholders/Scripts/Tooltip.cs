@@ -33,8 +33,8 @@ namespace MBA {
 				public float mSnapToSizeDistance = .25f;
 				public float mLiefSpan = 5f;
 				
-				[HideInInspector]
-				public bool mOpening = false;
+				
+				public bool mOpening = true;
 				[HideInInspector]
 				public Color mTextColor;
 				[HideInInspector]
@@ -48,7 +48,7 @@ namespace MBA {
 					this.mTextBoxRect = mTextBox.GetComponent<RectTransform>();
 					this.mTextBoxRect.sizeDelta = this.mInitialBox;
 					this.mCurrentSize = this.mTextBoxRect.sizeDelta;
-					this.mOpening = false;
+					this.mOpening = true;
 					this.mTextColor = this.mText.color;
 					this.mTextColor.a = 0f;
 					this.mText.color = this.mTextColor;
@@ -56,8 +56,8 @@ namespace MBA {
 					this.mTextBoxColor.a = 1f;
 					this.mTextBox.color = this.mTextBoxColor;  
 					
-					this.mTextBox.gameObject.SetActive(false);
-					this.mText.gameObject.SetActive(false);
+//					this.mTextBox.gameObject.SetActive(false);
+//					this.mText.gameObject.SetActive(false);
 				}
 			}
 
@@ -77,7 +77,7 @@ namespace MBA {
 			}
 			
 			// Use this for initialization
-			void Start () {
+			void Awake () {
 				this.mAnimSettings.Initialize();
 				this.mUISettings.Initialize();
 			}
