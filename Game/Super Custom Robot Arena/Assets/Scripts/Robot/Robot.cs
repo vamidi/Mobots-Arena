@@ -108,6 +108,21 @@ namespace MBA {
 			public float GetRobotMass(){
 				return this.mMass;
 			}
+			
+			public GameObject GetPartObj(int index){
+				switch(index){
+					case 0:
+						return this.goHead;
+					case 1:
+						return this.goLarm;
+					case 2:
+						return this.goRarm;
+					case 3:
+						return this.goCar;
+					default:
+						return this.goHead;
+				}				
+			}
 		
 			public Part GetPart(int index){
 				return mParts[index];

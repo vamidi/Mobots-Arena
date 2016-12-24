@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 
 // additional namespace 
 using Boomlagoon.JSON;
+
+// 
 
 public static class GameUtilities {
 	
@@ -27,6 +30,25 @@ public static class GameUtilities {
 		//TextAss declared as public variable and drag dropped the text file in inspector
 		TextAsset TxtAss = (TextAsset) Resources.Load(path, typeof(TextAsset));
 		return (TxtAss != null) ? TxtAss.text : "";
+	}
+	
+	public static bool CheckFileExists(string path, string fileName){
+		path = Application.dataPath + "/Resources/" + path + fileName;
+		return File.Exists(path);
+	}
+	
+	public static bool DeleteFile(string path, string fileName){
+		path = Application.dataPath + "/Resources/" + path + fileName;
+		if(File.Exists(path)){
+			File.Delete(path);
+		}
+		
+		return File.Exists(path);
+	}
+	
+	public static void WriteFile(string path, string fileName, string value){		
+		path = Application.dataPath + "/Resources/" + path;
+		File.WriteAllText(path + fileName, value);
 	}
 	
 	/// <summary>

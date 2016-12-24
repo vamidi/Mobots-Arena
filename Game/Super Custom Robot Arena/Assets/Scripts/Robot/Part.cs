@@ -15,6 +15,7 @@ public enum PART {
 [RequireComponent(typeof(HealthBar))]
 public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<double> {
 	
+	public string mPartName = "MKVII";
 	/// <summary>
 	/// The max health of the robot
 	/// </summary>
@@ -152,10 +153,6 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<double
 		this.mRobotWegith = weight;
 	}
 	
-	public void Init(){
-		this.mRobot = this.transform.root.GetComponent<Player>();
-	}
-	
 	#region UNITYMETHOD
 	
 	// Called before the Start function
@@ -171,6 +168,9 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<double
 		this.mFlashMaterial = new Material(Shader.Find("Mobile/Particles/Additive"));
 		float gray = 153f/255f;
 		this.mDownColor = new Color(gray, gray, gray, 1f);
+		if(this.mRobot == null)
+			this.mRobot = this.transform.root.GetComponent<Player>();
+		
 	}
 	
 	// Update is called once per frame

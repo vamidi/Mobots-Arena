@@ -10,8 +10,8 @@ public class DynamicListener : MonoBehaviour {
 	public bool mParameter = false;
 	public string mSendMassage = "Enter GameObject's method name";
 	public string mMessageParameter;
-	private Button b;
-	private GameObject mObjectListening;
+	protected Button b;
+	protected GameObject mObjectListening;
 	
 	
 	// Use this for initialization
@@ -21,11 +21,10 @@ public class DynamicListener : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+    void Update () {
 	}
 	
-	private void GetObjectListening () {
+	void GetObjectListening () {
 		if(this.thisIsListener)
 			this.mObjectListening = this.gameObject;
 		else
@@ -35,7 +34,7 @@ public class DynamicListener : MonoBehaviour {
 			this.SetListener();
 	}
 	
-	private void SetListener () {
+	protected virtual void SetListener () {
 		if(this.b){
 			if(!this.mParameter)
 				b.onClick.AddListener(() => this.mObjectListening.SendMessage(this.mSendMassage));
@@ -43,7 +42,6 @@ public class DynamicListener : MonoBehaviour {
 				b.onClick.AddListener(() => this.mObjectListening.SendMessage(this.mSendMassage, this.mMessageParameter));
 		}else{
 			Debug.LogError("Dynamics listeners belongs to this button");	
-		}
-			
+		}	
 	}
 }

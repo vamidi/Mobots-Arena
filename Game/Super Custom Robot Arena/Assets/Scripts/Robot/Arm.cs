@@ -78,6 +78,7 @@ public class Arm : Part, IShootable {
 		base.Start();
 		this.mLaserLine = this.GetComponent<LineRenderer>();
 		this.mResetDamage = this.mDamagePerRound;
+		this.mGunEnd = this.GetComponentsInChildren<Transform>()[1];
 	}
 	
 	// Update is called once per frame

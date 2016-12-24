@@ -35,10 +35,13 @@ public class Car : Part {
 	
 	public void SetSpeed(float speed){
 		speed = 2800f;
-		this.mSpeed = speed/this.mRobot.GetRobotMass();
+		if(this.mRobot != null)
+			this.mSpeed = speed/this.mRobot.GetRobotMass();
+		Debug.Log(this.mSpeed);
 	}
 
 	public void SetJumpStrength(float strength){
-		this.mJumpForce = strength/this.mRobot.GetRobotMass();
+		if(this.mRobot != null)
+			this.mJumpForce = strength/this.mRobot.GetRobotMass();
 	}
 }
