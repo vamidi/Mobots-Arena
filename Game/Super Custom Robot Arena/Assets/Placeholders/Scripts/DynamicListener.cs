@@ -22,6 +22,8 @@ public class DynamicListener : MonoBehaviour {
 	
 	// Update is called once per frame
     void Update () {
+		if(!this.mObjectListening)
+			this.GetObjectListening();
 	}
 	
 	void GetObjectListening () {

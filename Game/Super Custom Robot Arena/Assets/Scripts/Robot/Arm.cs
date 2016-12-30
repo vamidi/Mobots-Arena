@@ -114,4 +114,10 @@ public class Arm : Part, IShootable {
 		yield return shotDuration;
 		this.mLaserLine.enabled = false;
 	}
+	
+	protected void OnDrawGizmosSelected() {
+//		Gizmos.color = Color.yellow;
+//		Vector3 direction = this.mGunEnd.transform.forward * this.mRange;
+//		Gizmos.DrawRay(this.mGunEnd.position, direction);
+	}
 }

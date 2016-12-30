@@ -33,22 +33,22 @@ namespace MBA {
 				public float mSnapToSizeDistance = .25f;
 				public float mLiefSpan = 5f;
 				
-				
-				public bool mOpening = true;
+				public bool mOpening;
 				[HideInInspector]
 				public Color mTextColor;
 				[HideInInspector]
 				public Color mTextBoxColor;
-				[HideInInspector]
 				public RectTransform mTextBoxRect;
 				[HideInInspector]
 				public Vector2 mCurrentSize;
 				
-				public void Initialize() {
-					this.mTextBoxRect = mTextBox.GetComponent<RectTransform>();
+				public virtual void Initialize() {
+					if(!this.mTextBoxRect)
+						this.mTextBoxRect = mTextBox.GetComponent<RectTransform>();
+					this.mOpenedBox = this.mTextBoxRect.sizeDelta;
 					this.mTextBoxRect.sizeDelta = this.mInitialBox;
 					this.mCurrentSize = this.mTextBoxRect.sizeDelta;
-					this.mOpening = true;
+					this.mOpening = false;
 					this.mTextColor = this.mText.color;
 					this.mTextColor.a = 0f;
 					this.mText.color = this.mTextColor;
@@ -64,42 +64,43 @@ namespace MBA {
 			public AnimationSettings mAnimSettings = new AnimationSettings();
 			public UISettings mUISettings = new UISettings();
 			
-			private float mLifeTimer = 0f;
+			protected bool mOpened = false;
+			protected float mLifeTimer = 0f;
 			
 			/// <summary>
 			/// Method when we click the button
 			/// This will active new ui elements
 			/// </summary>
 			public void StartOpen(){
-				this.mUISettings.mOpening = true;
+				this.mOpened = true;
 				this.mUISettings.mTextBox.gameObject.SetActive(true);
 				this.mUISettings.mText.gameObject.SetActive(true);
 			}
 			
 			// Use this for initialization
-			void Awake () {
+			protected virtual void Start () {
 				this.mAnimSettings.Initialize();
 				this.mUISettings.Initialize();
 			}
 
 			// Update is called once per frame
-			void Update () {
+			protected virtual void Update () {
+				if(this.mUISettings.mOpening == false && this.mOpened == true)
+					this.mUISettings.mOpening = true;
+				
+				Debug.Log(this.mUISettings.mOpening);
 				if(this.mUISettings.mOpening){
 					OpenToolTip();
 					
 					if(this.mAnimSettings.mWidthOpen && this.mAnimSettings.mHeightOpen){
 						this.mLifeTimer += Time.deltaTime;
-						if(this.mLifeTimer > this.mUISettings.mLiefSpan){
-							this.FadeToolTipOut();
-						}else{
+						if(this.mLifeTimer < this.mUISettings.mLiefSpan)
 							this.FadeTextIn();
-						}
-						
 					}
 				}
 			}
 			
-			void OpenToolTip(){
+			protected void OpenToolTip(){
 				switch(this.mAnimSettings.mOpenStyle){
 					case OPENSTYLE.HEIGHTTOWIDTH:
 						this.OpenHeightToWidth();
@@ -118,7 +119,7 @@ namespace MBA {
 				this.mUISettings.mTextBoxRect.sizeDelta = this.mUISettings.mCurrentSize;
 			}
 			
-			void OpenHeightToWidth() {
+			protected void OpenHeightToWidth() {
 				if(!this.mAnimSettings.mHeightOpen){
 					this.OpenHeight();
 				}else{
@@ -126,7 +127,7 @@ namespace MBA {
 				}
 			}
 			
-			void OpenWidthToHeight() {
+			protected void OpenWidthToHeight() {
 				if(!this.mAnimSettings.mWidthOpen){
 					this.OpenWidth();
 				}else{
@@ -134,7 +135,7 @@ namespace MBA {
 				}				
 			}
 			
-			void OpenWidthAndHeight() {
+			protected void OpenWidthAndHeight() {
 				if(!this.mAnimSettings.mWidthOpen){
 					this.OpenWidth();
 				}
@@ -143,7 +144,7 @@ namespace MBA {
 				}
 			}
 			
-			void OpenWidth() {
+			protected void OpenWidth() {
 				this.mUISettings.mCurrentSize.x = Mathf.Lerp(this.mUISettings.mCurrentSize.x, this.mUISettings.mOpenedBox.x, this.mAnimSettings.mWidthSmooth * Time.deltaTime);
 				if(Mathf.Abs(this.mUISettings.mCurrentSize.x - this.mUISettings.mOpenedBox.x) < this.mUISettings.mSnapToSizeDistance){
 					this.mUISettings.mCurrentSize.x = this.mUISettings.mOpenedBox.x;
@@ -151,7 +152,7 @@ namespace MBA {
 				}
 			}
 			
-			void OpenHeight() {
+			protected void OpenHeight() {
 				this.mUISettings.mCurrentSize.y = Mathf.Lerp(this.mUISettings.mCurrentSize.y, this.mUISettings.mOpenedBox.y, this.mAnimSettings.mHeightSmooth * Time.deltaTime);
 				if(Mathf.Abs(this.mUISettings.mCurrentSize.y - this.mUISettings.mOpenedBox.y) < this.mUISettings.mSnapToSizeDistance){
 					this.mUISettings.mCurrentSize.y = this.mUISettings.mOpenedBox.y;
@@ -159,12 +160,12 @@ namespace MBA {
 				}
 			}
 			
-			void FadeTextIn() {
+			protected void FadeTextIn() {
 				this.mUISettings.mTextColor.a = Mathf.Lerp(this.mUISettings.mTextColor.a, 1, this.mAnimSettings.mTextSmooth * Time.deltaTime);
 				this.mUISettings.mText.color = this.mUISettings.mTextColor;
-			}
+			}		
 			
-			void FadeToolTipOut(){
+			protected void FadeToolTipOut(){
 				this.mUISettings.mTextColor.a = Mathf.Lerp(this.mUISettings.mTextColor.a, 0, this.mAnimSettings.mTextSmooth * Time.deltaTime);
 				this.mUISettings.mText.color = this.mUISettings.mTextColor;
 				this.mUISettings.mTextBoxColor.a = Mathf.Lerp(this.mUISettings.mTextBoxColor.a, 0, this.mAnimSettings.mTextSmooth * Time.deltaTime);

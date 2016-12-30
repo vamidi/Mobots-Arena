@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using MBA.UI;
 
 [System.Serializable]
 public class DialogInterFace : MonoBehaviour {
 	
+	public Tooltip mToolTip;
 	public Image mPanel; 
 	public Text mText;
 	public Button mPositiveButton, mNegativeButton;
@@ -17,9 +19,10 @@ public class DialogInterFace : MonoBehaviour {
 	}
 	
 	public void Awake(){
+		this.mToolTip = GetComponent<Tooltip>();
 		this.mPanel = GetComponent<Image>();
 		Color c = this.mPanel.color;
-		c.a = 0;
+		c.a = .8f;
 		this.mPanel.color = c;
 
 		c = this.mText.color;
@@ -42,6 +45,7 @@ public class DialogInterFace : MonoBehaviour {
 		c.a = 0;
 		this.mNegativeButton.GetComponentInChildren<Text>().color = c;	
 	}
+	
 	
 	public void Show(){
 		Color c = this.mPanel.color;
@@ -67,6 +71,8 @@ public class DialogInterFace : MonoBehaviour {
 		c = mNegativeButton.GetComponentInChildren<Text>().color;
 		c.a = 1f;
 		this.mNegativeButton.GetComponentInChildren<Text>().color = c;
+		
+		this.mToolTip.StartOpen();
 	}
 	
 	public interface OnClickListener {

@@ -5,13 +5,15 @@ using System;
 namespace MBA {
 
 	namespace UI {
-
+		
+		public delegate void OnExitState();
 		/// <summary>
 		/// Menu controller.that is responsible for determing
 		/// which pages are be loaded
 		/// </summary>
 		public class MenuController : MonoBehaviour {
 		
+			public OnExitState mExitState;
 			// Add all menu's that must work as pages
 			public GameObject[] mPages;
 			// must corrospond to the pages 
@@ -26,9 +28,14 @@ namespace MBA {
 				set { this.mEnterScreen = value; } 
 			}
 			
+			public void QuitGame() {
+//				Debug.Log("QUIT");
+				Application.Quit();
+			}
+			
 			// Use this for initialization
 			void Start () {
-				DontDestroyOnLoad(this.gameObject);
+//				DontDestroyOnLoad(this.gameObject);
 				this.SetCurrentPage(this.mPages[0]);
 			}
 			
@@ -68,6 +75,10 @@ namespace MBA {
 				rt.offsetMax = new Vector2(t.mSpawnPosition.x, t.mSpawnPosition.y);
 				rt.offsetMin = new Vector2(t.mSpawnPosition.x, t.mSpawnPosition.y);
 				rt.transform.localPosition = Vector3.zero;
+				if(this.mExitState != null){
+					this.mExitState();
+					this.mExitState = null;
+				}
 			}
 		}
 	}

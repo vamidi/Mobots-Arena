@@ -24,6 +24,8 @@ namespace MBA {
 		/// </summary>
 		public class MBAEditor : MonoBehaviour, DialogInterFace.OnClickListener {
 			
+			public GameObject mMainStage;
+			public GameObject mRobotPlaceholder;
 			public GameObject DialogPrefab;
 			public bool mStartImmidiatly = false;
 			public Color mGood, mBad, mEcual;
@@ -137,8 +139,14 @@ namespace MBA {
 			public void SaveToSlot(string index){
 				this.mSlot = "slot_#" + index + ".txt";
 //				Debug.Log(GameUtilities.CheckFileExists("Slots/", slot));
+				DialogInterFace[] interfaces = GameObject.FindObjectsOfType<DialogInterFace>();
+				if(interfaces.Length > 0){
+					foreach(DialogInterFace i in interfaces){
+						Destroy(i.gameObject);
+					}
+				}
 				if(GameUtilities.CheckFileExists("Slots/", this.mSlot)){
-					GameObject d = (GameObject) Instantiate(DialogPrefab, DialogPrefab.transform.position, Quaternion.identity);
+					GameObject d = (GameObject) Instantiate(DialogPrefab, DialogPrefab.transform.position, Quaternion.identity);					
 					DialogInterFace.Builder builder = new DialogInterFace.Builder(d.GetComponentInChildren<DialogInterFace>());
 					builder.SetMessage("Save slot is already in use.\nDo you want to override it?\nThis can't be undone.");
 					builder.SetNegativeButton("NO", this);
@@ -159,7 +167,7 @@ namespace MBA {
 						break;
 					case DialogInterFace.BUTTON_NEGATIVE:
 						if(this.mStartImmidiatly){
-							GameUtilities.LoadLevelAsync("demo_arena");
+							GameObject.FindGameObjectWithTag("Menu").SendMessage("SetNextPage", "Level");
 						}
 						break;
 				}
@@ -172,7 +180,12 @@ namespace MBA {
 			#region UNITYMETHODS    
 			
 			void Awake () {
-				string robots = GameUtilities.ReadFile ("Robots/robots");
+//				Destroy(Camera.main.gameObject.GetComponent<Skybox>());
+				Destroy(Camera.main.gameObject.GetComponent<SimpleRotation>());
+				Camera.main.gameObject.transform.rotation = Quaternion.identity;
+				GameObject.Find("Cylinder").GetComponent<Renderer>().enabled = true;
+
+				string robots = GameUtilities.ReadResource ("Robots/robots");
 				this.mRobotArray = JSONObject.Parse(robots).GetArray("robots");
 				foreach(JSONValue o in this.mRobotArray) {
 					// Set the json of the robot into the dictionary.
@@ -180,7 +193,28 @@ namespace MBA {
 				}
 				
 				this.mOldName.text = this.mNewName.text = "";
-				JSONObject j = JSONObject.Parse(GameUtilities.ReadFile("Slots/slot_#1")).GetObject("robot");
+				string file = "";
+				if(GameUtilities.CheckFileExists("Slots/", "slot_#1.txt")){
+					file = GameUtilities.ReadFile("Slots/", "slot_#1.txt");
+				}
+				
+				if(file == ""){
+					if(GameUtilities.CheckFileExists("Slots/", "slot_#2.txt")){
+						file =  GameUtilities.ReadFile("Slots/", "slot_#2.txt");
+					}
+				}
+				
+				if(file == ""){
+					if(GameUtilities.CheckFileExists("Slots/", "slot_#3.txt")){
+						file = GameUtilities.ReadFile("Slots/", "slot_#3.txt");
+					}
+				}
+				
+				if(file == "")
+					file = GameUtilities.ReadResource("Slots/standard");
+				
+				JSONObject j = JSONObject.Parse(file).GetObject("robot");
+				
 				this.mCurrentRobotName = j.GetString("head");
 				this.mCurrentRobotNameLarm = j.GetString("left");
 				this.mCurrentRobotNameRarm = j.GetString("right");
@@ -189,6 +223,7 @@ namespace MBA {
 						
 			void Start () {
 				this.mRobotEditor = GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotEditor>();
+				this.mRobotEditor.transform.position = new Vector3(this.mRobotEditor.transform.position.x, 0.04f, this.mRobotEditor.transform.position.z );
 				this.mAssign = new AssignValues (ChangeStats);
 				this.mPart = PART.HEAD;
 				this.EquipRobot(this.mCurrentRobotName);
@@ -199,6 +234,7 @@ namespace MBA {
 				this.mPart = PART.CAR;
 				this.EquipRobot(this.mCurrentRobotNameCar);				
 				this.Initialize();
+				this.transform.localRotation = Quaternion.identity;
 			}
 			
 			void FixedUpdate(){
@@ -508,7 +544,7 @@ namespace MBA {
 				parentObj.Add("robot", robotObj);	
 				GameUtilities.WriteFile("Slots/", this.mSlot, parentObj.ToString());
 				if(this.mStartImmidiatly){
-					StartCoroutine(GameUtilities.LoadLevelAsync("demo_arena"));
+					GameObject.FindGameObjectWithTag("Menu").SendMessage("SetNextPage", "Level");
 				}
 			}
 			

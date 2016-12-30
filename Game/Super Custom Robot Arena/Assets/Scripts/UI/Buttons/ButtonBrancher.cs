@@ -127,7 +127,7 @@ namespace MBA {
 
 			// Use this for initialization
 			void Start () {
-				this.mRobots = JSONObject.Parse(GameUtilities.ReadFile ("Robots/robots")).GetArray("robots");
+				this.mRobots = JSONObject.Parse(GameUtilities.ReadFile ("Robots/", "robots.txt")).GetArray("robots");
 				this.mCount = this.mRobots.Length;
 				this.mButtons = new List<GameObject>();
 				this.mLastScreenWidth = Screen.width;
