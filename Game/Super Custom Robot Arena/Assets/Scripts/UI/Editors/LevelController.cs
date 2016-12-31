@@ -14,7 +14,7 @@ public class LevelController : MonoBehaviour {
 	private Dictionary<string, JSONObject>mLevels = new Dictionary<string,JSONObject>();
 	
 	public void SelectLevel(string levelname) {
-		GameUtilities.LoadLevelAsync(this.mLevels[levelname].GetString("scene"));
+		GameObject.FindObjectOfType<SceneLoader>().LoadNewLevel(this.mLevels[levelname].GetString("scene"));
 	}
 
 	void Awake() {
@@ -61,7 +61,7 @@ public class LevelController : MonoBehaviour {
 					rect.anchoredPosition = positions[i];
 
 			}
-		}
+		}		
 	}
 	
 	// Update is called once per frame

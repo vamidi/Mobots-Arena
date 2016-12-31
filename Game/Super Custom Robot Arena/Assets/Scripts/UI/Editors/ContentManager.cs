@@ -80,7 +80,7 @@ namespace MBA {
 			public RevealSettings mRevealSettings = new RevealSettings();
 			public LinearSpawner mLinearSpawner = new LinearSpawner();
 
-			private MBAEditor mEditor;
+//			private MBAEditor mEditor;
 			private List<GameObject>mButtons;
 			private int mCount;
 			private float mLastScreenWidth = 0;
@@ -90,8 +90,8 @@ namespace MBA {
 		
 			// Use this for initialization
 			void Start () {
-				this.mEditor = GameObject.FindObjectOfType<MBAEditor>();
-				this.mCount = this.mEditor.GetRobotSize();
+//				this.mEditor = GameObject.FindObjectOfType<MBAEditor>();
+//				this.mCount = this.mEditor.GetRobotSize();
 				this.mButtons = new List<GameObject>();
 				this.mLastScreenWidth = Screen.width;
 				this.mLastScreenHeight = Screen.height;	
@@ -174,7 +174,7 @@ namespace MBA {
 
 				for(int i = 0; i < this.mButtons.Count; i++){
 					RectTransform buttonRect = this.mButtons[i].GetComponent<RectTransform>();					
-					string name = this.mEditor.GetRobot(i).Obj.GetString("robotname");
+//					string name = this.mEditor.GetRobot(i).Obj.GetString("robotname");
 					buttonRect.GetComponentInChildren<Text>().text = name;
 					buttonRect.GetComponentsInChildren<Image>()[1].sprite = RevealImageByName(name);
 					buttonRect.gameObject.GetComponent<DynamicListener>().mMessageParameter = name;
@@ -186,20 +186,20 @@ namespace MBA {
 			Sprite RevealImageByName (string robotName) {
 				Texture2D t2d = null;
 				Sprite holder = null;
-				switch (this.mEditor.GetPart()) {
-					case PART.HEAD:
-						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_head_image");	
-						break;
-					case PART.LARM:
-						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_larm_image");		
-						break;
-					case PART.RARM:
-						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_rarm_image");		
-						break;
-					case PART.CAR:
-						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_car_image");		
-						break;
-				}
+//				switch (this.mEditor.GetPart()) {
+//					case PART.HEAD:
+//						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_head_image");	
+//						break;
+//					case PART.LARM:
+//						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_larm_image");		
+//						break;
+//					case PART.RARM:
+//						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_rarm_image");		
+//						break;
+//					case PART.CAR:
+//						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_car_image");		
+//						break;
+//				}
 
 				if(t2d)
 					holder = Sprite.Create(t2d, new Rect(0,0, t2d.width, t2d.height), new Vector2(0.5f, 0.5f));

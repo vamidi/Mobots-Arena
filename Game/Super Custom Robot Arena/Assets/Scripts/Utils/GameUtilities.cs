@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+
 using System;
 using System.IO;
 using System.Collections;
@@ -115,26 +117,25 @@ public static class GameUtilities {
 	/// </summary>
 	/// <param name="levelName">Level name</param>
 	/// <returns>The routine.</returns>
-	public static IEnumerator LoadLevelAsync(string levelName) {
+	public static IEnumerator LoadLevelAsync(string levelName, Slider slider) {
 		AsyncOperation op = SceneManager.LoadSceneAsync (levelName);
 		op.allowSceneActivation = false;
 		while (!op.isDone) {
-			if (op.progress < 0.9f)
-			{
+			if (op.progress < 0.9f) {
+				Debug.Log(op.progress);
+				slider.value = op.progress;
 				loadProgress = "Loading: " + (op.progress * 100f).ToString("F0") + "%";
 			}
 			else // if progress >= 0.9f the scene is loaded and is ready to activate.
 			{
-				if (Input.anyKeyDown)
-				{
-					op.allowSceneActivation = true;
-				}
+				slider.value = 1f;
 				loadProgress = "Loading ready for activation, Press any key to continue";
+				op.allowSceneActivation = true;
 			}
 			if (lastLoadProgress != loadProgress) { lastLoadProgress = loadProgress; Debug.Log(loadProgress); } // Don't spam console.
 			yield return null;
 		}
-		loadProgress = "Load complete.";
-		Debug.Log(loadProgress);
+//		loadProgress = "Load complete.";
+//		Debug.Log(loadProgress);
 	}
 }

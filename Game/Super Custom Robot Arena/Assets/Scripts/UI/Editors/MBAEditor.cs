@@ -43,11 +43,7 @@ namespace MBA {
 			/// a particular robot part
 			/// </summary>
 			private AssignValues mAssign;
-			private JSONArray mRobotArray;
-			/// <summary>
-			/// The dictionary that contains the robots and their parts
-			/// </summary>
-			private Dictionary<string, JSONObject>mRobots = new Dictionary<string, JSONObject>();
+			private GameManager manager;
 			private RobotEditor mRobotEditor;
 			private PART mPart = PART.HEAD;
 			[SerializeField]
@@ -55,14 +51,6 @@ namespace MBA {
 			
 			public PART GetPart() {
 				return this.mPart;
-			}
-			
-			public int GetRobotSize () {
-				return this.mRobots.Count;
-			}
-			
-			public JSONValue GetRobot(int index){
-				return this.mRobotArray[index];
 			}
 			
 			#region MENULISTENER
@@ -167,7 +155,7 @@ namespace MBA {
 						break;
 					case DialogInterFace.BUTTON_NEGATIVE:
 						if(this.mStartImmidiatly){
-							GameObject.FindGameObjectWithTag("Menu").SendMessage("SetNextPage", "Level");
+							GameObject.FindGameObjectWithTag("Menu").SendMessage("SetNextPage", "Enemy");
 						}
 						break;
 				}
@@ -180,17 +168,11 @@ namespace MBA {
 			#region UNITYMETHODS    
 			
 			void Awake () {
+				manager = GameObject.FindObjectOfType<GameManager>();
 //				Destroy(Camera.main.gameObject.GetComponent<Skybox>());
 				Destroy(Camera.main.gameObject.GetComponent<SimpleRotation>());
 				Camera.main.gameObject.transform.rotation = Quaternion.identity;
 				GameObject.Find("Cylinder").GetComponent<Renderer>().enabled = true;
-
-				string robots = GameUtilities.ReadResource ("Robots/robots");
-				this.mRobotArray = JSONObject.Parse(robots).GetArray("robots");
-				foreach(JSONValue o in this.mRobotArray) {
-					// Set the json of the robot into the dictionary.
-					mRobots.Add(o.Obj.GetString("robotname"), o.Obj);
-				}
 				
 				this.mOldName.text = this.mNewName.text = "";
 				string file = "";
@@ -265,27 +247,27 @@ namespace MBA {
 					// speed
 					// weight
 
-					holder = mRobots[this.mCurrentRobotName].GetObject("parts").GetObject("head").GetObject("stats");
+					holder = manager.robotDictionary[this.mCurrentRobotName].GetObject("parts").GetObject("head").GetObject("stats");
 					overallHP += (float)holder.GetNumber("hitpoints");
 					this.mOverallTexts[1].text = holder.GetNumber("shieldhitpoints") + "";
 					this.mOverallTexts[2].text = holder.GetNumber("shieldstrength") + "%";
 					weight += (float)holder.GetNumber("weight");
 
-					holder = mRobots[this.mCurrentRobotNameLarm].GetObject("parts").GetObject("left").GetObject("stats");
+					holder = manager.robotDictionary[this.mCurrentRobotNameLarm].GetObject("parts").GetObject("left").GetObject("stats");
 					overallHP += (float)holder.GetNumber("hitpoints");
 					weight += (float)holder.GetNumber("weight");
 					this.mOverallTexts[3].text = holder.GetNumber("roundspersecond") + "";
 					this.mOverallTexts[4].text = holder.GetNumber("damageperround") + "";
 					this.mOverallTexts[5].text = holder.GetNumber("accuracy") + "";
 
-					holder = mRobots[this.mCurrentRobotNameRarm].GetObject("parts").GetObject("right").GetObject("stats");
+					holder = manager.robotDictionary[this.mCurrentRobotNameRarm].GetObject("parts").GetObject("right").GetObject("stats");
 					overallHP += (float)holder.GetNumber("hitpoints");
 					weight += (float)holder.GetNumber("weight");
 					this.mOverallTexts[6].text = holder.GetNumber("roundspersecond") + "";
 					this.mOverallTexts[7].text = holder.GetNumber("damageperround") + "";
 					this.mOverallTexts[8].text = holder.GetNumber("accuracy") + "";
 
-					holder = mRobots[this.mCurrentRobotNameCar].GetObject("parts").GetObject("car").GetObject("stats");
+					holder = manager.robotDictionary[this.mCurrentRobotNameCar].GetObject("parts").GetObject("car").GetObject("stats");
 					overallHP += (float)holder.GetNumber("hitpoints");
 					weight = (float)holder.GetNumber("weight");
 					this.mOverallTexts[9].text = holder.GetNumber("speed") + "N";
@@ -308,7 +290,7 @@ namespace MBA {
 					return;
 
 				// json object from the robots dictionary
-				JSONObject json = mRobots[robotName].GetObject("parts");
+				JSONObject json = manager.robotDictionary[robotName].GetObject("parts");
 				switch (this.mPart) {
 					case PART.HEAD:
 						//				head = GameUtilities.ReadFile ("Robots/" + robotName + "/" + robotName + "_" + part + "_stats");
@@ -356,12 +338,12 @@ namespace MBA {
 				this.mNewName.text = robotName;
 				if(this.mStats.Length == 8){
 					// json object from the robots dictionary
-					JSONObject oldrobotpartjson = mRobots[this.mCurrentRobotName].GetObject("parts");
-					JSONObject json = mRobots[robotName].GetObject("parts");	
+					JSONObject oldrobotpartjson = manager.robotDictionary[this.mCurrentRobotName].GetObject("parts");
+					JSONObject json = manager.robotDictionary[robotName].GetObject("parts");	
 
 					switch (this.mPart) {
 						case PART.HEAD:
-							oldrobotpartjson = mRobots[this.mCurrentRobotName].GetObject("parts").GetObject("head").GetObject("stats");
+							oldrobotpartjson = manager.robotDictionary[this.mCurrentRobotName].GetObject("parts").GetObject("head").GetObject("stats");
 							this.mStats[0].text = oldrobotpartjson.GetNumber("hitpoints") + "";
 							this.mStats[1].text = oldrobotpartjson.GetNumber("shieldhitpoints") + "";
 							this.mStats[2].text = oldrobotpartjson.GetNumber("shieldstrength") + "";
@@ -419,7 +401,7 @@ namespace MBA {
 							
 							break;
 						case PART.LARM:
-							oldrobotpartjson = mRobots[this.mCurrentRobotNameLarm].GetObject("parts").GetObject("left").GetObject("stats");
+							oldrobotpartjson = manager.robotDictionary[this.mCurrentRobotNameLarm].GetObject("parts").GetObject("left").GetObject("stats");
 							this.mStats[0].text = oldrobotpartjson.GetNumber("hitpoints") + "";
 							this.mStats[1].text = "";
 							this.mStats[2].text = "";
@@ -455,7 +437,7 @@ namespace MBA {
 							
 							break;
 						case PART.RARM:
-							oldrobotpartjson = mRobots[this.mCurrentRobotNameRarm].GetObject("parts").GetObject("right").GetObject("stats");
+							oldrobotpartjson = manager.robotDictionary[this.mCurrentRobotNameRarm].GetObject("parts").GetObject("right").GetObject("stats");
 							this.mStats[0].text = oldrobotpartjson.GetNumber("hitpoints") + "";
 							this.mStats[1].text = "";
 							this.mStats[2].text = "";
@@ -491,7 +473,7 @@ namespace MBA {
 							
 							break;
 						case PART.CAR:
-							oldrobotpartjson = mRobots[this.mCurrentRobotNameCar].GetObject("parts").GetObject("car").GetObject("stats");
+							oldrobotpartjson = manager.robotDictionary[this.mCurrentRobotNameCar].GetObject("parts").GetObject("car").GetObject("stats");
 							this.mStats[0].text = oldrobotpartjson.GetNumber("hitpoints") + "";
 							this.mStats[1].text = "";
 							this.mStats[2].text = "";
@@ -544,7 +526,7 @@ namespace MBA {
 				parentObj.Add("robot", robotObj);	
 				GameUtilities.WriteFile("Slots/", this.mSlot, parentObj.ToString());
 				if(this.mStartImmidiatly){
-					GameObject.FindGameObjectWithTag("Menu").SendMessage("SetNextPage", "Level");
+					GameObject.FindGameObjectWithTag("Menu").SendMessage("SetNextPage", "Enemy");
 				}
 			}
 			
