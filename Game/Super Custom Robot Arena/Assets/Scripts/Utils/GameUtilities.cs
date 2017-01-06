@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 using System;
@@ -13,7 +14,11 @@ using Boomlagoon.JSON;
 // 
 using System.IO.IsolatedStorage;
 
-public static class GameUtilities {
+public delegate void CallBack (Scene previousScene, Scene newScene);
+
+public static class GameUtilities {	
+	
+	public static UnityAction<Scene, Scene> sceneLoaded;
 	
 	/// <summary>
 	/// Loading text
@@ -139,8 +144,7 @@ public static class GameUtilities {
 	}
 	
 	//Breadth-first search
-	public static Transform FindDeepChild(this Transform aParent, string aName)
-	{
+	public static Transform FindDeepChild(this Transform aParent, string aName) {
 		var result = aParent.Find(aName);
 		if (result != null)
 			return result;

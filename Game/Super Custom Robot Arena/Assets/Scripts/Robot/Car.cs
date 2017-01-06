@@ -38,7 +38,6 @@ public class Car : Part {
 		speed = 2800f;
 		if(this.mRobot != null)
 			this.mSpeed = speed/this.mRobot.GetRobotMass();
-		Debug.Log(this.mSpeed);
 	}
 
 	public void SetJumpStrength(float strength){

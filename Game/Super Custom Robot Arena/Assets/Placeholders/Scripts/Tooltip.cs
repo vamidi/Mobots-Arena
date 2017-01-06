@@ -88,7 +88,6 @@ namespace MBA {
 				if(this.mUISettings.mOpening == false && this.mOpened == true)
 					this.mUISettings.mOpening = true;
 				
-				Debug.Log(this.mUISettings.mOpening);
 				if(this.mUISettings.mOpening){
 					OpenToolTip();
 					

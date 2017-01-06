@@ -168,7 +168,7 @@ public class EnemySelectController : MonoBehaviour {
 		yield return new WaitForSeconds(.5f);
 		Enemy holder = null;
 		if(manager.enemy.GetComponent<Enemy>() == null) {
-			Debug.Log("here");
+//			Debug.Log("here");
 			holder = manager.enemy.AddComponent<Enemy>();
 			holder.isControllable = false;
 			holder.GetPartObj(0).AddComponent<EnemyHead>();
@@ -178,7 +178,7 @@ public class EnemySelectController : MonoBehaviour {
 			yield return new WaitForSeconds(.5f);
 			holder.Initialize();
 		}else {
-			Debug.Log("here");
+//			Debug.Log("here");
 			Destroy(manager.enemy.GetComponent<Enemy>());
 			holder = manager.enemy.AddComponent<Enemy>();
 			holder.isControllable = false;

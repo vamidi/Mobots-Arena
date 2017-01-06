@@ -48,11 +48,12 @@ public class Player : Robot {
 	/****************************** PUBLIC METHODS *********************/
 	
 	public void Initialize(){
+		DontDestroyOnLoad(this.gameObject);
 		this.mParts [0] = this.goHead.GetComponent<Head> ();
 		this.mParts [1] = this.goLarm.GetComponent<Larm> ();
 		this.mParts [2] = this.goRarm.GetComponent<Rarm> ();
 		this.mParts [3] = this.goCar.GetComponent<Car> ();
-		
+			
 		if (this.mParts [0].GetPart () != PART.HEAD)
 			Debug.LogError ("The part is not a head part");
 
@@ -203,7 +204,11 @@ public class Player : Robot {
 	protected override void Move() {
 		if(Mathf.Abs(this.mForwardInput) > this.mInputDelay) {
 			// Move the player
-			this.mVelocity.z = this.mForwardInput * ((Car)this.mParts[3]).GetSpeed();
+			if(this.mParts[3] == null){
+				this.Initialize();
+			}else {
+				this.mVelocity.z = this.mForwardInput * ((Car)this.mParts[3]).GetSpeed();
+			}
 		} else {
 			this.mVelocity.z = 0;
 		}

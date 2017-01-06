@@ -31,6 +31,7 @@ public class Enemy : Robot {
 	private Color[] mColorArr = new Color[2];
 	
 	public void Initialize(){
+		DontDestroyOnLoad(this.gameObject);
 		this.mParts [0] = this.goHead.GetComponent<EnemyHead> ();
 		this.mParts [1] = this.goLarm.GetComponent<EnemyLarm> ();
 		this.mParts [2] = this.goRarm.GetComponent<EnemyRarm> ();

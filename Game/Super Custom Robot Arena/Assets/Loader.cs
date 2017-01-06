@@ -4,12 +4,12 @@ using System.Collections;
 
 public class Loader : MonoBehaviour {
 
-	public Slider mSlider;
+	public Slider mSlider;	
 	
 	// Use this for initialization
 	void Start () {
 		if(mSlider)
-			GameObject.FindObjectOfType<SceneLoader>().StartLevelAsync("", this.mSlider);
+			GameObject.FindObjectOfType<SceneLoader>().StartLevelAsync("", this.mSlider, GameUtilities.sceneLoaded);
 	}
 	
 	// Update is called once per frame

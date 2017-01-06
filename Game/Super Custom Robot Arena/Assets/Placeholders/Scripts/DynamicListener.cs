@@ -10,13 +10,14 @@ public class DynamicListener : MonoBehaviour {
 	public bool mParameter = false;
 	public string mSendMassage = "Enter GameObject's method name";
 	public string mMessageParameter;
+	
 	protected Button b;
 	protected GameObject mObjectListening;
 	
-	
 	// Use this for initialization
 	void Start () {
-		this.b = this.GetComponent<Button>();
+		if(!this.b)
+			this.b = this.GetComponent<Button>();
 		this.GetObjectListening();
 	}
 	

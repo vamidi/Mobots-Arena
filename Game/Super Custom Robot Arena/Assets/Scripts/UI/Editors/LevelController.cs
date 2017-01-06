@@ -12,6 +12,7 @@ public class LevelController : MonoBehaviour {
 	public float mSteps = 100f;
 	
 	private Dictionary<string, JSONObject>mLevels = new Dictionary<string,JSONObject>();
+	private GameManager mManger;
 	
 	public void SelectLevel(string levelname) {
 		GameObject.FindObjectOfType<SceneLoader>().LoadNewLevel(this.mLevels[levelname].GetString("scene"));
@@ -22,6 +23,8 @@ public class LevelController : MonoBehaviour {
 		v.y = 100f;
 		GameObject.FindGameObjectWithTag("Robot").transform.position = v;
 		GameObject.Find("Cylinder").GetComponent<Renderer>().enabled = false;
+		this.mManger = GameObject.FindObjectOfType<GameManager>();
+		GameUtilities.sceneLoaded = this.mManger.ChooseSpawnpoints;
 	}
 
 	// Use this for initialization

@@ -118,7 +118,6 @@ namespace MBA {
 			}
 			
 			protected void Awake () {
-				DontDestroyOnLoad(this.gameObject);
 				foreach( Transform child in this.transform){
 					if (child.gameObject.tag == this.mTags.mCarTag) {
 						this.goCar = child.gameObject;

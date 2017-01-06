@@ -16,7 +16,7 @@ namespace MBA {
 		/// <summary>
 		/// Call back for when the robot is done with building
 		/// </summary>
-		public delegate void AssignValues (string name);
+		public delegate void AssignValues ();
 		
 		/// <summary>
 		/// Editor class.
@@ -155,7 +155,8 @@ namespace MBA {
 						break;
 					case DialogInterFace.BUTTON_NEGATIVE:
 						if(this.mStartImmidiatly){
-							GameObject.FindGameObjectWithTag("Menu").SendMessage("SetNextPage", "Enemy");
+							// clean up begins
+							StartCoroutine(this.SaveRobot());
 						}
 						break;
 				}
@@ -218,14 +219,6 @@ namespace MBA {
 				this.Initialize();
 				this.transform.localRotation = Quaternion.identity;
 				this.mPart = PART.HEAD;
-			}
-			
-			void FixedUpdate(){
-				if( SceneManager.GetActiveScene().name == "demo_arena" && this.assigned == false){
-					// clean up begins
-					StartCoroutine(this.SaveRobot());
-					this.assigned = true;
-				}
 			}
 			
 			#endregion
@@ -526,9 +519,8 @@ namespace MBA {
 				//Adding values is easy (values are implicitly converted to JSONValues):
 				parentObj.Add("robot", robotObj);	
 				GameUtilities.WriteFile("Slots/", this.mSlot, parentObj.ToString());
-				if(this.mStartImmidiatly){
-					GameObject.FindGameObjectWithTag("Menu").SendMessage("SetNextPage", "Enemy");
-				}
+				// clean up begins
+				StartCoroutine(this.SaveRobot());
 			}
 			
 			private Sprite RevealImageByName (string robotName) {
@@ -561,7 +553,7 @@ namespace MBA {
 				holder.GetPartObj(1).AddComponent<Larm>();
 				holder.GetPartObj(2).AddComponent<Rarm>();
 				holder.GetPartObj(3).AddComponent<Car>();
-				yield return new WaitForSeconds(2.0f);
+				yield return new WaitForSeconds(.5f);
 				holder.Initialize();
 				holder.isControllable = false;
 				this.mPart = PART.HEAD;
@@ -573,7 +565,14 @@ namespace MBA {
 				this.mPart = PART.CAR;
 				this.ChangeStats(this.mCurrentRobotNameCar, holder);				
 				this.mPart = PART.HEAD;
+				this.ChangePage();
 				yield return null;
+			}
+			
+			private void ChangePage() {
+				if(this.mStartImmidiatly){
+					GameObject.FindGameObjectWithTag("Menu").SendMessage("SetNextPage", "Enemy");
+				}			
 			}
 		}
 	}

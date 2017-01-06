@@ -3,6 +3,7 @@ using System.Collections;
 
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class SceneLoader : MonoBehaviour {
 	
@@ -15,11 +16,14 @@ public class SceneLoader : MonoBehaviour {
 		SceneManager.LoadScene("loading_scene");
 	}
 	
-	public void StartLevelAsync(string scenename = "", Slider slider = null){
+	public void StartLevelAsync(string scenename = "", Slider slider = null, UnityAction<Scene, Scene> callback = null){
 		if(scenename != "")
 			StartCoroutine(GameUtilities.LoadLevelAsync(scenename, slider));
 		else
 			StartCoroutine(GameUtilities.LoadLevelAsync(this.mSceneName, slider));
+		
+		if(callback != null)
+			SceneManager.activeSceneChanged += callback;
 	}
 	
 	//Awake is always called before any Start functions
