@@ -57,7 +57,7 @@ namespace MBA {
 				public REVEALSTYLE mRevealStyle;
 				public Vector2 mDirection = new Vector2(0, 1f); // Slidedown
 				public float mBaseButtonSpacing = 5f;
-				public int mButtonOffset = 0;
+				public Vector2 mButtonOffset = Vector2.zero;
 
 				[HideInInspector]
 				public float mButtonSpacing = 5f;
@@ -76,11 +76,13 @@ namespace MBA {
 			public SCALEMODE mScaleMode;
 			public Vector2 mReferenceButtonSize;
 			public Vector2 mReferenceScreenSize;
+			public Vector3 targetPos;
 			public ButtonScaler mButtonScaler = new ButtonScaler();
 			public RevealSettings mRevealSettings = new RevealSettings();
 			public LinearSpawner mLinearSpawner = new LinearSpawner();
 
-//			private MBAEditor mEditor;
+			private MBAEditor mEditor;
+			private GameManager manager;
 			private List<GameObject>mButtons;
 			private int mCount;
 			private float mLastScreenWidth = 0;
@@ -90,8 +92,9 @@ namespace MBA {
 		
 			// Use this for initialization
 			void Start () {
-//				this.mEditor = GameObject.FindObjectOfType<MBAEditor>();
-//				this.mCount = this.mEditor.GetRobotSize();
+				this.manager = GameObject.FindObjectOfType<GameManager>();
+				this.mEditor = GameObject.FindObjectOfType<MBAEditor>();
+				this.mCount = this.manager.robots.Length;
 				this.mButtons = new List<GameObject>();
 				this.mLastScreenWidth = Screen.width;
 				this.mLastScreenHeight = Screen.height;	
@@ -163,18 +166,18 @@ namespace MBA {
 				for(int row = 0; row <= rows; row++) {
 					for(int column = 0; column < columns; column++) {
 						//						float r = column * rows + row;				
-						Vector3 targetPos = new Vector3(-45f, 103f, 0);
-						targetPos.x = (column * 90f) - this.mLinearSpawner.mButtonOffset;
-						targetPos.y = targetPos.y - (90f * row);
-						targetPos.z = 0;
-						positions.Add(targetPos);
+						Vector3 initPosition = this.targetPos;
+						initPosition.x = (column * this.mLinearSpawner.mButtonOffset.x) - targetPos.x;
+						initPosition.y = (row * this.mLinearSpawner.mButtonOffset.y) + targetPos.y;
+						initPosition.z = 0;
+						positions.Add(initPosition);
 
 					}
 				}		
 
 				for(int i = 0; i < this.mButtons.Count; i++){
 					RectTransform buttonRect = this.mButtons[i].GetComponent<RectTransform>();					
-//					string name = this.mEditor.GetRobot(i).Obj.GetString("robotname");
+					string name = this.manager.robots[i].Obj.GetString("robotname");
 					buttonRect.GetComponentInChildren<Text>().text = name;
 					buttonRect.GetComponentsInChildren<Image>()[1].sprite = RevealImageByName(name);
 					buttonRect.gameObject.GetComponent<DynamicListener>().mMessageParameter = name;
@@ -186,20 +189,20 @@ namespace MBA {
 			Sprite RevealImageByName (string robotName) {
 				Texture2D t2d = null;
 				Sprite holder = null;
-//				switch (this.mEditor.GetPart()) {
-//					case PART.HEAD:
-//						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_head_image");	
-//						break;
-//					case PART.LARM:
-//						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_larm_image");		
-//						break;
-//					case PART.RARM:
-//						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_rarm_image");		
-//						break;
-//					case PART.CAR:
-//						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_car_image");		
-//						break;
-//				}
+				switch (this.mEditor.GetPart()) {
+					case PART.HEAD:
+						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_head_image");	
+						break;
+					case PART.LARM:
+						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_larm_image");		
+						break;
+					case PART.RARM:
+						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_rarm_image");		
+						break;
+					case PART.CAR:
+						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_car_image");		
+						break;
+				}
 
 				if(t2d)
 					holder = Sprite.Create(t2d, new Rect(0,0, t2d.width, t2d.height), new Vector2(0.5f, 0.5f));

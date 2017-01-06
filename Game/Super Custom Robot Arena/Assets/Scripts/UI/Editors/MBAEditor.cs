@@ -92,7 +92,7 @@ namespace MBA {
 	
 					if (this.mAssign != null && this.mRobotEditor != null && holder != null && this.mPart != PART.UNASSIGNED )
 						// Change the robot part with the new object (assign is a callback)
-						this.mRobotEditor.SetRobot (this.mPart, robotName, holder, this.mAssign);
+						this.mRobotEditor.SetRobot (this.mPart, holder);
 					
 //					this.ChangeText(robotName);
 					this.Initialize();
@@ -217,6 +217,7 @@ namespace MBA {
 				this.EquipRobot(this.mCurrentRobotNameCar);				
 				this.Initialize();
 				this.transform.localRotation = Quaternion.identity;
+				this.mPart = PART.HEAD;
 			}
 			
 			void FixedUpdate(){

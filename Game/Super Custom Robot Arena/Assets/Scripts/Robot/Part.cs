@@ -12,7 +12,6 @@ public enum PART {
 	HEAD, CAR, LARM, RARM, UNASSIGNED
 }
 
-[RequireComponent(typeof(HealthBar))]
 public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<double> {
 	
 	public string mPartName = "MKVII";

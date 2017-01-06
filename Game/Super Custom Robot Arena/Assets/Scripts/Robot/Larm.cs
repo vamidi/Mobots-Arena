@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 
+[RequireComponent(typeof(HealthBar))]
 public class Larm : Arm { 
 	
 	public override void Shoot(){

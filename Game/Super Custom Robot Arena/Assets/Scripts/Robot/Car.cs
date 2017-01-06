@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(HealthBar))]
 public class Car : Part {
 	
 	/// <summary>

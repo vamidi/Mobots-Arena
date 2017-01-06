@@ -17,10 +17,6 @@ public class Player : Robot {
 
 	private float mResetTimer = 0f, mResetWeightTimer = 0f;
 	/// <summary>
-	/// To see if the player is controllable
-	/// </summary>
-	public bool isControllable = true;  
-	/// <summary>
 	/// Deadzone foor the input
 	/// </summary>
 	public float mInputDelay = 0.1f;                                                                                                                                                                                             
@@ -91,34 +87,6 @@ public class Player : Robot {
 		this.mStart = true;
 		((Car)this.mParts[3]).SetSpeed(1825);
 	}	
-	
-	
-	/// <summary>
-	/// Sets the correct values to the right part
-	/// </summary>
-	/// <param name="part">Part.</param>
-	/// <param name="method">Method.</param>
-	/// <param name="value">Value.</param>
-	public void SetValue(PART part, string method = "", object value = null)  {
-		
-		if (method == "" || value == null)
-			return;
-
-		switch (part) {
-			case PART.HEAD:
-				mParts [0].SendMessage (method, value, SendMessageOptions.DontRequireReceiver);
-				break;
-			case PART.LARM:
-				mParts [1].SendMessage (method, value, SendMessageOptions.DontRequireReceiver);
-				break;
-			case PART.RARM:
-				mParts [2].SendMessage (method, value, SendMessageOptions.DontRequireReceiver);
-				break;
-			case PART.CAR:
-				mParts [3].SendMessage (method, value, SendMessageOptions.DontRequireReceiver);
-				break;
-		}
-	}
 	
 	#region UNITYMETHODS
 	/****************************** UNITY METHODS *********************/

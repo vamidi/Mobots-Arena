@@ -21,7 +21,14 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	public string robotname = "MKVII";
+	public string enemyName = "";
 	public GameObject enemy;
+	
+	private GameObject enemyPrefab;
+	
+	public void CreateRobot(GameObject newEnemy){
+		this.enemyPrefab = newEnemy;
+	}
 	
 	void Awake(){
 		string robots = GameUtilities.ReadResource ("Robots/robots");

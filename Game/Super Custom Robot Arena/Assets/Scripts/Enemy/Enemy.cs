@@ -30,6 +30,54 @@ public class Enemy : Robot {
 	private float mMaxHealth;
 	private Color[] mColorArr = new Color[2];
 	
+	public void Initialize(){
+		this.mParts [0] = this.goHead.GetComponent<EnemyHead> ();
+		this.mParts [1] = this.goLarm.GetComponent<EnemyLarm> ();
+		this.mParts [2] = this.goRarm.GetComponent<EnemyRarm> ();
+		this.mParts [3] = this.goCar.GetComponent<EnemyCar> ();
+
+		if (this.mParts [0].GetPart () != PART.HEAD)
+			Debug.LogError ("The part is not a head part");
+
+		if (this.mParts [1].GetPart () != PART.LARM)
+			Debug.LogError ("The part is not a left arm part");
+
+		if (this.mParts [2].GetPart () != PART.RARM)
+			Debug.LogError ("The part is not a right arm part");
+
+		if (this.mParts [3].GetPart () != PART.CAR)
+			Debug.LogError ("The part is not a car part");
+
+		this.mResetMass = this.mMass = this.mParts [0].mRobotWegith + this.mParts [1].mRobotWegith + this.mParts [2].mRobotWegith + this.mParts [3].mRobotWegith;
+
+		for(int i = 0; i < this.mParts.Length; i++){
+			// Debug.Log("Part: " + this.mParts[i].GetPart() + " Health " + this.mParts[i].GetHealth());
+			this.mMaxHealth += mParts[i].GetMaxHealth();
+		}
+
+		this.mHealth = this.mMaxHealth;
+		
+		((EnemyCar)this.mParts[3]).SetSpeed(2200);
+		this.mAgent.speed = this.mSpeed.mChaseSpeed = ((EnemyCar)this.mParts[3]).GetSpeed();
+		
+//		this.mAgent.enabled = true;
+		
+		this.mStateMachine = new StateMachine (this);
+		this.mStateMachine.SetCurrentState(PatrolState.Instance());
+		this.mStateMachine.SetGlobalState (GlobalState.Instance ());
+		
+		this.mCurrentHealthBar = GameUtilities.FindDeepChild(this.transform, "HealthForGround").GetComponent<Image>();
+		this.mRatioText = GameUtilities.FindDeepChild(this.transform, "HealthText").GetComponent<Text>();		
+	}
+	
+	public void InitializeWaypoints() {
+		this.mWaypoints = GameObject.FindGameObjectsWithTag("Target");
+		if(this.mWaypoints != null && this.mWaypoints.Length == 0)
+			Debug.LogError("There are no waypoints set in the map");
+		else 
+			this.mCurrentWP = Random.Range(0, this.mWaypoints.Length - 1);
+	}
+	
 	public FieldOfView GetFieldOfView () {
 		return this.fov;
 	}
@@ -86,51 +134,15 @@ public class Enemy : Robot {
 				j++;
 			}
 		}	
-		this.mWaypoints = GameObject.FindGameObjectsWithTag("Target");
-		if(this.mWaypoints != null && this.mWaypoints.Length == 0)
-			Debug.LogError("There are no waypoints set in the map");
-		
-		this.mParts [0] = this.goHead.GetComponent<EnemyHead> ();
-		this.mParts [1] = this.goLarm.GetComponent<EnemyLarm> ();
-		this.mParts [2] = this.goRarm.GetComponent<EnemyRarm> ();
-		this.mParts [3] = this.goCar.GetComponent<EnemyCar> ();
-
-		if (this.mParts [0].GetPart () != PART.HEAD)
-			Debug.LogError ("The part is not a head part");
-
-		if (this.mParts [1].GetPart () != PART.LARM)
-			Debug.LogError ("The part is not a left arm part");
-
-		if (this.mParts [2].GetPart () != PART.RARM)
-			Debug.LogError ("The part is not a right arm part");
-
-		if (this.mParts [3].GetPart () != PART.CAR)
-			Debug.LogError ("The part is not a car part");
-		
-		this.mResetMass = this.mMass = this.mParts [0].mRobotWegith + this.mParts [1].mRobotWegith + this.mParts [2].mRobotWegith + this.mParts [3].mRobotWegith;
-		
-		((EnemyCar)this.mParts[3]).SetSpeed(2200);
-		this.mAgent.speed = this.mSpeed.mChaseSpeed = ((EnemyCar)this.mParts[3]).GetSpeed();
 		
 		this.mColorArr[0] = new Color(1f, .007f, .007f);
 		this.mColorArr[1] = new Color(.17f, .96f, 0f);
 		
-		for(int i = 0; i < this.mParts.Length; i++){
-			// Debug.Log("Part: " + this.mParts[i].GetPart() + " Health " + this.mParts[i].GetHealth());
-			this.mMaxHealth += mParts[i].GetMaxHealth();
-		}
-
-		this.mHealth = this.mMaxHealth;
 		this.mResetArea = this.researchArea;
-		this.mCurrentWP = Random.Range(0, this.mWaypoints.Length - 1);
-	
-		this.mStateMachine = new StateMachine (this);
-		this.mStateMachine.SetCurrentState(PatrolState.Instance());
-		this.mStateMachine.SetGlobalState (GlobalState.Instance ());
 	}
 	
 	protected override void Update(){		
-		if(this.mIsAlive){
+		if(this.mIsAlive && this.isControllable){
 			base.Update();
 			this.mStateMachine.Update();
 			
@@ -149,7 +161,7 @@ public class Enemy : Robot {
 	
 	// FixedUpdate is called 
 	protected override void FixedUpdate() {
-		if(this.mIsAlive){
+		if(this.mIsAlive && this.isControllable){
 			base.FixedUpdate();
 			this.mStateMachine.FixedUpdate();
 		
@@ -162,7 +174,7 @@ public class Enemy : Robot {
 	}
 	
 	protected override void LateUpdate() {
-		if(this.mIsAlive){
+		if(this.mIsAlive && this.isControllable){
 			base.LateUpdate();
 			this.mStateMachine.LateUpdate();
 		}
@@ -197,7 +209,8 @@ public class Enemy : Robot {
 	private void UpdateHealthBar(){
 		this.mHealth = 0;
 		for(int i = 0; i < this.mParts.Length; i++){
-			this.mHealth += mParts[i].GetHealth();
+			if(this.mParts[i] != null)
+				this.mHealth += mParts[i].GetHealth();
 		}
 	
 		if(this.mCurrentHealthBar){

@@ -48,7 +48,10 @@ namespace MBA {
 			/// The Tags
 			/// </summary>
 			public TagSettings mTags = new TagSettings();
-			
+			/// <summary>
+			/// To see if the player is controllable
+			/// </summary>
+			public bool isControllable;  
 			/****************************** PRIVATE PROPERTIES *********************/
 			
 			/// <summary>
@@ -92,6 +95,33 @@ namespace MBA {
 		
 			/****************************** PUBLIC METHODS *********************/
 		
+			/// <summary>
+			/// Sets the correct values to the right part
+			/// </summary>
+			/// <param name="part">Part.</param>
+			/// <param name="method">Method.</param>
+			/// <param name="value">Value.</param>
+			public void SetValue(PART part, string method = "", object value = null)  {
+
+				if (method == "" || value == null)
+					return;
+
+				switch (part) {
+					case PART.HEAD:
+						mParts [0].SendMessage (method, value, SendMessageOptions.DontRequireReceiver);
+						break;
+					case PART.LARM:
+						mParts [1].SendMessage (method, value, SendMessageOptions.DontRequireReceiver);
+						break;
+					case PART.RARM:
+						mParts [2].SendMessage (method, value, SendMessageOptions.DontRequireReceiver);
+						break;
+					case PART.CAR:
+						mParts [3].SendMessage (method, value, SendMessageOptions.DontRequireReceiver);
+						break;
+				}
+			}
+			
 			/// <summary>
 			/// Returns the rotation.
 			/// </summary>

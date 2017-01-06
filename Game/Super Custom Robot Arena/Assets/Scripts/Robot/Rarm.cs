@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(HealthBar))]
 public class Rarm : Arm {
 
 	public override void Shoot () {

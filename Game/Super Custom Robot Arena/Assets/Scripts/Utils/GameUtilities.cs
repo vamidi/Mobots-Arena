@@ -122,7 +122,6 @@ public static class GameUtilities {
 		op.allowSceneActivation = false;
 		while (!op.isDone) {
 			if (op.progress < 0.9f) {
-				Debug.Log(op.progress);
 				slider.value = op.progress;
 				loadProgress = "Loading: " + (op.progress * 100f).ToString("F0") + "%";
 			}
@@ -132,10 +131,25 @@ public static class GameUtilities {
 				loadProgress = "Loading ready for activation, Press any key to continue";
 				op.allowSceneActivation = true;
 			}
-			if (lastLoadProgress != loadProgress) { lastLoadProgress = loadProgress; Debug.Log(loadProgress); } // Don't spam console.
+			if (lastLoadProgress != loadProgress) { lastLoadProgress = loadProgress; /* Debug.Log(loadProgress); */ } // Don't spam console.
 			yield return null;
 		}
 //		loadProgress = "Load complete.";
 //		Debug.Log(loadProgress);
+	}
+	
+	//Breadth-first search
+	public static Transform FindDeepChild(this Transform aParent, string aName)
+	{
+		var result = aParent.Find(aName);
+		if (result != null)
+			return result;
+		foreach(Transform child in aParent)
+		{
+			result = child.FindDeepChild(aName);
+			if (result != null)
+				return result;
+		}
+		return null;
 	}
 }

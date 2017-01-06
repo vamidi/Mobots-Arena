@@ -11,17 +11,18 @@ namespace MBA {
 			/// The Tags
 			/// </summary>
 			public TagSettings mTags = new TagSettings();
+		
 			/// <summary>
 			/// Gameobject of the parts
 			/// </summary>
 			[SerializeField]
-			private GameObject goHead, goLarm, goRarm, goCar; 
+			protected GameObject goHead, goLarm, goRarm, goCar; 
 			
 			/// <summary>
 			/// Classes of the parts
 			/// </summary>
 			[SerializeField]
-			private Part[] mParts = new Part[4];  
+			protected Part[] mParts = new Part[4];  
 
 			public GameObject GetPartObj(int index){
 				switch(index){
@@ -46,11 +47,10 @@ namespace MBA {
 			/// Change the part of the robot.
 			/// </summary>
 			/// <param name="part">Part.</param>
-			/// <param name="robotName">Robot name.</param>
 			/// <param name="newObj">New object.</param>
-			/// <param name="callBack">Call back.</param>
-			public void SetRobot(PART part, string robotName, GameObject newObj, AssignValues callBack){
+			public void SetRobot(PART part, GameObject newObj){
 				GameObject holder = null;
+				GameObject gunEnd = null;
 				switch (part) {
 					case PART.HEAD:
 						if (newObj.name != goHead.name) {
@@ -69,8 +69,9 @@ namespace MBA {
 						}
 						break;
 					case PART.LARM:
-						if (newObj.name != goHead.name) {
+						if (newObj.name != goLarm.name) {
 							Transform parent = goLarm.transform.parent;
+							gunEnd = goLarm.GetComponentsInChildren<Transform>()[1].gameObject;
 							holder = (GameObject)Instantiate (newObj, goLarm.transform.position, goLarm.transform.rotation);
 							//holder.transform.localPosition = GameObject.Find("larm_spawn").transform.localPosition;
 							holder.name = newObj.name;
@@ -78,25 +79,28 @@ namespace MBA {
 							//							holder.AddComponent<Larm>();
 							//							mParts [1] = holder.GetComponent<Larm> ();
 							holder.transform.parent = parent;
+							gunEnd.transform.parent = holder.transform;
 							Destroy (goLarm);
 							goLarm = holder;
 						}
 						break;
 					case PART.RARM:
-						if (newObj.name != goHead.name) {
+						if (newObj.name != goRarm.name) {
 							Transform parent = goRarm.transform.parent;
+							gunEnd = goRarm.GetComponentsInChildren<Transform>()[1].gameObject;
 							holder = (GameObject)Instantiate (newObj, goRarm.transform.position, goRarm.transform.rotation);
 							holder.name = newObj.name;
 							holder.tag = this.mTags.mRamTag;
 							//							holder.AddComponent<Rarm>();
 							//							mParts [2] = holder.GetComponent<Rarm> ();
 							holder.transform.parent = parent;
+							gunEnd.transform.parent = holder.transform;
 							Destroy (goRarm);
 							goRarm = holder;
 						}
 						break;
 					case PART.CAR:
-						if (newObj.name != goHead.name) {
+						if (newObj.name != goCar.name) {
 							Transform parent = goCar.transform.parent;
 							holder = (GameObject)Instantiate (newObj, goCar.transform.position, goCar.transform.rotation);
 							holder.name = newObj.name;
@@ -113,7 +117,7 @@ namespace MBA {
 				//				callBack (robotName);
 			}
 			
-			void Awake () {
+			protected void Awake () {
 				DontDestroyOnLoad(this.gameObject);
 				foreach( Transform child in this.transform){
 					if (child.gameObject.tag == this.mTags.mCarTag) {
@@ -134,16 +138,6 @@ namespace MBA {
 						}
 					}
 				}
-			}
-			
-			// Use this for initialization
-			void Start () {
-			
-			}
-			
-			// Update is called once per frame
-			void Update () {
-			
 			}
 		}
 	}
