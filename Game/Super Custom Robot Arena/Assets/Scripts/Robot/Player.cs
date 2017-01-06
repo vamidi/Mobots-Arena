@@ -114,6 +114,9 @@ public class Player : Robot {
 	
 	// Update is called once per frame
 	protected override void Update() {
+		if(this.mParts[0] == null || this.mParts[1] == null || this.mParts[2] == null || this.mParts[3] == null)
+			this.Initialize();
+		
 		if(this.isControllable){
 			this.GetInput();
 			this.OrbitRobot();
@@ -204,11 +207,8 @@ public class Player : Robot {
 	protected override void Move() {
 		if(Mathf.Abs(this.mForwardInput) > this.mInputDelay) {
 			// Move the player
-			if(this.mParts[3] == null){
-				this.Initialize();
-			}else {
+			if(this.mParts[3] != null)
 				this.mVelocity.z = this.mForwardInput * ((Car)this.mParts[3]).GetSpeed();
-			}
 		} else {
 			this.mVelocity.z = 0;
 		}
