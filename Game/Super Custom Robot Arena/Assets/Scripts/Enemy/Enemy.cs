@@ -60,9 +60,7 @@ public class Enemy : Robot {
 		
 		((EnemyCar)this.mParts[3]).SetSpeed(2200);
 		this.mAgent.speed = this.mSpeed.mChaseSpeed = ((EnemyCar)this.mParts[3]).GetSpeed();
-		
-//		this.mAgent.enabled = true;
-		
+				
 		this.mStateMachine = new StateMachine (this);
 		this.mStateMachine.SetCurrentState(PatrolState.Instance());
 		this.mStateMachine.SetGlobalState (GlobalState.Instance ());
@@ -77,6 +75,8 @@ public class Enemy : Robot {
 			Debug.LogError("There are no waypoints set in the map");
 		else 
 			this.mCurrentWP = Random.Range(0, this.mWaypoints.Length - 1);
+		
+		this.mAgent.enabled = true;
 	}
 	
 	public FieldOfView GetFieldOfView () {

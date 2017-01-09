@@ -93,13 +93,16 @@ public class FieldOfView : MonoBehaviour {
 	
 	#region UNITYMETHODS
 	
+	public void Initialize() {
+		StartCoroutine(this.FindTargetsWithDelay(.2f));
+		this.mEnemy = this.GetComponent<Enemy>();
+	}
+	
 	// Use this for initialization
 	void Start () { 
 		this.mViewMesh = new Mesh();
 		this.mViewMesh.name = "View Mesh";
 		this.mMeshFilter.mesh = this.mViewMesh;
-		StartCoroutine(this.FindTargetsWithDelay(.2f));
-		this.mEnemy = this.GetComponent<Enemy>();
 	}
 	
 	void LateUpdate(){

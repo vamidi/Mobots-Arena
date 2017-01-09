@@ -154,7 +154,7 @@ namespace MBA {
 						}
 						break;
 					case DialogInterFace.BUTTON_NEGATIVE:
-						if(this.mStartImmidiatly){
+						if(this.mStartImmidiatly) {
 							// clean up begins
 							StartCoroutine(this.SaveRobot());
 						}

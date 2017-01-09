@@ -27,7 +27,7 @@ public class DebugSettings {
 [System.Serializable]
 public class OrbitSettings {
 	public float mXRotation = -34f;
-	public float mYRotation = 180f;
+	public float mYRotation = 0f;
 	public float mMaxXRotation = -34f;
 	public float mMinXRotation = -65f;
 	public float mVorbitSmooth = 50f;
@@ -160,6 +160,17 @@ public class CameraController : MonoBehaviour {
 	/// Input variables
 	/// </summary>
 	private float mMouseInputVertical, mMouseInputHorizontal, mZoomInput, mOrbitSnapInput;
+	
+	public void Initialize(Transform target, Player mPlayer = null) {
+		if(mPlayer != null)
+			this.mRobot = mPlayer;
+		
+		if(!mRobot)
+			Debug.LogWarning("You dont have a robot script for your camera");
+		
+		this.SetCameraTarget(target);
+		this.initRotation();
+	}
 
 	/// <summary>
 	/// Sets the camera target.
@@ -183,15 +194,15 @@ public class CameraController : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		this.SetCameraTarget(GameObject.FindGameObjectWithTag("Robot").transform);
 		if (!mTarget)
-			Debug.LogError("You dont have a target for your camera");
-		this.initRotation();
+			Debug.LogWarning("You dont have a target for your camera");
+		else{
+			this.initRotation();
 		
-		mRobot = (this.mTarget.GetComponent<Player>()) ? this.mTarget.GetComponent<Player>() : null;
-		if(!mRobot)
-			Debug.LogWarning("You dont have a robot script for your camera");
-		
+			mRobot = (this.mTarget.GetComponent<Player>()) ? this.mTarget.GetComponent<Player>() : null;
+			if(!mRobot)
+				Debug.LogWarning("You dont have a robot script for your camera");
+		}
 		this.mCollision.Initialize(this.GetComponent<Camera>());
 		this.mCollision.UpdateCameraClipPoints(this.transform.position, this.transform.rotation, ref this.mCollision.mAdjustedCameraClipPoints);		
 		this.mCollision.UpdateCameraClipPoints(this.mDestination, this.transform.rotation, ref this.mCollision.mDesiredCameraClipPoints);

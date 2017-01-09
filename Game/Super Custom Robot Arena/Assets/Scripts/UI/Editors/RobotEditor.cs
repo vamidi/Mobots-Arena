@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEditorInternal;
 
 namespace MBA {
 	
@@ -75,6 +76,11 @@ namespace MBA {
 							holder = (GameObject)Instantiate (newObj, goLarm.transform.position, goLarm.transform.rotation);
 							//holder.transform.localPosition = GameObject.Find("larm_spawn").transform.localPosition;
 							holder.name = newObj.name;
+							if(!holder.GetComponent<LineRenderer>()){
+								holder.AddComponent<LineRenderer>();
+								ComponentUtility.PasteComponentValues(goLarm.GetComponent<LineRenderer>());
+							}
+							
 							holder.tag = this.mTags.mLarmTag;
 							//							holder.AddComponent<Larm>();
 							//							mParts [1] = holder.GetComponent<Larm> ();
@@ -90,6 +96,10 @@ namespace MBA {
 							gunEnd = goRarm.GetComponentsInChildren<Transform>()[1].gameObject;
 							holder = (GameObject)Instantiate (newObj, goRarm.transform.position, goRarm.transform.rotation);
 							holder.name = newObj.name;
+							if(!holder.GetComponent<LineRenderer>()){
+								holder.AddComponent<LineRenderer>();
+								ComponentUtility.PasteComponentValues(goRarm.GetComponent<LineRenderer>());
+							}
 							holder.tag = this.mTags.mRamTag;
 							//							holder.AddComponent<Rarm>();
 							//							mParts [2] = holder.GetComponent<Rarm> ();

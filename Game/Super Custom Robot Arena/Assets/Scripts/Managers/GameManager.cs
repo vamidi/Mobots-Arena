@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour {
 	private GameObject mPlayer;
 	private GameObject enemyPrefab;
 	private List<Vector3> mSpawnpoints = new List<Vector3>();
+	private GameObject[] mPoints;
+	
 	
 	public void CreateRobot(GameObject newEnemy){
 		this.enemyPrefab = newEnemy;
@@ -42,29 +44,48 @@ public class GameManager : MonoBehaviour {
 	
 	public void StartGame(Vector3 startpoint) {
 		if(this.mPlayer){
+			this.mPlayer.SetActive(true);			
 			this.mPlayer.transform.position = startpoint;
 			this.mSpawnpoints.Remove(startpoint);
-			this.enemy.transform.position = this.mSpawnpoints[Random.Range(0, this.mSpawnpoints.Count)];
+			Enemy e = null;
+			if(this.enemy){
+				this.enemy.SetActive(true);
+				e = this.enemy.GetComponent<Enemy>();
+				this.enemy.GetComponent<FieldOfView>().Initialize();
+				if(e != null){
+					e.InitializeWaypoints();
+				}
+				this.enemy.transform.position = this.mSpawnpoints[Random.Range(0, this.mSpawnpoints.Count)];
+			}
 			this.mSpawnpoints.Add(startpoint);
+			foreach(GameObject p in this.mPoints){
+				p.SetActive(false);
+			}
 			
 			Destroy(this.mPlayer.GetComponent<SimpleRotation>());
 			Destroy(this.mPlayer.GetComponent<RobotEditor>());
-			Player holder = this.mPlayer.AddComponent<Player>();
-			Camera.main.gameObject.AddComponent<CameraController>();
+			Player holder = this.mPlayer.GetComponent<Player>();
+			Camera.main.GetComponent<CameraController>().Initialize(mPlayer.transform, holder);
 			holder.isControllable = true;
+			if(e != null)
+				e.isControllable = true;
 		}		
 	}
 	
 	public void ChooseSpawnpoints(Scene oldScene, Scene newScene) {
 		if(mLoader.mSceneName == newScene.name) {
-			GameObject[] points = GameObject.FindGameObjectsWithTag("Spawnpoints");
-			foreach(GameObject p in points){
+			this.mPoints = GameObject.FindGameObjectsWithTag("Spawnpoints");
+			foreach(GameObject p in this.mPoints){
 				this.mSpawnpoints.Add(p.transform.position);
 				Tooltip t = p.GetComponent<Tooltip>();
 				t.StartOpen();
 			}
 		}
 		
+		if(this.mPlayer && this.enemy){
+			this.mPlayer.SetActive(false);
+			this.enemy.SetActive(false);
+		}
 	}
 	
 	void Awake() {

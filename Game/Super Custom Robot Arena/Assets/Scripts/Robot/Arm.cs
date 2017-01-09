@@ -110,9 +110,11 @@ public class Arm : Part, IShootable {
 	protected void Move () { }
 
 	protected IEnumerator ShotEffect () {
-		this.mLaserLine.enabled = true;
+		if(this.mLaserLine)
+			this.mLaserLine.enabled = true;
 		yield return shotDuration;
-		this.mLaserLine.enabled = false;
+		if(this.mLaserLine)
+			this.mLaserLine.enabled = false;
 	}
 	
 	protected void OnDrawGizmosSelected() {

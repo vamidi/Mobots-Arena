@@ -15,6 +15,7 @@ public class EnemySelectController : MonoBehaviour {
 	public GameManager manager;
 	public RobotEditor mEditor;
 	
+	private Vector3 mPosition;
 	private bool changing = false;
 	private PART mPart = PART.HEAD;
 	
@@ -31,6 +32,7 @@ public class EnemySelectController : MonoBehaviour {
 		GameObject.Find("Cylinder").GetComponent<Renderer>().enabled = false;
 		this.manager = GameObject.FindObjectOfType<GameManager>();
 		this.mEditor = manager.enemy.GetComponent<RobotEditor>();
+		this.mPosition = this.transform.localPosition;
 	}
 	
 	// Use this for initialization
@@ -199,6 +201,7 @@ public class EnemySelectController : MonoBehaviour {
 		this.ChangeStats(manager.enemyName, holder);				
 		this.mPart = PART.HEAD;
 		this.changing = false;
+		this.transform.localPosition = this.mPosition;
 		yield return new WaitForSeconds(1f);
 		GameObject.FindGameObjectWithTag("Menu").SendMessage("SetNextPage", "Level");
 		yield return null;

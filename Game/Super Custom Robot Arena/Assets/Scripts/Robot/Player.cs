@@ -68,6 +68,9 @@ public class Player : Robot {
 
 		this.mResetMass = this.mMass =  this.mParts [0].mRobotWegith + this.mParts [1].mRobotWegith + this.mParts [2].mRobotWegith + this.mParts [3].mRobotWegith;
 		((Car)this.mParts[3]).SetSpeed(1825);
+		
+		if(this.mTorsoTransform == null)
+			this.mTorsoTransform = GameUtilities.FindDeepChild(this.transform, "Body");
 	}
 
 	/// <summary>
