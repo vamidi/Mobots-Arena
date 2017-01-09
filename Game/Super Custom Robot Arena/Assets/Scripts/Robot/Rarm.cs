@@ -4,6 +4,10 @@ using System.Collections;
 [RequireComponent(typeof(HealthBar))]
 public class Rarm : Arm {
 
+	public override void Initialize() {
+		this.mHealthBar = this.gameObject.AddComponent<HealthBar>();
+	}
+	
 	public override void Shoot () {
 		base.Shoot();
 		

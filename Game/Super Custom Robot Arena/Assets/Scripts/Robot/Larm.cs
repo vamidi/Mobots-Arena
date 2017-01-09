@@ -5,6 +5,10 @@ using System;
 [RequireComponent(typeof(HealthBar))]
 public class Larm : Arm { 
 	
+	public override void Initialize() {
+		this.mHealthBar = this.gameObject.AddComponent<HealthBar>();
+	}
+	
 	public override void Shoot(){
 		base.Shoot();
 		
@@ -21,6 +25,7 @@ public class Larm : Arm {
 				GameObject bullet = (GameObject)Instantiate (this.mBullet, this.mGunEnd.position, this.mGunEnd.rotation);
 				bullet.GetComponent<Bullet> ().mDamage = this.mDamagePerRound;
 			}
+			
 			StartCoroutine(this.ShotEffect());
 
 			Vector3 rayOrg = this.mGunEnd.position; //this.mCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f,  0));

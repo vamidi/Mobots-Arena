@@ -22,6 +22,10 @@ public class Head : Part {
 	[SerializeField]
 	private float mArmorStrength = 15f;
 	
+	public override void Initialize() {
+		this.mHealthBar = this.gameObject.AddComponent<HealthBar>();
+	}
+	
 	public void UpdateShieldBar(){
 		float ratio = Map( this.mArmorHealth, 0, this.mMaxArmorHealth, 0, 1);		
 		if(this.mCurrentShieldBar && this.mCurrentShieldBar.fillAmount != ratio){

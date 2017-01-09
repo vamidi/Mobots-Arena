@@ -44,6 +44,10 @@ public class EnemySelectController : MonoBehaviour {
 			robotsnames.Add(manager.robots[i].Obj.GetString("robotname"));
 		}
 
+		for(int i = 0; i < 3; i++){
+			robotsnames.Add("slot_#" + (i+1) + "");
+		}
+		
 		float rows = Mathf.Floor(robotsnames.Count / 3);
 		int columns = 3;
 		List<Vector3> positions = new List<Vector3>();
@@ -159,14 +163,37 @@ public class EnemySelectController : MonoBehaviour {
 	
 	private IEnumerator SaveRobot(){
 		this.changing = true;
-		this.mPart = PART.HEAD;
-		this.EquipRobot(manager.enemyName);
-		this.mPart = PART.LARM;
-		this.EquipRobot(manager.enemyName);
-		this.mPart = PART.RARM;
-		this.EquipRobot(manager.enemyName);
-		this.mPart = PART.CAR;
-		this.EquipRobot(manager.enemyName);
+		if(this.manager.enemyName.Contains("slot")){
+			string file = "";
+			if(GameUtilities.CheckFileExists("Slots/", this.manager.enemyName + ".txt")){
+				file = GameUtilities.ReadFile("Slots/", this.manager.enemyName + ".txt");	
+			}
+			
+			JSONObject j = JSONObject.Parse(file).GetObject("robot");
+			
+			this.manager.enemyHead = j.GetString("head");
+			this.manager.enemyLarm = j.GetString("left");
+			this.manager.enemyRarm = j.GetString("right");
+			this.manager.enemyCar = j.GetString("car");
+			
+			this.mPart = PART.HEAD;
+			this.EquipRobot(this.manager.enemyHead);
+			this.mPart = PART.LARM;
+			this.EquipRobot(this.manager.enemyLarm);
+			this.mPart = PART.RARM;
+			this.EquipRobot(this.manager.enemyRarm);
+			this.mPart = PART.CAR;
+			this.EquipRobot(this.manager.enemyCar);
+		}else{
+			this.mPart = PART.HEAD;
+			this.EquipRobot(manager.enemyName);
+			this.mPart = PART.LARM;
+			this.EquipRobot(manager.enemyName);
+			this.mPart = PART.RARM;
+			this.EquipRobot(manager.enemyName);
+			this.mPart = PART.CAR;
+			this.EquipRobot(manager.enemyName);
+		}
 		yield return new WaitForSeconds(.5f);
 		Enemy holder = null;
 		if(manager.enemy.GetComponent<Enemy>() == null) {
@@ -174,8 +201,11 @@ public class EnemySelectController : MonoBehaviour {
 			holder = manager.enemy.AddComponent<Enemy>();
 			holder.isControllable = false;
 			holder.GetPartObj(0).AddComponent<EnemyHead>();
+			GameObject bullet = (GameObject) GameUtilities.ReadResourceFile("Bullet");
 			holder.GetPartObj(1).AddComponent<EnemyLarm>();
+			holder.GetPartObj(1).GetComponent<EnemyLarm>().mBullet = bullet;
 			holder.GetPartObj(2).AddComponent<EnemyRarm>();
+			holder.GetPartObj(2).GetComponent<EnemyRarm>().mBullet = bullet;
 			holder.GetPartObj(3).AddComponent<EnemyCar>();
 			yield return new WaitForSeconds(.5f);
 			holder.Initialize();
@@ -185,21 +215,36 @@ public class EnemySelectController : MonoBehaviour {
 			holder = manager.enemy.AddComponent<Enemy>();
 			holder.isControllable = false;
 			holder.GetPartObj(0).AddComponent<EnemyHead>();
+			GameObject bullet = (GameObject) GameUtilities.ReadResourceFile("Bullet");
 			holder.GetPartObj(1).AddComponent<EnemyLarm>();
+			holder.GetPartObj(1).GetComponent<EnemyLarm>().mBullet = bullet;
 			holder.GetPartObj(2).AddComponent<EnemyRarm>();
+			holder.GetPartObj(1).GetComponent<EnemyRarm>().mBullet = bullet;
 			holder.GetPartObj(3).AddComponent<EnemyCar>();
 			yield return new WaitForSeconds(.5f);
 			holder.Initialize();
 		}
-		this.mPart = PART.HEAD;
-		this.ChangeStats(manager.enemyName, holder);
-		this.mPart = PART.LARM;
-		this.ChangeStats(manager.enemyName, holder);
-		this.mPart = PART.RARM;
-		this.ChangeStats(manager.enemyName, holder);
-		this.mPart = PART.CAR;
-		this.ChangeStats(manager.enemyName, holder);				
-		this.mPart = PART.HEAD;
+		if(this.manager.enemyName.Contains("slot")){
+			this.mPart = PART.HEAD;
+			this.ChangeStats(this.manager.enemyHead, holder);
+			this.mPart = PART.LARM;
+			this.ChangeStats(this.manager.enemyLarm, holder);
+			this.mPart = PART.RARM;
+			this.ChangeStats(this.manager.enemyRarm, holder);
+			this.mPart = PART.CAR;
+			this.ChangeStats(this.manager.enemyCar, holder);				
+			this.mPart = PART.HEAD;
+		}else{		
+			this.mPart = PART.HEAD;
+			this.ChangeStats(manager.enemyName, holder);
+			this.mPart = PART.LARM;
+			this.ChangeStats(manager.enemyName, holder);
+			this.mPart = PART.RARM;
+			this.ChangeStats(manager.enemyName, holder);
+			this.mPart = PART.CAR;
+			this.ChangeStats(manager.enemyName, holder);				
+			this.mPart = PART.HEAD;
+		}
 		this.changing = false;
 		this.transform.localPosition = this.mPosition;
 		yield return new WaitForSeconds(1f);

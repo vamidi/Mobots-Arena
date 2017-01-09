@@ -105,6 +105,10 @@ public class TagSettings {
 	/// Thecar UI tag
 	/// </summary>
 	public string mCarUI = "CarUI";
+	/// <summary>
+	/// The cancel key
+	/// </summary>
+	public string mCancel = "Cancel";
 }
 
 public class CameraController : MonoBehaviour {

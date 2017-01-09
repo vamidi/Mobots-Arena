@@ -3,6 +3,13 @@ using System.Collections;
 
 public class EnemyRarm : Arm {
 	
+	public float mInitRoundsPerSeconds = 1f;
+	
+	public override void SetRoundsPerSecond(float seconds){
+		this.mRoundsPerSecond = seconds;
+		this.mInitRoundsPerSeconds = this.mRoundsPerSecond;
+	}
+	
 	public override void Shoot(){
 		if (Time.time > this.mNextFire) {
 			this.mNextFire = Time.time + this.mRoundsPerSecond;
@@ -79,7 +86,6 @@ public class EnemyRarm : Arm {
 	protected override void Start () {
 		base.Start();
 		this.mPart = PART.RARM;
-		this.mRoundsPerSecond = 1.2f;
 	}
 	
 	// Update is called once per frame

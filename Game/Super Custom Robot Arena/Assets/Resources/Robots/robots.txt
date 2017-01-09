@@ -17,7 +17,7 @@
             "hitpoints": 155,
             "weight": 90,
             "damageperround": 20,
-            "roundspersecond": 0.9,
+            "roundspersecond": 0.6,
             "accuracy": 0.9
           },
           "owned": true
@@ -27,7 +27,7 @@
             "hitpoints": 155,
             "weight": 90,
             "damageperround": 20, 
-            "roundspersecond": 0.9, 
+            "roundspersecond": 0.6, 
             "accuracy": 0.9
           },
           "owned": true
@@ -60,7 +60,7 @@
             "hitpoints": 105,
             "weight": 65,
             "damageperround": 5,
-            "roundspersecond": 4,
+            "roundspersecond": 0.9,
             "accuracy": 0.5
           },
           "owned": true
@@ -70,7 +70,7 @@
             "hitpoints": 105,
             "weight": 65,
             "damageperround": 5, 
-            "roundspersecond": 4, 
+            "roundspersecond": 0.9, 
             "accuracy": 0.5
           },
           "owned": true
@@ -146,7 +146,7 @@
             "hitpoints": 130,
             "weight": 95,
             "damageperround": 30,
-            "roundspersecond": 1.5,
+            "roundspersecond": 0.5,
             "accuracy": 0.95
           },
           "owned": true
@@ -156,7 +156,7 @@
             "hitpoints": 130,
             "weight": 95,
             "damageperround": 30, 
-            "roundspersecond": 1.5, 
+            "roundspersecond": 0.5, 
             "accuracy": 0.95
           },
           "owned": true
@@ -189,7 +189,7 @@
             "hitpoints": 95,
             "weight": 70,
             "damageperround": 7,
-            "roundspersecond": 1.8,
+            "roundspersecond": 0.8,
             "accuracy": 0.8
           },
           "owned": true
@@ -199,7 +199,7 @@
             "hitpoints": 95,
             "weight": 70,
             "damageperround": 7, 
-            "roundspersecond": 1.8, 
+            "roundspersecond": 0.8, 
             "accuracy": 0.8
           },
           "owned": true

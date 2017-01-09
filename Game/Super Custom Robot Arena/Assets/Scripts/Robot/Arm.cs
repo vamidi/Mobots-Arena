@@ -32,8 +32,9 @@ public class Arm : Part, IShootable {
 	/// The Robot accuracy.
 	/// </summary>
 	protected float mAccuracy = 3f;
-	protected WaitForSeconds shotDuration = new WaitForSeconds(.07f);
-	protected AudioSource mGunSound;
+	protected WaitForSeconds shotDuration = new WaitForSeconds(.09f);
+	protected AudioClip mGunSound;
+	protected AudioSource mGunAudioSource;
 	protected LineRenderer mLaserLine;
 	protected bool mFire = false;
 	
@@ -41,6 +42,10 @@ public class Arm : Part, IShootable {
 	protected float mRecoilRecoverTime;
 	protected float mCurrentRecoilPos;
 	protected float mCurrentRecoilVel;
+	
+	public override void Initialize() {
+		
+	}
 	
 	public void ResetDamage(){
 		this.mDamagePerRound = this.mResetDamage;
@@ -50,7 +55,7 @@ public class Arm : Part, IShootable {
 		this.mDamagePerRound = damage;
 	}
 
-	public void SetRoundsPerSecond(float seconds){
+	public virtual void SetRoundsPerSecond(float seconds){
 		this.mRoundsPerSecond = seconds;
 	}
 
@@ -79,6 +84,12 @@ public class Arm : Part, IShootable {
 		this.mLaserLine = this.GetComponent<LineRenderer>();
 		this.mResetDamage = this.mDamagePerRound;
 		this.mGunEnd = this.GetComponentsInChildren<Transform>()[1];
+		this.mGunAudioSource = this.gameObject.AddComponent<AudioSource>();
+		this.mGunSound = (AudioClip) GameUtilities.ReadResourceFile("placeholdersound");
+		if(this.mGunSound){
+			this.mGunAudioSource.clip = this.mGunSound;
+			this.mGunAudioSource.loop = false;
+		}
 	}
 	
 	// Update is called once per frame
@@ -110,9 +121,15 @@ public class Arm : Part, IShootable {
 	protected void Move () { }
 
 	protected IEnumerator ShotEffect () {
+		if(this.mGunSound){
+			this.mGunAudioSource.Play();
+		}
+		
 		if(this.mLaserLine)
 			this.mLaserLine.enabled = true;
+		
 		yield return shotDuration;
+		
 		if(this.mLaserLine)
 			this.mLaserLine.enabled = false;
 	}

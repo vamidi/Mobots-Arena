@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
+//
 using Boomlagoon.JSON;
-using UnityEngine.SceneManagement;
+// own namespace
 using MBA.UI;
 
 public class GameManager : MonoBehaviour {
@@ -25,18 +27,45 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	public SceneLoader mLoader;
+	public GameObject mRobotUI;
+	public GameObject mPauseObj;
 	public string robotname = "MKVII";
-	public string enemyName = "";
+	public string enemyName = "", enemyHead, enemyLarm, enemyRarm, enemyCar;
 	public GameObject enemy;
 	public CallBack mCallback = null;
 	public bool mInGame = false;
 	public bool mCursorOn = false;
 	
+	public TagSettings mTagSettings = new TagSettings();
+	
 	private GameObject mPlayer;
 	private GameObject enemyPrefab;
+	private GameObject mPause;
 	private List<Vector3> mSpawnpoints = new List<Vector3>();
 	private GameObject[] mPoints;
+	private float mTimeScale;
 	
+	public void Resume() {
+		if(!this.mInGame) {
+			this.mInGame = true;
+			this.mCursorOn = true;
+			if(this.mPause)
+				Destroy(this.mPause);
+			Time.timeScale = this.mTimeScale;
+		}	
+	}
+	
+	public void PauseGame() {
+		this.mInGame = false;
+		this.mCursorOn = false;
+		this.mPause = (GameObject) Instantiate(this.mPauseObj, this.transform.position, Quaternion.identity);
+		this.mPause.GetComponent<Canvas>().worldCamera = Camera.main;
+		Time.timeScale = 0f;
+	}
+	
+	public void Restart() {
+		
+	}
 	
 	public void CreateRobot(GameObject newEnemy){
 		this.enemyPrefab = newEnemy;
@@ -65,10 +94,20 @@ public class GameManager : MonoBehaviour {
 			Destroy(this.mPlayer.GetComponent<SimpleRotation>());
 			Destroy(this.mPlayer.GetComponent<RobotEditor>());
 			Player holder = this.mPlayer.GetComponent<Player>();
+			
+			if(this.mRobotUI){
+				Instantiate(this.mRobotUI, this.transform.position, Quaternion.identity);
+				for(int i = 0; i < 4; i++){
+					holder.GetPartObj(i).GetComponent<Part>().Initialize();
+				}
+			}
+			
 			Camera.main.GetComponent<CameraController>().Initialize(mPlayer.transform, holder);
 			holder.isControllable = true;
 			if(e != null)
 				e.isControllable = true;
+			
+			this.mInGame = this.mCursorOn = true;
 		}		
 	}
 	
@@ -89,6 +128,7 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	void Awake() {
+		this.mTimeScale = Time.timeScale;
 		//Check if instance already exists
 		if (instance == null)
 
@@ -105,7 +145,7 @@ public class GameManager : MonoBehaviour {
 		DontDestroyOnLoad(gameObject);
 		
 		this.mLoader = GameObject.FindObjectOfType<SceneLoader>();
-		string robots = GameUtilities.ReadResource ("Robots/robots");
+		string robots = GameUtilities.ReadTextAsset ("Robots/robots");
 		this.robotDictionary = new Dictionary<string, JSONObject>();
 		this.robots = JSONObject.Parse(robots).GetArray("robots");
 	
@@ -124,6 +164,11 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		Cursor.lockState = (mCursorOn) ? CursorLockMode.Locked : CursorLockMode.None;
+		
+		if(this.mInGame && Input.GetButtonDown(this.mTagSettings.mCancel)){
+			this.PauseGame();
+		}
+		
 	}
 }

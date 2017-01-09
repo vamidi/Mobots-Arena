@@ -29,7 +29,7 @@ public class LevelController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		string levels = GameUtilities.ReadResource ("Arenas/levels");
+		string levels = GameUtilities.ReadTextAsset ("Arenas/levels");
 		JSONArray arr = JSONObject.Parse(levels).GetArray("levels");
 		
 		foreach(JSONValue o in arr){

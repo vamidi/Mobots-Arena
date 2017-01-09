@@ -64,6 +64,8 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<double
 	/// </summary>
 	protected bool isFlashing = false;
 	
+	public abstract void Initialize();
+	
 	/// <summary>
 	/// Returns the part
 	/// </summary>
@@ -71,7 +73,7 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<double
 	public PART GetPart(){
 		return this.mPart;
 	}
-
+	
 	public Robot GetParent(){
 		return this.mRobot;
 	}

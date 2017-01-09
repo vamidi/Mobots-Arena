@@ -194,7 +194,7 @@ namespace MBA {
 				}
 				
 				if(file == "")
-					file = GameUtilities.ReadResource("Slots/standard");
+					file = GameUtilities.ReadTextAsset("Slots/standard");
 				
 				JSONObject j = JSONObject.Parse(file).GetObject("robot");
 				
@@ -551,7 +551,11 @@ namespace MBA {
 				Player holder = mRobotEditor.gameObject.AddComponent<Player>();
 				holder.GetPartObj(0).AddComponent<Head>();
 				holder.GetPartObj(1).AddComponent<Larm>();
+				GameObject bullet = (GameObject) GameUtilities.ReadResourceFile("Bullet");
+				holder.GetPartObj(1).GetComponent<Larm>().mBullet = bullet;
 				holder.GetPartObj(2).AddComponent<Rarm>();
+				holder.GetPartObj(2).GetComponent<Rarm>().mBullet = bullet;
+				
 				holder.GetPartObj(3).AddComponent<Car>();
 				yield return new WaitForSeconds(.5f);
 				holder.Initialize();

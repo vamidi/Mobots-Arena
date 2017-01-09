@@ -29,7 +29,11 @@ public static class GameUtilities {
 	/// </summary>
 	private static string lastLoadProgress = null;
 
-	public static string ReadResource(string Path){
+	public static UnityEngine.Object ReadResourceFile(string Path){
+		return Resources.Load(Path);
+	}
+	
+	public static string ReadTextAsset(string Path){
 		TextAsset txtAss = (TextAsset) Resources.Load(Path, typeof(TextAsset));
 		return (txtAss != null) ? txtAss.text : "";
 	}

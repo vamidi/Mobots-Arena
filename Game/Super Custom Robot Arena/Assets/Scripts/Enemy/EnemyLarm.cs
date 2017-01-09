@@ -2,10 +2,18 @@
 using System.Collections;
 using System;
 
-public class EnemyLarm : Arm { 
+public class EnemyLarm : Arm {
+	
+	public float mInitRoundsPerSeconds = 1f;
+	
+	public override void SetRoundsPerSecond(float seconds){
+		this.mRoundsPerSecond = seconds;
+		this.mInitRoundsPerSeconds = this.mRoundsPerSecond;
+	}
 		
 	public override void Shoot(){
 		if (Time.time > this.mNextFire) {
+			this.mRoundsPerSecond = this.mInitRoundsPerSeconds + UnityEngine.Random.Range(0.3f, 0.5f);
 			this.mNextFire = Time.time + this.mRoundsPerSecond;
 			this.mCurrentRecoilPos -= this.mRecoilAmount;
 			//	public float shootTimer = 2f, mReset = 2f;
@@ -82,7 +90,6 @@ public class EnemyLarm : Arm {
 	protected override void Start () {
 		base.Start();
 		this.mPart = PART.LARM;
-		this.mRoundsPerSecond = 0.8f;
 	}
 	
 	// Update is called once per frame

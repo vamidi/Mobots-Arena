@@ -22,6 +22,10 @@ public class EnemyHead : Part {
 	[SerializeField]
 	private float mArmorStrength = 15f;
 	
+	public override void Initialize() {
+
+	}
+	
 	public void UpdateShieldBar(){
 		float ratio = this.mArmorHealth / this.mMaxArmorHealth;
 		if(this.mCurrentShieldBar)

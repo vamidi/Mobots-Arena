@@ -13,6 +13,10 @@ public class EnemyCar : Part {
 	/// </summary>
 	private float mJumpForce = 5f;
 
+	public override void Initialize() {
+		
+	}
+	
 	public float GetSpeed(){
 		return this.mSpeed;
 	}

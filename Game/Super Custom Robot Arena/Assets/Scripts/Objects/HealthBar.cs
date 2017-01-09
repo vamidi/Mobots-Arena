@@ -31,6 +31,8 @@ public class HealthBar : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		this.mPart = GetComponent<Part>();
+		if(this.mPart)
+			this.part = this.mPart.GetPart();
 		this.mColorArr[0] = new Color(1f, .007f, .007f);
 		this.mColorArr[1] = new Color(.17f, .96f, 0f);
 		this.Init();

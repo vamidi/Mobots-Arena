@@ -14,7 +14,11 @@ public class Car : Part {
 	/// The jump strengtj pf the robot
 	/// </summary>
 	private float mJumpForce = 5f;
-
+	
+	public override void Initialize() {
+		this.mHealthBar = this.gameObject.AddComponent<HealthBar>();
+	}
+	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
