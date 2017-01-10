@@ -16,13 +16,18 @@ public class Car : Part {
 	private float mJumpForce = 5f;
 	
 	public override void Initialize() {
-		this.mHealthBar = this.gameObject.AddComponent<HealthBar>();
+		if(this.mHealthBar)
+			this.mHealthBar.Initialize();
+	}
+	
+	protected override void Awake(){
+		base.Awake();
+		this.mPart = PART.CAR;
 	}
 	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
-		this.mPart = PART.CAR;
 	}
 	
 	// Update is called once per frame

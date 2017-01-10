@@ -6,6 +6,8 @@ using MBA.Humanoids;
 
 public class ArmController : MonoBehaviour {
 	
+	public float mMouseSentiviy = 100f;
+	
 	private Player mRobot;
 	private Transform mLeftArm, mRightArm;
 	[SerializeField]
@@ -64,7 +66,7 @@ public class ArmController : MonoBehaviour {
 	/// Is this method we get the input of the player
 	/// </summary>
 	void GetInput() {
-		this.mMouseVertical = Input.GetAxisRaw(this.mInput.mMouseVertical);
+		this.mMouseVertical = Input.GetAxisRaw(this.mInput.mMouseVertical) * Time.deltaTime * mMouseSentiviy;
 	}
 	
 	/// <summary>

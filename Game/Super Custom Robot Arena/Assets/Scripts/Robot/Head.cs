@@ -23,7 +23,12 @@ public class Head : Part {
 	private float mArmorStrength = 15f;
 	
 	public override void Initialize() {
-		this.mHealthBar = this.gameObject.AddComponent<HealthBar>();
+		if(!this.mCurrentShieldBar)
+			this.mCurrentShieldBar = GameObject.FindGameObjectWithTag("ArmorUI").GetComponent<Image>();
+		if(this.mHealthBar)
+			this.mHealthBar.Initialize();
+		
+		this.mMaxHealth = this.mArmorHealth;
 	}
 	
 	public void UpdateShieldBar(){
@@ -71,7 +76,7 @@ public class Head : Part {
 	/// <value>The health.</value>
 	public float ArmorHealth {
 		get { return this.mArmorHealth; }
-		set { this.mArmorHealth = value; }
+		set { this.mArmorHealth = value;  }
 	}
 	
 	/// <summary>
@@ -79,7 +84,7 @@ public class Head : Part {
 	/// </summary>
 	/// <param name="armor">Armor.</param>
 	public void SetArmor(float armor){
-		this.mArmorHealth = armor;
+		this.mArmorHealth = this.mMaxArmorHealth = armor;
 	}
 
 	/// <summary>
@@ -98,10 +103,14 @@ public class Head : Part {
 		this.mHealth += (float)(this.mMaxHealth * h); // ex 265 * .1 == 10% = 39,75
 	}
 	
+	protected override void Awake(){
+		base.Awake();
+		this.mPart = PART.HEAD;
+	}
+	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
-		this.mPart = PART.HEAD;
 		this.mArmorHealth = this.mMaxHealth;
 	}
 	

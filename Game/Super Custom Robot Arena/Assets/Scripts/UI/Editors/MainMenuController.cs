@@ -11,6 +11,11 @@ public class MainMenuController : MonoBehaviour {
 		v.y = 100f;
 		GameObject.FindGameObjectWithTag("Robot").transform.position = v;
 		GameObject.Find("Cylinder").GetComponent<Renderer>().enabled = false;
+		if(!GameObject.FindObjectOfType<GameManager>().enemy)
+			GameObject.FindObjectOfType<GameManager>().enemy = GameObject.FindGameObjectWithTag("Enemy");
+		
+		GameObject.FindObjectOfType<GameManager>().Initialize();
+		
 	}
 
 	// Use this for initialization

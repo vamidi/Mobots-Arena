@@ -65,8 +65,9 @@ public class PatrolState : State<Enemy> {
 				}
 			}
 		}else */
-		if(mEnemy.Agent.destination != mEnemy.mWaypoints[mEnemy.mCurrentWP].transform.position)
-			mEnemy.Agent.SetDestination(mEnemy.mWaypoints[mEnemy.mCurrentWP].transform.position);		
+		if(mEnemy.mWaypoints != null && mEnemy.mWaypoints.Length > 0)
+		if(mEnemy.Agent.destination != mEnemy.mWaypoints[mEnemy.mCurrentWP].transform.position && mEnemy.Agent.isOnNavMesh)
+				mEnemy.Agent.SetDestination(mEnemy.mWaypoints[mEnemy.mCurrentWP].transform.position);		
 	}
 	
 	protected override void Turn (Enemy mEnemy) { }

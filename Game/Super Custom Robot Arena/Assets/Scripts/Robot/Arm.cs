@@ -6,6 +6,7 @@ public class Arm : Part, IShootable {
 	
 	public Transform mGunEnd;
 	public GameObject mBullet;
+	public bool mCanFire = false;
 	public LayerMask mObstacle;
 	
 	[SerializeField]
@@ -44,7 +45,7 @@ public class Arm : Part, IShootable {
 	protected float mCurrentRecoilVel;
 	
 	public override void Initialize() {
-		
+		this.mNextFire = Time.time + this.mRoundsPerSecond;
 	}
 	
 	public void ResetDamage(){
@@ -70,11 +71,13 @@ public class Arm : Part, IShootable {
 	}
 
 	public virtual void Shoot() {
-		Vector3 rayOrg = this.mGunEnd.position; //this.mCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f,  0));
-		RaycastHit hit;
+		if(this.mCanFire && this.mFire){
+			Vector3 rayOrg = this.mGunEnd.position; //this.mCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f,  0));
+			RaycastHit hit;
 
-		if(Physics.Raycast(rayOrg, this.mGunEnd.transform.forward, out hit, this.mSmallRange, this.mObstacle)) {
-			Debug.Log("Wall");
+			if(Physics.Raycast(rayOrg, this.mGunEnd.transform.forward, out hit, this.mSmallRange, this.mObstacle)) {
+				Debug.Log("Wall");
+			}
 		}
 	}
 	
@@ -85,6 +88,7 @@ public class Arm : Part, IShootable {
 		this.mResetDamage = this.mDamagePerRound;
 		this.mGunEnd = this.GetComponentsInChildren<Transform>()[1];
 		this.mGunAudioSource = this.gameObject.AddComponent<AudioSource>();
+		this.mGunAudioSource.playOnAwake = false;
 		this.mGunSound = (AudioClip) GameUtilities.ReadResourceFile("placeholdersound");
 		if(this.mGunSound){
 			this.mGunAudioSource.clip = this.mGunSound;

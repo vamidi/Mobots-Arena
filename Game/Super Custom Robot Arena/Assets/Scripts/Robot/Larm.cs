@@ -6,14 +6,17 @@ using System;
 public class Larm : Arm { 
 	
 	public override void Initialize() {
-		this.mHealthBar = this.gameObject.AddComponent<HealthBar>();
+		if(this.mHealthBar)
+			this.mHealthBar.Initialize();
+		this.mCanFire = true;
+		base.Initialize();
 	}
 	
 	public override void Shoot(){
 		base.Shoot();
 		
 		// left btn click
-		if (this.mFire && Time.time > this.mNextFire) {
+		if (this.mFire && this.mCanFire && Time.time > this.mNextFire) {
 			this.mNextFire = Time.time + this.mRoundsPerSecond;
 			
 			this.mCurrentRecoilPos -= this.mRecoilAmount;
@@ -41,10 +44,14 @@ public class Larm : Arm {
 		}
 	}
 	
+	protected override void Awake(){
+		base.Awake();
+		this.mPart = PART.LARM;
+	}
+	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
-		this.mPart = PART.LARM;
 	}
 	
 	// Update is called once per frame
@@ -57,7 +64,9 @@ public class Larm : Arm {
 	}
 	
 	protected override void GetInput(){
-		base.GetInput();
-		this.mFire = Input.GetButtonDown(this.mInput.mFire);
+		if(((Player)mRobot).isControllable){
+			base.GetInput();
+			this.mFire = Input.GetButtonDown(this.mInput.mFire);
+		}
 	}
 }

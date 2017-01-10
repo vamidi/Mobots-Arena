@@ -45,6 +45,11 @@ public class GameManager : MonoBehaviour {
 	private GameObject[] mPoints;
 	private float mTimeScale;
 	
+	public void Initialize() {
+		this.mPlayer = GameObject.FindGameObjectWithTag("Robot");
+		this.mSpawnpoints.Clear();
+	}
+	
 	public void Resume() {
 		if(!this.mInGame) {
 			this.mInGame = true;
@@ -52,6 +57,7 @@ public class GameManager : MonoBehaviour {
 			if(this.mPause)
 				Destroy(this.mPause);
 			Time.timeScale = this.mTimeScale;
+			this.mPlayer.GetComponent<Player>().isControllable = true;
 		}	
 	}
 	
@@ -61,10 +67,23 @@ public class GameManager : MonoBehaviour {
 		this.mPause = (GameObject) Instantiate(this.mPauseObj, this.transform.position, Quaternion.identity);
 		this.mPause.GetComponent<Canvas>().worldCamera = Camera.main;
 		Time.timeScale = 0f;
+		this.mPlayer.GetComponent<Player>().isControllable = false;
 	}
 	
 	public void Restart() {
 		
+	}
+	
+	public void QuitGame() {
+		this.mInGame = false;
+		this.mCursorOn = false;
+		Destroy(this.enemy);
+		Destroy(this.mPlayer);
+		if(this.mPause)
+			Destroy(this.mPause);
+		Time.timeScale = this.mTimeScale;
+		GameObject.FindObjectOfType<SceneLoader>().LoadNewLevel("main_scene");
+		GameUtilities.sceneLoaded = null;
 	}
 	
 	public void CreateRobot(GameObject newEnemy){
@@ -81,10 +100,10 @@ public class GameManager : MonoBehaviour {
 				this.enemy.SetActive(true);
 				e = this.enemy.GetComponent<Enemy>();
 				this.enemy.GetComponent<FieldOfView>().Initialize();
+				this.enemy.transform.position = this.mSpawnpoints[Random.Range(0, this.mSpawnpoints.Count)];
 				if(e != null){
 					e.InitializeWaypoints();
 				}
-				this.enemy.transform.position = this.mSpawnpoints[Random.Range(0, this.mSpawnpoints.Count)];
 			}
 			this.mSpawnpoints.Add(startpoint);
 			foreach(GameObject p in this.mPoints){
@@ -103,11 +122,12 @@ public class GameManager : MonoBehaviour {
 			}
 			
 			Camera.main.GetComponent<CameraController>().Initialize(mPlayer.transform, holder);
-			holder.isControllable = true;
 			if(e != null)
 				e.isControllable = true;
 			
+			holder.isControllable = true;
 			this.mInGame = this.mCursorOn = true;
+			
 		}		
 	}
 	
@@ -115,7 +135,9 @@ public class GameManager : MonoBehaviour {
 		if(mLoader.mSceneName == newScene.name) {
 			this.mPoints = GameObject.FindGameObjectsWithTag("Spawnpoints");
 			foreach(GameObject p in this.mPoints){
-				this.mSpawnpoints.Add(p.transform.position);
+				SpawnpointListener s = p.GetComponent<SpawnpointListener>();
+				Vector3 spawnpoint = new Vector3(s.mSpawnpointParameter.position.x, 1.3f, s.mSpawnpointParameter.position.z);
+				this.mSpawnpoints.Add(spawnpoint);
 				Tooltip t = p.GetComponent<Tooltip>();
 				t.StartOpen();
 			}

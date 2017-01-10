@@ -8,14 +8,14 @@
         },
         {
             "level" : {            
-                "levelname" : "final",
-                "scene" : "demo_arena"
+                "levelname" : "Final",
+                "scene" : "final"
             }        
         },
         {
             "level" : {            
                 "levelname" : "final2",
-                "scene" : "demo_arena"
+                "scene" : "final"
             }
         }
     ]

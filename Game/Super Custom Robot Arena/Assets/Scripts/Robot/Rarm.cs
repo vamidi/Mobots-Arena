@@ -5,14 +5,17 @@ using System.Collections;
 public class Rarm : Arm {
 
 	public override void Initialize() {
-		this.mHealthBar = this.gameObject.AddComponent<HealthBar>();
+		if(this.mHealthBar)
+			this.mHealthBar.Initialize();
+		this.mCanFire = true;
+		base.Initialize();
 	}
 	
 	public override void Shoot () {
 		base.Shoot();
 		
 		// right btn click
-		if (this.mFire && Time.time > this.mNextFire) {
+		if (this.mFire && this.mCanFire && Time.time > this.mNextFire) {
 			this.mNextFire = Time.time + this.mRoundsPerSecond;
 			
 			this.mCurrentRecoilPos -= this.mRecoilAmount;
@@ -40,10 +43,14 @@ public class Rarm : Arm {
 		}
 	}
 	
+	protected override void Awake(){
+		base.Awake();
+		this.mPart = PART.RARM;
+	}
+	
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
-		this.mPart = PART.RARM;
 	}
 	
 	// Update is called once per frame

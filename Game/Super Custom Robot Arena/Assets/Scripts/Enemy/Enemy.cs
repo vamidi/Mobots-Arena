@@ -70,7 +70,7 @@ public class Enemy : Robot {
 	}
 	
 	public void InitializeWaypoints() {
-		this.mWaypoints = GameObject.FindGameObjectsWithTag("Target");
+		this.mWaypoints = GameObject.FindGameObjectsWithTag("Waypoint");
 		if(this.mWaypoints != null && this.mWaypoints.Length == 0)
 			Debug.LogError("There are no waypoints set in the map");
 		else 
@@ -169,8 +169,6 @@ public class Enemy : Robot {
 			this.Move();
 			this.Turn();
 //			this.Jump();
-			
-//			this.mRigidbody.velocity = this.transform.TransformDirection(this.mVelocity);
 		}
 	}
 	
