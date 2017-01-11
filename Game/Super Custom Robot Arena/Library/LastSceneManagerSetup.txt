@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Menu/main_scene.unity
+- path: Assets/Scenes/Game/hall_way.unity
   isLoaded: 1
   isActive: 1
