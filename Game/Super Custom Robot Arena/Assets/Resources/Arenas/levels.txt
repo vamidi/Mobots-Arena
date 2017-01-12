@@ -14,8 +14,8 @@
         },
         {
             "level" : {            
-                "levelname" : "final2",
-                "scene" : "final"
+                "levelname" : "Hallway",
+                "scene" : "hall_way"
             }
         }
     ]
