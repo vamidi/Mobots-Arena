@@ -1,1 +1,1 @@
-{"robot":{"head":"MKVII","left":"MKVI","right":"Samurai","car":"Knight"}}
+{"robot":{"head":"MKVII","left":"MKVII","right":"MKVII","car":"MKVII"}}
