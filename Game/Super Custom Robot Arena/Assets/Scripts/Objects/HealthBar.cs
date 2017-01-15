@@ -7,8 +7,10 @@ public class HealthBar : MonoBehaviour {
 	public float mColorLerpSpeed = 2f;
 	public PART part = PART.HEAD;
 	[SerializeField]
-	private TagSettings mTags = new TagSettings();
 	public Image mCurrentHealthBar;
+
+	private GameManager manager;
+	private TagSettings mTags = new TagSettings();
 	private Text mRatioText;
 	
 	[SerializeField]
@@ -44,7 +46,11 @@ public class HealthBar : MonoBehaviour {
 		if(mPart != null){
 			float ratio = Map( mPart.GetHealth(), 0, mPart.GetMaxHealth(), 0, 1);
 			if(this.mCurrentHealthBar && this.mCurrentHealthBar.fillAmount != ratio){
-				this.mCurrentHealthBar.fillAmount = Mathf.Lerp(this.mCurrentHealthBar.fillAmount, ratio, Time.deltaTime * this.mColorLerpSpeed);
+				if(manager.mInGame)
+					this.mCurrentHealthBar.fillAmount = Mathf.Lerp(this.mCurrentHealthBar.fillAmount, ratio, Time.deltaTime * this.mColorLerpSpeed);
+				else
+					this.mCurrentHealthBar.fillAmount = ratio;
+				
 				this.mCurrentHealthBar.color = Color.Lerp(this.mColorArr[0], this.mColorArr[1], ratio);
 			}
 			
@@ -55,6 +61,7 @@ public class HealthBar : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		this.manager = GameObject.FindObjectOfType<GameManager>();
 		this.mPart = GetComponent<Part>();
 		if(this.mPart)
 			this.part = this.mPart.GetPart();

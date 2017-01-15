@@ -30,6 +30,12 @@ public class AttackState : State<Enemy> {
 			// Move the player
 			mEnemy.StartCoroutine(Dodging(mEnemy));
 			
+			if(mEnemy.GetFieldOfView().FindTarget() == null && mEnemy.mPlayerInSight && mEnemy.mPlayer){
+				mEnemy.mPlayerInSight = false;
+			}else if(mEnemy.GetFieldOfView().FindTarget() != null && mEnemy.mPlayerInSight == false && mEnemy.mPlayer){
+				mEnemy.mPlayerInSight = true;
+			}
+			
 			if(mEnemy.mPlayer){
 				if(Vector3.Distance(mEnemy.transform.position, mEnemy.mPlayer.position) > mEnemy.GetFieldOfView().mViewRadius){
 					mEnemy.GetFSM().ChangeState(ChaseState.Instance());

@@ -160,4 +160,18 @@ public static class GameUtilities {
 		}
 		return null;
 	}
+	
+	
+	public static Sprite GetImageSprite (string path) {
+		Texture2D t2d = null;
+		Sprite holder = null;
+		
+		t2d = Resources.Load<Texture2D>(path);
+
+		if(t2d)
+			holder = Sprite.Create(t2d, new Rect(0,0, t2d.width, t2d.height), new Vector2(0.5f, 0.5f));
+
+		return holder;
+	}
+	
 }

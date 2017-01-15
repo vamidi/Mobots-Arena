@@ -30,9 +30,8 @@ public class ChaseState : State<Enemy> {
 			if(mEnemy.researchArea <= 0){
 				mEnemy.researchArea = mEnemy.mResetArea;
 				mEnemy.mPlayer = mEnemy.GetFieldOfView().FindTarget();
-				if(!mEnemy.mPlayer){
+				if(!mEnemy.mPlayer)
 					mEnemy.GetFSM().ChangeState(PatrolState.Instance());
-				}
 			}
 		}
 	}

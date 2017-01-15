@@ -41,7 +41,7 @@ public class FieldOfView : MonoBehaviour {
 
 			if(Vector3.Angle( this.transform.forward, direction ) < this.mViewAngle / 2){
 				float distanceToTarget = Vector3.Distance(this.transform.position, t.position);
-
+				
 				if(!Physics.Raycast(this.transform.position, direction, distanceToTarget, this.mObstaclesMask)){
 					return t;
 				}
@@ -96,6 +96,7 @@ public class FieldOfView : MonoBehaviour {
 	public void Initialize() {
 		StartCoroutine(this.FindTargetsWithDelay(.2f));
 		this.mEnemy = this.GetComponent<Enemy>();
+		this.mMeshFilter.GetComponent<Renderer>().enabled = true;
 	}
 	
 	// Use this for initialization
@@ -188,8 +189,8 @@ public class FieldOfView : MonoBehaviour {
 
 			if(Vector3.Angle( this.transform.forward, direction ) < this.mViewAngle / 2){
 				float distanceToTarget = Vector3.Distance(this.transform.position, t.position);
-
 				if(!Physics.Raycast(this.transform.position, direction, distanceToTarget, this.mObstaclesMask)){
+					this.mEnemy.mPlayerInSight = true;
 					this.mEnemy.mPlayer = t;
 				}
 			}

@@ -9,7 +9,7 @@ public class DialogInterFace : MonoBehaviour {
 	public Tooltip mToolTip;
 	public Image mPanel; 
 	public Text mText;
-	public Button mPositiveButton, mNegativeButton;
+	public Button mPositiveButton, mNegativeButton, mAlternativeButton;
 	public const int BUTTON_POSITIVE = 0;
 	public const int BUTTON_NEGATIVE = 1;
 	public const int BUTTON_NEUTRAL = 2;
@@ -44,6 +44,15 @@ public class DialogInterFace : MonoBehaviour {
 		c = mNegativeButton.GetComponentInChildren<Text>().color;
 		c.a = 0;
 		this.mNegativeButton.GetComponentInChildren<Text>().color = c;	
+		
+		if(this.mAlternativeButton){
+			c = this.mAlternativeButton.GetComponent<Image>().color;
+			c.a = 0;
+			this.mAlternativeButton.GetComponent<Image>().color = c;
+			c = this.mAlternativeButton.GetComponentInChildren<Text>().color;
+			c.a = 0;
+			this.mAlternativeButton.GetComponentInChildren<Text>().color = c;	
+		}
 	}
 	
 	
@@ -72,6 +81,18 @@ public class DialogInterFace : MonoBehaviour {
 		c.a = 1f;
 		this.mNegativeButton.GetComponentInChildren<Text>().color = c;
 		
+		c = mNegativeButton.GetComponentInChildren<Text>().color;
+		c.a = 1f;
+		this.mNegativeButton.GetComponentInChildren<Text>().color = c;	
+		if(this.mAlternativeButton){
+			c = this.mAlternativeButton.GetComponent<Image>().color;
+			c.a = 1f;
+			this.mAlternativeButton.GetComponent<Image>().color = c;
+			c = mAlternativeButton.GetComponentInChildren<Text>().color;
+			c.a = 1f;
+			this.mAlternativeButton.GetComponentInChildren<Text>().color = c;	
+		}
+		
 		this.mToolTip.StartOpen();
 	}
 	
@@ -86,6 +107,7 @@ public class DialogInterFace : MonoBehaviour {
 		public string mMessage = "";
 		public string mPositiveText = "";
 		public string mNegativeText = "";
+		public string mAlternativeText = "";
 		[HideInInspector]
 		public OnClickListener mOnClickListener = null;
 	
@@ -93,6 +115,8 @@ public class DialogInterFace : MonoBehaviour {
 			this.mInterface.mText.text = this.mMessage;
 			this.mInterface.mPositiveButton.GetComponentInChildren<Text>().text = this.mPositiveText;
 			this.mInterface.mNegativeButton.GetComponentInChildren<Text>().text = this.mNegativeText;
+			if(this.mInterface.mAlternativeButton != null)
+				this.mInterface.mAlternativeButton.GetComponentInChildren<Text>().text = this.mAlternativeText;
 			return this.mInterface;
 		}
 			
@@ -113,6 +137,11 @@ public class DialogInterFace : MonoBehaviour {
 		public void SetNegativeButton(string msg, OnClickListener DialogClickListener){
 			this.mNegativeText = msg;
 			this.mInterface.mNegativeButton.onClick.AddListener(() => DialogClickListener.OnClick(this.mInterface, DialogInterFace.BUTTON_NEGATIVE));
+		}
+		
+		public void SetAlternativeButton(string msg, OnClickListener DialogClickListener){
+			this.mAlternativeText = msg;
+			this.mInterface.mAlternativeButton.onClick.AddListener(() => DialogClickListener.OnClick(this.mInterface, DialogInterFace.BUTTON_NEUTRAL));
 		}
 	}
 }

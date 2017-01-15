@@ -13,7 +13,7 @@ public class Enemy : Robot {
 	public Text mRatioText;
 	public Speed mSpeed = new Speed();
 	public bool mDebug = true;
-	public bool canShoot = false;
+	public bool canShoot = false, mPlayerInSight = false;
 	public float researchArea = 10f, mResetArea = 0f;
 	public float mColorLerpSpeed = .2f;
 	public int mCurrentWP = 0;
@@ -65,6 +65,7 @@ public class Enemy : Robot {
 		this.mStateMachine.SetCurrentState(PatrolState.Instance());
 		this.mStateMachine.SetGlobalState (GlobalState.Instance ());
 		
+		GameUtilities.FindDeepChild(this.transform, "Canvas").gameObject.SetActive(true);
 		this.mCurrentHealthBar = GameUtilities.FindDeepChild(this.transform, "HealthForGround").GetComponent<Image>();
 		this.mRatioText = GameUtilities.FindDeepChild(this.transform, "HealthText").GetComponent<Text>();		
 	}
@@ -177,6 +178,9 @@ public class Enemy : Robot {
 			base.LateUpdate();
 			this.mStateMachine.LateUpdate();
 		}
+		
+		if(this.mPlayer)
+			Debug.DrawLine(this.transform.position, this.mPlayer.transform.position, Color.red);
 	}
 	
 	#endregion

@@ -12,29 +12,33 @@ public class EnemyRarm : Arm {
 	
 	public override void Shoot(){
 		if (Time.time > this.mNextFire) {
+			this.mRoundsPerSecond = this.mInitRoundsPerSeconds + UnityEngine.Random.Range(0.3f, 0.5f);
 			this.mNextFire = Time.time + this.mRoundsPerSecond;
-			this.mCurrentRecoilPos -= this.mRecoilAmount;
-			//	public float shootTimer = 2f, mReset = 2f;
-			Enemy e = ((Enemy)this.mRobot);
-			if(this.mBullet){
-				var direction = e.mPlayer.position - this.mGunEnd.position;
-				direction.y = e.mPlayer.position.y;
-				GameObject bullet = (GameObject) Instantiate(this.mBullet, this.mGunEnd.position, Quaternion.LookRotation(direction));
-				bullet.GetComponent<Bullet>().mDamage = this.mDamagePerRound;
-			}
-		
-		
-			StartCoroutine(this.ShotEffect());
-
-			Vector3 rayOrg = this.mGunEnd.position; //this.mCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f,  0));
-			RaycastHit hit;
-
-			mLaserLine.SetPosition(0, this.mGunEnd.position);
-
-			if(Physics.Raycast(rayOrg, e.mPlayer.position, out hit, this.mRange)) {
-				this.mLaserLine.SetPosition(1, hit.point);				
-			}else {
-				this.mLaserLine.SetPosition(1, rayOrg + (mGunEnd.transform.forward * this.mRange));
+			
+			if(((Enemy)this.mRobot).mPlayerInSight){
+				this.mCurrentRecoilPos -= this.mRecoilAmount;
+				//	public float shootTimer = 2f, mReset = 2f;
+				Enemy e = ((Enemy)this.mRobot);
+				if(this.mBullet){
+					var direction = e.mPlayer.position - this.mGunEnd.position;
+					direction.y = e.mPlayer.position.y;
+					GameObject bullet = (GameObject) Instantiate(this.mBullet, this.mGunEnd.position, Quaternion.LookRotation(direction));
+					bullet.GetComponent<Bullet>().mDamage = this.mDamagePerRound;
+				}
+			
+			
+				StartCoroutine(this.ShotEffect());
+	
+				Vector3 rayOrg = this.mGunEnd.position; //this.mCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f,  0));
+				RaycastHit hit;
+	
+				mLaserLine.SetPosition(0, this.mGunEnd.position);
+	
+				if(Physics.Raycast(rayOrg, e.mPlayer.position, out hit, this.mRange)) {
+					this.mLaserLine.SetPosition(1, hit.point);				
+				}else {
+					this.mLaserLine.SetPosition(1, rayOrg + (mGunEnd.transform.forward * this.mRange));
+				}
 			}
 		}
 	}

@@ -11,18 +11,23 @@ public class EnemySelectController : MonoBehaviour {
 	
 	public GameObject mContent;
 	public GameObject mEnemySlot;
-	public float mOffset = 50f;
+	public float mOffset = 50f, mButtonOffsetX = 200f, mButtonOffsetY = 155f;
 	public GameManager manager;
 	public RobotEditor mEditor;
 	
-	private Vector3 mPosition;
-	private bool changing = false;
+	private Vector3 mPosition, mInitPosition;
+	private bool changing = false, init = false;
 	private PART mPart = PART.HEAD;
 	
 	public void SelectEnemy(string enemyName){
 		manager.enemyName = enemyName;
 		if(this.changing == false)
 			StartCoroutine(this.SaveRobot());
+	}
+	
+	public void CreateRobot(){
+		if(this.changing == false && this.init)
+			StartCoroutine(this.MakeRobot());		
 	}
 
 	void Awake() {
@@ -32,6 +37,11 @@ public class EnemySelectController : MonoBehaviour {
 		GameObject.Find("Cylinder").GetComponent<Renderer>().enabled = false;
 		this.manager = GameObject.FindObjectOfType<GameManager>();
 		this.mEditor = manager.enemy.GetComponent<RobotEditor>();
+		GameObject mCanvas = GameUtilities.FindDeepChild(this.mEditor.transform, "Canvas").gameObject;
+		if(mCanvas)
+			mCanvas.SetActive(false);
+		this.mInitPosition = this.mEditor.transform.position;
+		
 		this.mPosition = this.transform.localPosition;
 	}
 	
@@ -55,8 +65,8 @@ public class EnemySelectController : MonoBehaviour {
 			for(int column = 0; column < columns; column++) {
 				// float r = column * rows + row;				
 				Vector3 targetPos = new Vector3(145f, -90f, 0);
-				targetPos.x = targetPos.x + (column * 300f) + (column * this.mOffset);
-				targetPos.y = targetPos.y - (155f * row) - (row * this.mOffset);
+				targetPos.x = targetPos.x + (column * this.mButtonOffsetX) + (column * this.mOffset);
+				targetPos.y = targetPos.y - (this.mButtonOffsetY * row) - (row * this.mOffset);
 				targetPos.z = 0;
 				positions.Add(targetPos);
 
@@ -162,7 +172,7 @@ public class EnemySelectController : MonoBehaviour {
 	}
 	
 	private IEnumerator SaveRobot(){
-		this.changing = true;
+		this.changing = this.init = true;
 		if(this.manager.enemyName.Contains("slot")){
 			string file = "";
 			if(GameUtilities.CheckFileExists("Slots/", this.manager.enemyName + ".txt")){
@@ -195,10 +205,21 @@ public class EnemySelectController : MonoBehaviour {
 			this.EquipRobot(manager.enemyName);
 		}
 		yield return new WaitForSeconds(.5f);
+		this.changing = false;
+		this.transform.localPosition = this.mPosition;
+		yield return new WaitForSeconds(1f);
+		this.mEditor.transform.position = new Vector3(4f, -.5f, 10.5f );
+		yield return null;
+	}
+	
+	private IEnumerator MakeRobot(){
+		this.changing = true;
+		this.mEditor.transform.position = this.mInitPosition;
 		Enemy holder = null;
 		if(manager.enemy.GetComponent<Enemy>() == null) {
-//			Debug.Log("here");
+			//			Debug.Log("here");
 			holder = manager.enemy.AddComponent<Enemy>();
+			yield return new WaitForSeconds(.5f);
 			holder.isControllable = false;
 			holder.GetPartObj(0).AddComponent<EnemyHead>();
 			GameObject bullet = (GameObject) GameUtilities.ReadResourceFile("Bullet");
@@ -209,17 +230,17 @@ public class EnemySelectController : MonoBehaviour {
 			holder.GetPartObj(3).AddComponent<EnemyCar>();
 			yield return new WaitForSeconds(.5f);
 			holder.Initialize();
-		}else {
-//			Debug.Log("here");
+		}else{
 			Destroy(manager.enemy.GetComponent<Enemy>());
 			holder = manager.enemy.AddComponent<Enemy>();
+			yield return new WaitForSeconds(.5f);
 			holder.isControllable = false;
 			holder.GetPartObj(0).AddComponent<EnemyHead>();
 			GameObject bullet = (GameObject) GameUtilities.ReadResourceFile("Bullet");
 			holder.GetPartObj(1).AddComponent<EnemyLarm>();
 			holder.GetPartObj(1).GetComponent<EnemyLarm>().mBullet = bullet;
 			holder.GetPartObj(2).AddComponent<EnemyRarm>();
-			holder.GetPartObj(1).GetComponent<EnemyRarm>().mBullet = bullet;
+			holder.GetPartObj(2).GetComponent<EnemyRarm>().mBullet = bullet;
 			holder.GetPartObj(3).AddComponent<EnemyCar>();
 			yield return new WaitForSeconds(.5f);
 			holder.Initialize();
@@ -245,9 +266,8 @@ public class EnemySelectController : MonoBehaviour {
 			this.ChangeStats(manager.enemyName, holder);				
 			this.mPart = PART.HEAD;
 		}
+		yield return new WaitForSeconds(1.2f);
 		this.changing = false;
-		this.transform.localPosition = this.mPosition;
-		yield return new WaitForSeconds(1f);
 		GameObject.FindGameObjectWithTag("Menu").SendMessage("SetNextPage", "Level");
 		yield return null;
 	}

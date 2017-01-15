@@ -9,6 +9,7 @@ public class LevelController : MonoBehaviour {
 	
 	public GameObject mContent;
 	public GameObject mLevelslotPrefab;	
+	public Sprite mStandard;
 	public float mSteps = 100f;
 	
 	private Dictionary<string, JSONObject>mLevels = new Dictionary<string,JSONObject>();
@@ -60,6 +61,12 @@ public class LevelController : MonoBehaviour {
 				RectTransform rect = b.GetComponent<RectTransform>();
 				b.GetComponent<DynamicListener>().mMessageParameter = name;
 				b.GetComponentInChildren<Text>().text = name;
+				string path = "Arenas/" + name + "/Thumbnail/" + name;	
+				Sprite img = GameUtilities.GetImageSprite(path);
+				if(img)
+					b.GetComponentInChildren<Image>().sprite = img;
+				else
+					b.GetComponentInChildren<Image>().sprite = this.mStandard;
 				if(i != 0)
 					rect.anchoredPosition = positions[i];
 

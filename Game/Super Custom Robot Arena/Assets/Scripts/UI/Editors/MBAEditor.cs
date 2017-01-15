@@ -26,7 +26,7 @@ namespace MBA {
 			
 			public GameObject mMainStage;
 			public GameObject mRobotPlaceholder;
-			public GameObject DialogPrefab;
+			public GameObject DialogPrefab, DialogPrefabBig;
 			public bool mStartImmidiatly = false;
 			public Color mGood, mBad, mEcual;
 			public string mCurrentRobotName = "MKVII", mCurrentRobotNameRarm = "MKVII",  mCurrentRobotNameLarm = "MKVII",  mCurrentRobotNameCar = "MKVII";
@@ -37,7 +37,7 @@ namespace MBA {
 			
 			private string mSlot = "";
 			[SerializeField]
-			private bool assigned = false;
+			private bool assigned = false, isBuilding = false;
 			/// <summary>
 			/// The manager to assign values to
 			/// a particular robot part
@@ -56,7 +56,22 @@ namespace MBA {
 			#region MENULISTENER
 			
 			public void CheckRobot(string robotName) {
-				this.mReferenceImage.sprite = RevealImageByName(robotName);
+				string path = "";
+				switch (this.mPart) {
+					case PART.HEAD:
+						path = "Robots/" + robotName + "/" + robotName.ToLower() + "_head_image";
+						break;
+					case PART.LARM:
+						path = "Robots/" + robotName + "/" + robotName.ToLower() + "_larm_image";
+						break;
+					case PART.RARM:
+						path = "Robots/" + robotName + "/" + robotName.ToLower() + "_rarm_image";
+						break;
+					case PART.CAR:
+						path = "Robots/" + robotName + "/" + robotName.ToLower() + "_car_image";		
+						break;
+				}
+				this.mReferenceImage.sprite = GameUtilities.GetImageSprite(path);
 				this.mButtonHolder.GetComponent<DynamicListener>().mMessageParameter = robotName;
 				this.ChangeText(robotName);	
 			}
@@ -149,14 +164,30 @@ namespace MBA {
 			public void OnClick(DialogInterFace dialog, int which){
 				switch(which){
 					case DialogInterFace.BUTTON_POSITIVE:
-						if(!GameUtilities.DeleteFile("Slots/", this.mSlot)){
-							this.CreateSlot();
+						if(dialog.mAlternativeButton != null){
+							if(isBuilding == false)
+								StartCoroutine(this.CreateRobotFromSlot(1));
+						}else{
+							if(!GameUtilities.DeleteFile("Slots/", this.mSlot)){
+								this.CreateSlot();
+							}
 						}
 						break;
 					case DialogInterFace.BUTTON_NEGATIVE:
-						if(this.mStartImmidiatly) {
-							// clean up begins
-							StartCoroutine(this.SaveRobot());
+						if(dialog.mAlternativeButton != null){
+							if(isBuilding == false)
+								StartCoroutine(this.CreateRobotFromSlot(3));
+						}else{
+							if(this.mStartImmidiatly) {
+								// clean up begins
+								StartCoroutine(this.SaveRobot());
+							}
+						}
+						break;
+					case DialogInterFace.BUTTON_NEUTRAL:
+						if(dialog.mAlternativeButton != null){
+							if(isBuilding == false)
+								StartCoroutine(this.CreateRobotFromSlot(2));
 						}
 						break;
 				}
@@ -169,56 +200,27 @@ namespace MBA {
 			#region UNITYMETHODS    
 			
 			void Awake () {
+				this.transform.rotation = Quaternion.identity;
 				manager = GameObject.FindObjectOfType<GameManager>();
 //				Destroy(Camera.main.gameObject.GetComponent<Skybox>());
-				Destroy(Camera.main.gameObject.GetComponent<SimpleRotation>());
-				Camera.main.gameObject.transform.rotation = Quaternion.identity;
+				if(Camera.main.GetComponent<SimpleRotation>() != null){
+					Destroy(Camera.main.gameObject.GetComponent<SimpleRotation>());
+				}
 				GameObject.Find("Cylinder").GetComponent<Renderer>().enabled = true;
-				
 				this.mOldName.text = this.mNewName.text = "";
-				string file = "";
-				if(GameUtilities.CheckFileExists("Slots/", "slot_#1.txt")){
-					file = GameUtilities.ReadFile("Slots/", "slot_#1.txt");
-				}
-				
-				if(file == ""){
-					if(GameUtilities.CheckFileExists("Slots/", "slot_#2.txt")){
-						file =  GameUtilities.ReadFile("Slots/", "slot_#2.txt");
-					}
-				}
-				
-				if(file == ""){
-					if(GameUtilities.CheckFileExists("Slots/", "slot_#3.txt")){
-						file = GameUtilities.ReadFile("Slots/", "slot_#3.txt");
-					}
-				}
-				
-				if(file == "")
-					file = GameUtilities.ReadTextAsset("Slots/standard");
-				
-				JSONObject j = JSONObject.Parse(file).GetObject("robot");
-				
-				this.mCurrentRobotName = j.GetString("head");
-				this.mCurrentRobotNameLarm = j.GetString("left");
-				this.mCurrentRobotNameRarm = j.GetString("right");
-				this.mCurrentRobotNameCar = j.GetString("car");
 			}
 						
 			void Start () {
-				this.mRobotEditor = GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotEditor>();
-				this.mRobotEditor.transform.position = new Vector3(this.mRobotEditor.transform.position.x, 0.04f, this.mRobotEditor.transform.position.z );
-				this.mAssign = new AssignValues (ChangeStats);
-				this.mPart = PART.HEAD;
-				this.EquipRobot(this.mCurrentRobotName);
-				this.mPart = PART.LARM;
-				this.EquipRobot(this.mCurrentRobotNameLarm);
-				this.mPart = PART.RARM;
-				this.EquipRobot(this.mCurrentRobotNameRarm);
-				this.mPart = PART.CAR;
-				this.EquipRobot(this.mCurrentRobotNameCar);				
-				this.Initialize();
-				this.transform.localRotation = Quaternion.identity;
-				this.mPart = PART.HEAD;
+				Camera.main.gameObject.transform.rotation = Quaternion.identity;
+				this.gameObject.transform.localRotation = Quaternion.Euler(Vector3.zero);
+				GameObject d = (GameObject) Instantiate(this.DialogPrefabBig, DialogPrefab.transform.position, Quaternion.identity);					
+				DialogInterFace.Builder builder = new DialogInterFace.Builder(d.GetComponentInChildren<DialogInterFace>());
+				builder.SetMessage("Which slot do you like to load and change?\n Choose your three slots");
+				builder.SetPositiveButton("Slot 1", this);
+				builder.SetAlternativeButton("Slot 2", this);
+				builder.SetNegativeButton("Slot 3", this);
+				DialogInterFace alert = builder.Create();
+				alert.Show();	
 			}
 			
 			#endregion
@@ -271,6 +273,44 @@ namespace MBA {
 					this.mOverallTexts[11].text = weight.ToString("0") + "KG";								
 
 				}
+			}
+			
+			private IEnumerator CreateRobotFromSlot(int index){
+				this.isBuilding = true;
+				string file = "";
+				if(GameUtilities.CheckFileExists("Slots/", "slot_#" + index + ".txt")){
+					file = GameUtilities.ReadFile("Slots/", "slot_#" + index + ".txt");
+				}
+				
+				if(file == "")
+					file = GameUtilities.ReadTextAsset("Slots/standard");
+
+				JSONObject j = JSONObject.Parse(file).GetObject("robot");
+
+				this.mCurrentRobotName = j.GetString("head");
+				this.mCurrentRobotNameLarm = j.GetString("left");
+				this.mCurrentRobotNameRarm = j.GetString("right");
+				this.mCurrentRobotNameCar = j.GetString("car");
+				
+				yield return new WaitForSeconds(1f);
+				
+				this.mRobotEditor = GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotEditor>();
+				this.mRobotEditor.transform.position = new Vector3(this.mRobotEditor.transform.position.x, 0.04f, this.mRobotEditor.transform.position.z );
+				this.mAssign = new AssignValues (ChangeStats);
+				this.mPart = PART.HEAD;
+				this.EquipRobot(this.mCurrentRobotName);
+				this.mPart = PART.LARM;
+				this.EquipRobot(this.mCurrentRobotNameLarm);
+				this.mPart = PART.RARM;
+				this.EquipRobot(this.mCurrentRobotNameRarm);
+				this.mPart = PART.CAR;
+				this.EquipRobot(this.mCurrentRobotNameCar);				
+				this.Initialize();
+				this.mPart = PART.HEAD;
+				
+				this.isBuilding = false;
+				yield return new WaitForSeconds(1f);
+				
 			}
 			
 			/// <summary>
@@ -521,30 +561,6 @@ namespace MBA {
 				GameUtilities.WriteFile("Slots/", this.mSlot, parentObj.ToString());
 				// clean up begins
 				StartCoroutine(this.SaveRobot());
-			}
-			
-			private Sprite RevealImageByName (string robotName) {
-				Texture2D t2d = null;
-				Sprite holder = null;
-				switch (this.mPart) {
-					case PART.HEAD:
-						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_head_image");	
-						break;
-					case PART.LARM:
-						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_larm_image");		
-						break;
-					case PART.RARM:
-						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_rarm_image");		
-						break;
-					case PART.CAR:
-						t2d = Resources.Load<Texture2D> ("Robots/" + robotName + "/" + robotName.ToLower() + "_car_image");		
-						break;
-				}
-
-				if(t2d)
-					holder = Sprite.Create(t2d, new Rect(0,0, t2d.width, t2d.height), new Vector2(0.5f, 0.5f));
-
-				return holder;
 			}
 			
 			private IEnumerator SaveRobot(){

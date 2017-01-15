@@ -137,7 +137,7 @@ public abstract class State<T> {
 				}
 			}
 		}else {
-			Debug.Log("Max tries exceeded. Changing behaviour");
+//			Debug.Log("Max tries exceeded. Changing behaviour");
 			mEnemy.GetFSM().ChangeState(AttackState.Instance());
 		}
 	}
