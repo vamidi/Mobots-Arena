@@ -567,7 +567,7 @@ namespace MBA {
 				Player holder = mRobotEditor.gameObject.AddComponent<Player>();
 				holder.GetPartObj(0).AddComponent<Head>();
 				holder.GetPartObj(1).AddComponent<Larm>();
-				GameObject bullet = (GameObject) GameUtilities.ReadResourceFile("Bullet");
+				GameObject bullet = (GameObject) GameUtilities.ReadResourceFile("Bullets/Bullet");
 				holder.GetPartObj(1).GetComponent<Larm>().mBullet = bullet;
 				holder.GetPartObj(2).AddComponent<Rarm>();
 				holder.GetPartObj(2).GetComponent<Rarm>().mBullet = bullet;

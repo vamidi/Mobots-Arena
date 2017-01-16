@@ -307,4 +307,7 @@ public class Player : Robot {
 		}
 	}
 
+	protected override void OnEntityDead() {
+		
+	}
 }

@@ -5,6 +5,7 @@ using System.Collections;
 public class Arm : Part, IShootable {
 	
 	public Transform mGunEnd;
+	public Transform mMuzzle;
 	public GameObject mBullet;
 	public bool mCanFire = false;
 	public LayerMask mObstacle;
@@ -34,6 +35,7 @@ public class Arm : Part, IShootable {
 	/// </summary>
 	protected float mAccuracy = 3f;
 	protected WaitForSeconds shotDuration = new WaitForSeconds(.09f);
+	protected ParticleSystem mParticleSystem;
 	protected AudioClip mGunSound;
 	protected AudioSource mGunAudioSource;
 	protected LineRenderer mLaserLine;
@@ -87,6 +89,12 @@ public class Arm : Part, IShootable {
 		this.mLaserLine = this.GetComponent<LineRenderer>();
 		this.mResetDamage = this.mDamagePerRound;
 		this.mGunEnd = this.GetComponentsInChildren<Transform>()[1];
+		if(this.GetComponentsInChildren<Transform>().Length > 2){
+			this.mMuzzle = this.GetComponentsInChildren<Transform>()[2];
+			if(this.mMuzzle)
+				this.mMuzzle.position = mGunEnd.position;
+			this.mParticleSystem = this.mMuzzle.GetComponent<ParticleSystem>();
+		}
 		this.mGunAudioSource = this.gameObject.AddComponent<AudioSource>();
 		this.mGunAudioSource.playOnAwake = false;
 		this.mGunSound = (AudioClip) GameUtilities.ReadResourceFile("placeholdersound");
@@ -125,9 +133,11 @@ public class Arm : Part, IShootable {
 	protected void Move () { }
 
 	protected IEnumerator ShotEffect () {
-		if(this.mGunSound){
+		if(this.mGunSound)
 			this.mGunAudioSource.Play();
-		}
+		
+		if(this.mParticleSystem)
+			this.mParticleSystem.Play();
 		
 		if(this.mLaserLine)
 			this.mLaserLine.enabled = true;

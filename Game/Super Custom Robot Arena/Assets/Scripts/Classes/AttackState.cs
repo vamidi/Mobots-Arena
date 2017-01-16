@@ -119,7 +119,7 @@ public class AttackState : State<Enemy> {
 		Vector3 viewAngleA, viewAngleB; 
 		if(mEnemy.mPlayer){
 			direction = mEnemy.mPlayer.position - mEnemy.transform.position;
-			mEnemy.transform.rotation = Quaternion.Slerp(mEnemy.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * mEnemy.mRotateVel);	
+			mEnemy.transform.rotation = Quaternion.Lerp(mEnemy.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * mEnemy.mRotateVel);	
 
 			if(Vector3.Angle( mEnemy.transform.forward, direction ) < 5f){
 				((EnemyLarm)mEnemy.GetPart(1)).Shoot();
@@ -131,7 +131,7 @@ public class AttackState : State<Enemy> {
 			if(Vector3.Distance(mEnemy.mPlayer.transform.position, viewAngleA) > 15f ||
 				Vector3.Distance(mEnemy.mPlayer.transform.position, viewAngleB) > 0 ){
 				direction = mEnemy.mPlayer.position - mEnemy.transform.position;
-				mEnemy.transform.rotation = Quaternion.Slerp(mEnemy.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * mEnemy.mRotateVel);	
+				mEnemy.transform.rotation = Quaternion.Lerp(mEnemy.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * mEnemy.mRotateVel);	
 			}
 		}
 	}

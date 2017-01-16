@@ -6,17 +6,21 @@ public class Crosshair : MonoBehaviour {
 
 	public LayerMask mLayer;
 	public Transform mGunEnd, mOldPos;
+
+	public GameObject player;
+
 	
 	private Player mPlayer;
 	
+	
 	// Use this for initialization
 	void Start () {
-		this.mPlayer = this.transform.root.GetComponent<Player>();
+//		this.mPlayer = this.transform.root.GetComponent<Player>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(this.mPlayer.isControllable){
+		if(this.mPlayer && this.mPlayer.isControllable){
 			this.gameObject.SetActive(true);
 			Vector3 rayOrg = this.mGunEnd.position;
 			RaycastHit hit;
@@ -38,7 +42,11 @@ public class Crosshair : MonoBehaviour {
 			this.transform.LookAt(Camera.main.transform.position);
 			this.transform.Rotate(0, 180f, 0);	
 		}else{
-			this.gameObject.SetActive(false);
+			
+			// center point of the player
+			Debug.Log(player.transform.position);
+			
+//			this.gameObject.SetActive(false);
 		}
 	}
 }

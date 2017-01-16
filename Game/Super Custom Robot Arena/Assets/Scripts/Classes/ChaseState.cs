@@ -61,6 +61,6 @@ public class ChaseState : State<Enemy> {
 	protected override void Turn (Enemy mEnemy) {
 		Vector3 direction = Vector3.zero; 
 		direction = mEnemy.mPlayer.position - mEnemy.transform.position;
-		mEnemy.transform.rotation = Quaternion.Slerp(mEnemy.transform.rotation, Quaternion.LookRotation(direction), 0.1f);
+		mEnemy.transform.rotation = Quaternion.Lerp(mEnemy.transform.rotation, Quaternion.LookRotation(direction), mEnemy.mRotateVel);
 	}
 }

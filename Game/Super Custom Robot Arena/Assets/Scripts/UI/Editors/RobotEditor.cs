@@ -50,8 +50,8 @@ namespace MBA {
 			/// <param name="part">Part.</param>
 			/// <param name="newObj">New object.</param>
 			public void SetRobot(PART part, GameObject newObj){
-				GameObject holder = null;
-				GameObject gunEnd = null;
+				GameObject holder, muzzle = null;
+				
 				switch (part) {
 					case PART.HEAD:
 						if (newObj.name != goHead.name) {
@@ -72,7 +72,9 @@ namespace MBA {
 					case PART.LARM:
 						if (newObj.name != goLarm.name) {
 							Transform parent = goLarm.transform.parent;
-							gunEnd = goLarm.GetComponentsInChildren<Transform>()[1].gameObject;
+//							gunEnd = goLarm.GetComponentsInChildren<Transform>()[1].gameObject;
+							if(goLarm.GetComponentsInChildren<Transform>().Length > 2)
+								muzzle = goLarm.GetComponentsInChildren<Transform>()[2].gameObject;
 							holder = (GameObject)Instantiate (newObj, goLarm.transform.position, goLarm.transform.rotation);
 							//holder.transform.localPosition = GameObject.Find("larm_spawn").transform.localPosition;
 							holder.name = newObj.name;
@@ -85,7 +87,8 @@ namespace MBA {
 							//							holder.AddComponent<Larm>();
 							//							mParts [1] = holder.GetComponent<Larm> ();
 							holder.transform.parent = parent;
-							gunEnd.transform.parent = holder.transform;
+							if(muzzle)
+								muzzle.transform.parent = holder.transform;
 							Destroy (goLarm);
 							goLarm = holder;
 						}
@@ -93,7 +96,9 @@ namespace MBA {
 					case PART.RARM:
 						if (newObj.name != goRarm.name) {
 							Transform parent = goRarm.transform.parent;
-							gunEnd = goRarm.GetComponentsInChildren<Transform>()[1].gameObject;
+//							gunEnd = goRarm.GetComponentsInChildren<Transform>()[1].gameObject;
+							if(goRarm.GetComponentsInChildren<Transform>().Length > 2)
+								muzzle = goRarm.GetComponentsInChildren<Transform>()[2].gameObject;
 							holder = (GameObject)Instantiate (newObj, goRarm.transform.position, goRarm.transform.rotation);
 							holder.name = newObj.name;
 							if(!holder.GetComponent<LineRenderer>()){
@@ -104,7 +109,8 @@ namespace MBA {
 							//							holder.AddComponent<Rarm>();
 							//							mParts [2] = holder.GetComponent<Rarm> ();
 							holder.transform.parent = parent;
-							gunEnd.transform.parent = holder.transform;
+							if(muzzle)
+								muzzle.transform.parent = holder.transform;
 							Destroy (goRarm);
 							goRarm = holder;
 						}

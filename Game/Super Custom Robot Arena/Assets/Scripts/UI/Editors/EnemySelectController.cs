@@ -222,7 +222,7 @@ public class EnemySelectController : MonoBehaviour {
 			yield return new WaitForSeconds(.5f);
 			holder.isControllable = false;
 			holder.GetPartObj(0).AddComponent<EnemyHead>();
-			GameObject bullet = (GameObject) GameUtilities.ReadResourceFile("Bullet");
+			GameObject bullet = (GameObject) GameUtilities.ReadResourceFile("Bullets/Bullet");
 			holder.GetPartObj(1).AddComponent<EnemyLarm>();
 			holder.GetPartObj(1).GetComponent<EnemyLarm>().mBullet = bullet;
 			holder.GetPartObj(2).AddComponent<EnemyRarm>();
@@ -236,7 +236,7 @@ public class EnemySelectController : MonoBehaviour {
 			yield return new WaitForSeconds(.5f);
 			holder.isControllable = false;
 			holder.GetPartObj(0).AddComponent<EnemyHead>();
-			GameObject bullet = (GameObject) GameUtilities.ReadResourceFile("Bullet");
+			GameObject bullet = (GameObject) GameUtilities.ReadResourceFile("Bullets/Bullet");
 			holder.GetPartObj(1).AddComponent<EnemyLarm>();
 			holder.GetPartObj(1).GetComponent<EnemyLarm>().mBullet = bullet;
 			holder.GetPartObj(2).AddComponent<EnemyRarm>();

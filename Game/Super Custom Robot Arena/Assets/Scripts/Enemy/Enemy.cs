@@ -149,8 +149,7 @@ public class Enemy : Robot {
 			this.mStateMachine.Update();
 			
 			if(this.mHealth <= 0f){
-				this.mHealth = 0;
-				this.mIsAlive = false;
+				this.OnEntityDead();
 			}
 			
 			if(mDebug)
@@ -228,4 +227,17 @@ public class Enemy : Robot {
 	}
 
 	#endregion
+	
+	protected override void OnEntityDead() {
+		this.mHealth = 0;
+		this.mIsAlive = false;
+		if(this.mExplosionPrefab){
+			GameObject e = (GameObject) Instantiate(this.mExplosionPrefab, this.transform.position, Quaternion.identity);
+			Destroy(e, 1f);
+		}
+		
+		GameObject.FindObjectOfType<GameManager>().OnPlayerWin();
+		Destroy(this.gameObject);
+			
+	}
 }

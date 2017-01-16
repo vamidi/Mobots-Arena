@@ -61,7 +61,7 @@ public class LevelController : MonoBehaviour {
 				RectTransform rect = b.GetComponent<RectTransform>();
 				b.GetComponent<DynamicListener>().mMessageParameter = name;
 				b.GetComponentInChildren<Text>().text = name;
-				string path = "Arenas/" + name + "/Thumbnail/" + name;	
+				string path = "Arenas/" + name + "/Thumbnail/" + name + "_thumb";
 				Sprite img = GameUtilities.GetImageSprite(path);
 				if(img)
 					b.GetComponentInChildren<Image>().sprite = img;

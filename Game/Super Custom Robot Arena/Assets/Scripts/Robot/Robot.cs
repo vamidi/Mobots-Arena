@@ -16,7 +16,7 @@ namespace MBA {
 		public abstract class Robot : MonoBehaviour {
 			
 			/****************************** PUBLIC PROPERTIES *********************/ 
-			
+			public GameObject mExplosionPrefab;
 			/// <summary>
 			/// Name of the robot
 			/// </summary>
@@ -102,7 +102,8 @@ namespace MBA {
 			/// <param name="method">Method.</param>
 			/// <param name="value">Value.</param>
 			public void SetValue(PART part, string method = "", object value = null)  {
-
+				
+				
 				if (method == "" || value == null)
 					return;
 
@@ -130,7 +131,6 @@ namespace MBA {
 				get { return mTargetRot;  }
 			}
 			
-		
 			/// <summary>
 			/// Gets the mass of the robot/
 			/// </summary>
@@ -292,6 +292,8 @@ namespace MBA {
 			protected abstract void Jump();
 			
 			#endregion
+		
+			protected abstract void OnEntityDead();
 		}
 	}
 }

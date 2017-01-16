@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour {
 	
 	public SceneLoader mLoader;
 	public GameObject mRobotUI;
-	public GameObject mPauseObj;
+	public GameObject mPauseObj, mWinnerObj, mLoseObj;
 	public string robotname = "MKVII";
 	public string enemyName = "", enemyHead, enemyLarm, enemyRarm, enemyCar;
 	public GameObject enemy;
@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour {
 	
 	private GameObject mPlayer;
 	private GameObject enemyPrefab;
-	private GameObject mPause;
+	private GameObject mPause, mWin, mLose;
 	private List<Vector3> mSpawnpoints = new List<Vector3>();
 	private GameObject[] mPoints;
 	private float mTimeScale;
@@ -84,6 +84,23 @@ public class GameManager : MonoBehaviour {
 		Time.timeScale = this.mTimeScale;
 		GameObject.FindObjectOfType<SceneLoader>().LoadNewLevel("main_scene");
 		GameUtilities.sceneLoaded = null;
+	}
+	
+	public void OnPlayerWin(){
+		this.mInGame = false;
+		this.mCursorOn = false;
+		this.mWin = (GameObject) Instantiate(this.mWinnerObj, this.transform.position, Quaternion.identity);
+		this.mWin.GetComponent<Canvas>().worldCamera = Camera.main;
+		this.mPlayer.GetComponent<Player>().isControllable = false;
+	}
+	
+	public void OnPlayerLose(){
+		this.mInGame = false;
+		this.mCursorOn = false;
+		this.mLose = (GameObject) Instantiate(this.mLoseObj, this.transform.position, Quaternion.identity);
+		this.mLose.GetComponent<Canvas>().worldCamera = Camera.main;
+		this.mPlayer.GetComponent<Enemy>().isControllable = false;		
+		
 	}
 	
 	public void CreateRobot(GameObject newEnemy){

@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Bullet : MonoBehaviour {
 	
+	public GameObject hitParticle;
 	/// <summary>
 	/// The life time of the bullet
 	/// </summary> 
@@ -25,13 +26,13 @@ public class Bullet : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		this.mRigidbody = this.GetComponent<Rigidbody>();
-		this.transform.rotation *= Quaternion.Euler(90, 0, 0); // Rotate because the object can come out wrong.
+//		this.transform.rotation *= Quaternion.Euler(90, 0, 0); // Rotate because the object can come out wrong.
 	}
 	
 	// Update is called once per frame
 	void Update () {		
 		Destroy(this.gameObject, mLife);		
-		this.mRigidbody.velocity = this.transform.up * this.mSpeed;
+		this.mRigidbody.velocity = this.transform.forward * this.mSpeed;
 	}
 	
 	void OnTriggerEnter(Collider col){
@@ -39,6 +40,10 @@ public class Bullet : MonoBehaviour {
 			return;
 		
 		if(col.tag == "Head" || col.tag == "Left" || col.tag == "Right" || col.tag == "Car" || col.tag == "Target"){
+			if(this.hitParticle){
+				GameObject particle = (GameObject) Instantiate(hitParticle, this.transform.position, Quaternion.identity);
+				Destroy(particle, 1.2f);
+			}
 			col.SendMessage("Damage", this.mDamage, SendMessageOptions.DontRequireReceiver);
 		}
 					
