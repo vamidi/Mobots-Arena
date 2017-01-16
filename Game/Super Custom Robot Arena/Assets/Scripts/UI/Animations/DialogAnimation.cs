@@ -77,11 +77,13 @@ public class DialogAnimation : Tooltip {
 		
 		this.mDialogUISettings.PositiveButton.GetComponent<Image>().color = this.mDialogUISettings.mPositiveButtonColor;
 		this.mDialogUISettings.NegativeButton.GetComponent<Image>().color = this.mDialogUISettings.mNegativeButtonColor;
-		this.mDialogUISettings.AlternativeButton.GetComponent<Image>().color = this.mDialogUISettings.mAlternativeColor;
+        if (this.mDialogUISettings.AlternativeButton)
+            this.mDialogUISettings.AlternativeButton.GetComponent<Image>().color = this.mDialogUISettings.mAlternativeColor;
 		
 		this.mDialogUISettings.PositiveButton.GetComponentInChildren<Text>().color = this.mDialogUISettings.mPositiveTextColor;
 		this.mDialogUISettings.NegativeButton.GetComponentInChildren<Text>().color = this.mDialogUISettings.mNegativeTextColor;
-		this.mDialogUISettings.AlternativeButton.GetComponentInChildren<Text>().color = this.mDialogUISettings.mAlternativeTextColor;
+        if (this.mDialogUISettings.AlternativeButton)
+		    this.mDialogUISettings.AlternativeButton.GetComponentInChildren<Text>().color = this.mDialogUISettings.mAlternativeTextColor;
 		
 	}
 }
