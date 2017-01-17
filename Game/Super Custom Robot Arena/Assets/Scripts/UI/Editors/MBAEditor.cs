@@ -296,7 +296,7 @@ namespace MBA {
 				
 				this.mRobotEditor = GameObject.FindGameObjectWithTag("Robot").GetComponent<RobotEditor>();
 				this.mRobotEditor.transform.position = new Vector3(this.mRobotEditor.transform.position.x, 0.04f, this.mRobotEditor.transform.position.z );
-				this.mAssign = new AssignValues (ChangeStats);
+				//this.mAssign = new AssignValues (ChangeStats);
 				this.mPart = PART.HEAD;
 				this.EquipRobot(this.mCurrentRobotName);
 				this.mPart = PART.LARM;

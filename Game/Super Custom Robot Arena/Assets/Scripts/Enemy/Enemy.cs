@@ -8,7 +8,7 @@ public class Enemy : Robot {
 	
 	public Transform mPlayer = null;
 	public CoverBase mCurrentCoverBase;
-	public NavMeshAgent Agent { get { return this.mAgent; } set { this.mAgent = value; } }
+	public UnityEngine.AI.NavMeshAgent Agent { get { return this.mAgent; } set { this.mAgent = value; } }
 	public Image mCurrentHealthBar;
 	public Text mRatioText;
 	public Speed mSpeed = new Speed();
@@ -22,7 +22,7 @@ public class Enemy : Robot {
 	public GameObject[] mWaypoints;
 	public Transform[] mEvadePoints;
 
-	private NavMeshAgent mAgent = null;
+	private UnityEngine.AI.NavMeshAgent mAgent = null;
 	private FieldOfView fov = null;
 	[SerializeField]
 	private StateMachine mStateMachine = null;
@@ -119,7 +119,7 @@ public class Enemy : Robot {
 	protected override void Start(){
 		base.Start();
 		
-		this.mAgent = this.GetComponent<NavMeshAgent>();
+		this.mAgent = this.GetComponent<UnityEngine.AI.NavMeshAgent>();
 		if(!this.mAgent)
 			Debug.LogError("There is no navmesh agent attached to this gameobject");
 		
