@@ -5,10 +5,13 @@ using System.Collections;
 
 using MBA.UI;
 using MBA.Humanoids;
+using System.Collections.Generic;
 
 public class Player : Robot {
 
 	/****************************** PUBLIC PROPERTIES *********************/
+	public GameObject mPlayerPositionPrefab;
+	public List<Vector3>mLastPositions = new List<Vector3>();
 	public Image mCurrentDamageBar, mCurrentWeightBar;
 	public Text mTimerText, mWeightTimerText; 
 	public float mTimer = 30f, mWeightTimer = 30f;
@@ -33,6 +36,10 @@ public class Player : Robot {
 	/// </summary>
 	[SerializeField]
 	public PositionSettings mPosition = new PositionSettings();                                                                                              
+	
+	private bool isDeleting = false;
+	[SerializeField]
+	private List<GameObject>mPlayerPositions = new List<GameObject>();
 	
 	/// <summary>
 	/// Forward, RotateInput calculations
@@ -113,6 +120,7 @@ public class Player : Robot {
 		this.mResetWeightTimer = this.mWeightTimer;
 		this.mStartTimer = false;
 		this.mStart = false;
+		StartCoroutine(this.SavePlayerPosition(2.5f));
 	}
 	
 	// Update is called once per frame
@@ -307,7 +315,30 @@ public class Player : Robot {
 		}
 	}
 
+	private IEnumerator SavePlayerPosition(float delay){
+		while(this.isControllable){
+			if(this.mLastPositions.Count > 1 && this.mLastPositions.Count > 10){
+				this.isDeleting = true;
+				this.mLastPositions.RemoveRange(1, 5);
+
+				if(this.mDebug){
+					for(int i = 0; i < 5; i++){
+						Destroy(this.mPlayerPositions[i]);
+					}
+					this.mPlayerPositions.RemoveRange(1, 5);
+				}
+				this.isDeleting = false;
+				
+			}
+			yield return new WaitForSeconds(delay);
+			if(this.isDeleting == false){
+				this.mLastPositions.Add(this.transform.position);
+				if(this.mPlayerPositionPrefab && this.mDebug)
+					this.mPlayerPositions.Add(Instantiate(this.mPlayerPositionPrefab, this.transform.position, Quaternion.identity) as GameObject);
+			}
+		}
+	}
+	
 	protected override void OnEntityDead() {
-		
 	}
 }

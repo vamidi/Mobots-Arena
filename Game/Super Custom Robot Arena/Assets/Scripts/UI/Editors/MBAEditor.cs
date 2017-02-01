@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
@@ -16,7 +17,7 @@ namespace MBA {
 		/// <summary>
 		/// Call back for when the robot is done with building
 		/// </summary>
-		public delegate void AssignValues ();
+		public delegate void AssignValues (string robotName = "", Player p = null);
 		
 		/// <summary>
 		/// Editor class.
@@ -571,7 +572,6 @@ namespace MBA {
 				holder.GetPartObj(1).GetComponent<Larm>().mBullet = bullet;
 				holder.GetPartObj(2).AddComponent<Rarm>();
 				holder.GetPartObj(2).GetComponent<Rarm>().mBullet = bullet;
-				
 				holder.GetPartObj(3).AddComponent<Car>();
 				yield return new WaitForSeconds(.5f);
 				holder.Initialize();
@@ -585,6 +585,8 @@ namespace MBA {
 				this.mPart = PART.CAR;
 				this.ChangeStats(this.mCurrentRobotNameCar, holder);				
 				this.mPart = PART.HEAD;
+				GameUtilities.FindDeepChild(holder.transform, "Arms").gameObject.AddComponent<ArmController>();
+				yield return new WaitForSeconds(.5f);
 				this.ChangePage();
 				yield return null;
 			}

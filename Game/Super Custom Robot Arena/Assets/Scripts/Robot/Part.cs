@@ -14,11 +14,11 @@ public enum PART {
 
 public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<double> {
 	
-	public string mPartName = "MKVII";
 	/// <summary>
-	/// The max health of the robot
+	/// The health of the robot
 	/// </summary>
-	public float mMaxHealth = 100f;
+	public float mHealth = 100f;
+	public string mPartName = "MKVII";
 	/// <summary>
 	/// The weight of the part
 	/// </summary>
@@ -47,10 +47,10 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<double
 	/// </summary>
 	protected Texture mTexture = null;
 	/// <summary>
-	/// The health of the robot
+	/// The max health of the robot
 	/// </summary>
 	[SerializeField]
-	protected float mHealth = 100f;
+	protected float mMaxHealth = 100f;
 	/// <summary>
 	/// The weapon of the robot
 	/// </summary>
@@ -143,7 +143,7 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<double
 	/// </summary>
 	/// <param name="health">Health.</param>
 	public void SetHealth(float health){
-		this.mHealth = health;
+		this.mHealth = this.mMaxHealth = health;		
 	}
 
 	/// <summary>
@@ -181,9 +181,7 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<double
 			this.GetComponent<Renderer>().material.color = this.mDownColor;
 		}
 		
-		if(this.mHealth > 100){
-			this.mHealth = 100f;
-		}
+
 	}
 	
 	#endregion

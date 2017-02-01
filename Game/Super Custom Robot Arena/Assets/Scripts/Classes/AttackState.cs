@@ -10,6 +10,7 @@ public class AttackState : State<Enemy> {
 	private float mIntialRotationSpeed;
 	private Vector3 newPos = Vector3.zero;
 	
+	
 	public static AttackState Instance(){
 		if(s_attackState == null)
 			s_attackState = new AttackState();
@@ -27,17 +28,18 @@ public class AttackState : State<Enemy> {
 	// Update is called once per frame
 	public override void Update (Enemy mEnemy) {
 		if(this.mPriority > mEnemy.GetFSM().GetGlobalState().GetPriority()){
-			// Move the player
-			mEnemy.StartCoroutine(Dodging(mEnemy));
-			
-			if(mEnemy.GetFieldOfView().FindTarget() == null && mEnemy.mPlayerInSight && mEnemy.mPlayer){
-				mEnemy.mPlayerInSight = false;
-			}else if(mEnemy.GetFieldOfView().FindTarget() != null && mEnemy.mPlayerInSight == false && mEnemy.mPlayer){
-				mEnemy.mPlayerInSight = true;
-			}
 			
 			if(mEnemy.mPlayer){
-				if(Vector3.Distance(mEnemy.transform.position, mEnemy.mPlayer.position) > mEnemy.GetFieldOfView().mViewRadius){
+				
+				float distance = Vector3.Distance(mEnemy.transform.position, mEnemy.mPlayer.position);
+				
+				if(mEnemy.GetFieldOfView().FindTarget() == null && mEnemy.mPlayerInSight && distance < mEnemy.GetFieldOfView().mViewRadius){
+					mEnemy.GetFSM().ChangeState(SearchState.Instance());
+				}
+				
+				mEnemy.StartCoroutine(Dodging(mEnemy));
+				
+				if(distance > mEnemy.GetFieldOfView().mViewRadius){
 					mEnemy.GetFSM().ChangeState(ChaseState.Instance());
 				}
 			}

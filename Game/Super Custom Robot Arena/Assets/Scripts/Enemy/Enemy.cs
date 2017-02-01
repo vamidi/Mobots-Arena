@@ -8,11 +8,10 @@ public class Enemy : Robot {
 	
 	public Transform mPlayer = null;
 	public CoverBase mCurrentCoverBase;
-	public NavMeshAgent Agent { get { return this.mAgent; } set { this.mAgent = value; } }
+	public UnityEngine.AI.NavMeshAgent Agent { get { return this.mAgent; } set { this.mAgent = value; } }
 	public Image mCurrentHealthBar;
 	public Text mRatioText;
 	public Speed mSpeed = new Speed();
-	public bool mDebug = true;
 	public bool canShoot = false, mPlayerInSight = false;
 	public float researchArea = 10f, mResetArea = 0f;
 	public float mColorLerpSpeed = .2f;
@@ -22,7 +21,7 @@ public class Enemy : Robot {
 	public GameObject[] mWaypoints;
 	public Transform[] mEvadePoints;
 
-	private NavMeshAgent mAgent = null;
+	private UnityEngine.AI.NavMeshAgent mAgent = null;
 	private FieldOfView fov = null;
 	[SerializeField]
 	private StateMachine mStateMachine = null;
@@ -50,24 +49,26 @@ public class Enemy : Robot {
 			Debug.LogError ("The part is not a car part");
 
 		this.mResetMass = this.mMass = this.mParts [0].mRobotWegith + this.mParts [1].mRobotWegith + this.mParts [2].mRobotWegith + this.mParts [3].mRobotWegith;
-
-		for(int i = 0; i < this.mParts.Length; i++){
-			// Debug.Log("Part: " + this.mParts[i].GetPart() + " Health " + this.mParts[i].GetHealth());
-			this.mMaxHealth += mParts[i].GetMaxHealth();
-		}
-
-		this.mHealth = this.mMaxHealth;
 		
 		((EnemyCar)this.mParts[3]).SetSpeed(2200);
 		this.mAgent.speed = this.mSpeed.mChaseSpeed = ((EnemyCar)this.mParts[3]).GetSpeed();
 				
 		this.mStateMachine = new StateMachine (this);
 		this.mStateMachine.SetCurrentState(PatrolState.Instance());
-		this.mStateMachine.SetGlobalState (GlobalState.Instance ());
+		this.mStateMachine.SetGlobalState (GlobalState.Instance ());		
+	}
+	
+	public void InitializeHealth() {
+		for(int i = 0; i < this.mParts.Length; i++){
+			this.mMaxHealth += mParts[i].GetMaxHealth();
+		}
+
+		this.mHealth = this.mMaxHealth;
+		Debug.Log("h: " + this.mHealth + " max: " + this.mMaxHealth);
 		
 		GameUtilities.FindDeepChild(this.transform, "Canvas").gameObject.SetActive(true);
 		this.mCurrentHealthBar = GameUtilities.FindDeepChild(this.transform, "HealthForGround").GetComponent<Image>();
-		this.mRatioText = GameUtilities.FindDeepChild(this.transform, "HealthText").GetComponent<Text>();		
+		this.mRatioText = GameUtilities.FindDeepChild(this.transform, "HealthText").GetComponent<Text>();
 	}
 	
 	public void InitializeWaypoints() {
@@ -119,7 +120,7 @@ public class Enemy : Robot {
 	protected override void Start(){
 		base.Start();
 		
-		this.mAgent = this.GetComponent<NavMeshAgent>();
+		this.mAgent = this.GetComponent<UnityEngine.AI.NavMeshAgent>();
 		if(!this.mAgent)
 			Debug.LogError("There is no navmesh agent attached to this gameobject");
 		
@@ -140,13 +141,18 @@ public class Enemy : Robot {
 		this.mColorArr[0] = new Color(1f, .007f, .007f);
 		this.mColorArr[1] = new Color(.17f, .96f, 0f);
 		
-		this.mResetArea = this.researchArea;
+		this.mResetArea = this.researchArea;		
+		
+		this.Initialize();
+		this.InitializeHealth();
+		this.InitializeWaypoints();
 	}
 	
 	protected override void Update(){		
 		if(this.mIsAlive && this.isControllable){
 			base.Update();
 			this.mStateMachine.Update();
+			Debug.Log(this.mStateMachine.ToString());
 			
 			if(this.mHealth <= 0f){
 				this.OnEntityDead();
@@ -211,10 +217,11 @@ public class Enemy : Robot {
 	private void UpdateHealthBar(){
 		this.mHealth = 0;
 		for(int i = 0; i < this.mParts.Length; i++){
-			if(this.mParts[i] != null)
+			if(this.mParts[i] != null){
 				this.mHealth += mParts[i].GetHealth();
-		}
-	
+			}
+		}		
+			
 		if(this.mCurrentHealthBar){
 			float ratio = Map( this.mHealth, 0, this.mMaxHealth, 0, 1);
 			this.mCurrentHealthBar.fillAmount = Mathf.Lerp(this.mCurrentHealthBar.fillAmount, ratio, Time.deltaTime * this.mColorLerpSpeed);

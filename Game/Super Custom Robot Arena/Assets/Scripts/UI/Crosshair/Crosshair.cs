@@ -7,6 +7,7 @@ public class Crosshair : MonoBehaviour {
 	public LayerMask mLayer;
 	public Transform mGunEnd, mOldPos;
 
+	public GameObject lArm;
 	public GameObject player;
 
 	
@@ -41,12 +42,25 @@ public class Crosshair : MonoBehaviour {
 				
 			this.transform.LookAt(Camera.main.transform.position);
 			this.transform.Rotate(0, 180f, 0);	
-		}else{
-			
-			// center point of the player
-			Debug.Log(player.transform.position);
-			
-//			this.gameObject.SetActive(false);
 		}
+		
+		// center point of the player
+//		Vector3 centerpointPlayer = Vector3.zero;
+//		Vector3 centerpointLeftArm = Vector3.zero;
+//		
+//		if(player){
+//			centerpointPlayer = player.transform.position;
+//		}
+//		if(lArm){
+//			centerpointLeftArm = lArm.GetComponent<SphereCollider>().bounds.center;
+//		}
+//		
+//		if(centerpointPlayer != Vector3.zero && centerpointLeftArm != Vector3.zero){
+//			float distX = Vector3.Distance(centerpointPlayer, centerpointLeftArm);
+//			var a = Mathf.Tan(2.5f) * distX;
+////			Debug.Log(a);
+//		}
+		
+		
 	}
 }
