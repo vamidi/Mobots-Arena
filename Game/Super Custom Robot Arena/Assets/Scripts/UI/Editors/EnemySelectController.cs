@@ -266,6 +266,7 @@ public class EnemySelectController : MonoBehaviour {
 			this.ChangeStats(manager.enemyName, holder);				
 			this.mPart = PART.HEAD;
 		}
+		holder.InitializeHealth();
 		yield return new WaitForSeconds(1.2f);
 		this.changing = false;
 		GameObject.FindGameObjectWithTag("Menu").SendMessage("SetNextPage", "Level");

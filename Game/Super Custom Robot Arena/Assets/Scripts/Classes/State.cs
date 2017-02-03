@@ -41,6 +41,10 @@ public abstract class State<T> {
 
 	// Exit is called once the state is exitted
 	public abstract void Exit (T mEnemy);
+	
+	public string ToString(){
+		return "I am currently in state" + this.GetType().Name;
+	}
 
 	protected abstract void Move (T mEnemy);
 	

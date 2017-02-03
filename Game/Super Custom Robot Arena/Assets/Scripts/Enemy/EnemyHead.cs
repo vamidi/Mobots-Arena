@@ -126,8 +126,8 @@ public class EnemyHead : Part {
 			this.UpdateShieldBar();
 		}
 		
-		if(this.mArmorHealth > 100){
-			this.mArmorHealth = 100f;
+		if(this.mArmorHealth > this.mMaxArmorHealth){
+			this.mArmorHealth = this.mMaxArmorHealth;
 			this.UpdateShieldBar();
 		}
 	}

@@ -51,14 +51,13 @@ namespace MBA {
 			/// <summary>
 			/// To see if the player is controllable
 			/// </summary>
-			public bool isControllable;  
+			public bool isControllable, mDebug = true;  
 			/****************************** PRIVATE PROPERTIES *********************/
 			
 			/// <summary>
 			/// To see if the player/enemy is alive
 			/// </summary>
 			protected bool mIsAlive = true;
-			
 			/// <summary>
 			/// Target rotaion variables
 			/// </summary>

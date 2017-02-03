@@ -100,8 +100,8 @@ public class EnemyRarm : Arm {
 				this.mHealthBar.UpdateHealthBar();
 		}
 
-		if(this.mHealth > 100){
-			this.mHealth = 100f;
+		if(this.mHealth > this.mMaxHealth){
+			this.mHealth = this.mMaxHealth;
 			if(this.mHealthBar)
 				this.mHealthBar.UpdateHealthBar();
 		}

@@ -111,18 +111,18 @@ public class Head : Part {
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
-		this.mArmorHealth = this.mMaxHealth;
+		this.mArmorHealth = this.mMaxArmorHealth;
 	}
 	
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
 		if( this.mArmorHealth < 0 ){
-			this.mArmorHealth = 0f;
+			this.mArmorHealth = 0;
 		}
 		
-		if(this.mArmorHealth > 100){
-			this.mArmorHealth = 100f;
+		if(this.mArmorHealth > this.mMaxArmorHealth){
+			this.mArmorHealth = this.mMaxArmorHealth;
 		}
 		
 		this.UpdateShieldBar(); 

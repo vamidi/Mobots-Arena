@@ -104,6 +104,7 @@ public class FieldOfView : MonoBehaviour {
 		this.mViewMesh = new Mesh();
 		this.mViewMesh.name = "View Mesh";
 		this.mMeshFilter.mesh = this.mViewMesh;
+		this.Initialize();
 	}
 	
 	void LateUpdate(){
