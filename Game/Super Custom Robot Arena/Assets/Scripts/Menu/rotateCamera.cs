@@ -3,6 +3,7 @@ using System.Collections;
 
 public class rotateCamera : MonoBehaviour {
 
+    public float speed;
 	// Use this for initialization
 	void Start () {
 	
@@ -10,6 +11,6 @@ public class rotateCamera : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        transform.Rotate(Vector3.up * Time.deltaTime * 5, Space.World);
+        transform.Rotate(Vector3.up * Time.deltaTime * speed, Space.World);
     }
 }
