@@ -1085,6 +1085,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+  amplitude: 0.3
 --- !u!4 &1622816072
 Transform:
   m_ObjectHideFlags: 0
