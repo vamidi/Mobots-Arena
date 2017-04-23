@@ -73,7 +73,7 @@ public class Arm : Part, IShootable {
 	}
 
 	public virtual void Shoot() {
-		if(this.mCanFire && this.mFire){
+		if(this.mCanFire && this.mFire) {
 			Vector3 rayOrg = this.mGunEnd.position; //this.mCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f,  0));
 			RaycastHit hit;
 
@@ -98,7 +98,7 @@ public class Arm : Part, IShootable {
 		this.mGunAudioSource = this.gameObject.AddComponent<AudioSource>();
 		this.mGunAudioSource.playOnAwake = false;
 		this.mGunSound = (AudioClip) GameUtilities.ReadResourceFile("placeholdersound");
-		if(this.mGunSound){
+		if(this.mGunSound) {
 			this.mGunAudioSource.clip = this.mGunSound;
 			this.mGunAudioSource.loop = false;
 		}
