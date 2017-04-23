@@ -1,0 +1,22 @@
+{
+    "levels": [
+        {
+            "level" : {            
+                "levelname" : "Demo",
+                "scene" : "demo_arena"
+            }
+        },
+        {
+            "level" : {            
+                "levelname" : "Final",
+                "scene" : "final"
+            }        
+        },
+        {
+            "level" : {            
+                "levelname" : "Hallway",
+                "scene" : "hall_way"
+            }
+        }
+    ]
+}
