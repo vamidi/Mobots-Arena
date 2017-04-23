@@ -1,0 +1,1 @@
+{"health": 120,"armor": 120,"armorstrength": 10,"weight": 75,"damageperround": 7, "roudspersecond": 2, "accuracy": 5 }
