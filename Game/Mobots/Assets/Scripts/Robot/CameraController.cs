@@ -64,19 +64,19 @@ public class TagSettings {
 	/// <summary>
 	/// Tag for the head
 	/// </summary>
-	public string mHeadTag = "Head";                                                        
+	public string mHeadTag = "Head";
 	/// <summary>
 	/// Tag for the left arm
 	/// </summary>
-	public string mLarmTag = "Left";                                                   
+	public string mLarmTag = "Left";
 	/// <summary>
 	/// Tag for the right arm
 	/// </summary>
-	public string mRamTag = "Right";                                            
+	public string mRarmTag = "Right";
 	/// <summary>
 	/// Tag for the car
 	/// </summary>
-	public string mCarTag = "Car";                                                         
+	public string mCarTag = "Car";
 	/// <summary>
 	/// Tag for the floor
 	/// </summary>

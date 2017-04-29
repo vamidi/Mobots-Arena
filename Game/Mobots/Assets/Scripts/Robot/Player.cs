@@ -54,7 +54,7 @@ public class Player : Robot {
 		
 	/****************************** PUBLIC METHODS *********************/
 	
-	public void Initialize(){
+	public void Initialize() {
 		DontDestroyOnLoad(this.gameObject);
 		this.mParts [0] = this.goHead.GetComponent<Head> ();
 		this.mParts [1] = this.goLarm.GetComponent<Larm> ();

@@ -24,6 +24,7 @@ public class ArmController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		this.mRobot = this.transform.root.GetComponent<Player>();
+		Debug.Log(mRobot);
 		if(this.mRobot){
 			this.mLeftArm = this.mRobot.GetPart(1).transform;
 			this.mRightArm = this.mRobot.GetPart(2).transform;
@@ -36,7 +37,7 @@ public class ArmController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(mRobot.isControllable){
+		if(mRobot.isControllable) {
 			this.GetInput();
 		}
 

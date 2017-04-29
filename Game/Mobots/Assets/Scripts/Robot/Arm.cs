@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Arm : Part, IShootable {
+public class Arm : Part, Interfaces.IShootable {
 	
 	public Transform mGunEnd;
 	public Transform mMuzzle;
@@ -47,22 +47,22 @@ public class Arm : Part, IShootable {
 	protected float mCurrentRecoilVel;
 	
 	public override void Initialize() {
-		this.mNextFire = Time.time + this.mRoundsPerSecond;
+		mNextFire = Time.time + mRoundsPerSecond;
 	}
 	
-	public void ResetDamage(){
+	public void ResetDamage() {
 		this.mDamagePerRound = this.mResetDamage;
 	}
 
-	public void SetDamagePerRound(float damage){
+	public void SetDamagePerRound(float damage) {
 		this.mDamagePerRound = damage;
 	}
 
-	public virtual void SetRoundsPerSecond(float seconds){
+	public virtual void SetRoundsPerSecond(float seconds) {
 		this.mRoundsPerSecond = seconds;
 	}
 
-	public void SetAccuracy(float accuracy){
+	public void SetAccuracy(float accuracy) {
 		this.mAccuracy = accuracy;
 	}
 
@@ -107,7 +107,7 @@ public class Arm : Part, IShootable {
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update();
-		if(((Player)mRobot).isControllable){
+		if(((Player)mRobot).isControllable) {
 			this.GetInput();
 			this.Shoot();
 		}

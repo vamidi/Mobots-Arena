@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4964254850664832}
   - component: {fileID: 65892504688116900}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4144369337660270}
   - component: {fileID: 65348710508615750}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: colliders (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,12 +56,12 @@ GameObject:
   - component: {fileID: 23899968128199660}
   - component: {fileID: 114946226801673874}
   - component: {fileID: 65019476450152976}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 127
+  m_StaticEditorFlags: 41
   m_IsActive: 1
 --- !u!4 &4144369337660270
 Transform:
@@ -82,15 +82,15 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1539894108985140}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 34, y: 0, z: 15.8}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -11.7, y: 0, z: 25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4964254850664832}
   - {fileID: 4144369337660270}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!4 &4964254850664832
 Transform:
   m_ObjectHideFlags: 1
@@ -134,6 +134,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!33 &33863129289628070
 MeshFilter:

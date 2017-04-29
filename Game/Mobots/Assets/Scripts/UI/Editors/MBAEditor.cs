@@ -319,8 +319,7 @@ namespace MBA {
 			/// </summary>
 			/// <param name="part">Part.</param>
 			/// <param name="robotName">Robot name.</param>
-			private void ChangeStats(string robotName = "", Player p = null){
-				
+			private void ChangeStats(string robotName = "", Player p = null) {
 				if (robotName == "")
 					return;
 

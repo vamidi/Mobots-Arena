@@ -134,7 +134,7 @@ namespace MBA {
 			/// Gets the mass of the robot/
 			/// </summary>
 			/// <returns>The robot mass.</returns>
-			public float GetRobotMass(){
+			public float GetRobotMass() {
 				return this.mMass;
 			}
 			
@@ -167,7 +167,7 @@ namespace MBA {
 		
 			protected virtual void Awake() {	
 				foreach( Transform child in this.transform){
-					if (child.gameObject.tag == this.mTags.mCarTag) {
+					if (child.gameObject.CompareTag(mTags.mCarTag)) {
 						this.goCar = child.gameObject;
 					}
 					if(child.childCount > 0) {
@@ -178,7 +178,7 @@ namespace MBA {
 							foreach (Transform innerChild in nodeChild) {
 								if (innerChild.gameObject.tag == this.mTags.mLarmTag) {
 									this.goLarm = innerChild.gameObject;
-								}else if(innerChild.gameObject.tag == this.mTags.mRamTag){
+								}else if(innerChild.gameObject.tag == this.mTags.mRarmTag){
 									this.goRarm = innerChild.gameObject;
 								}
 							}

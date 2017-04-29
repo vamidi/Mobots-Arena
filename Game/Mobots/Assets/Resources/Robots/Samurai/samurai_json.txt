@@ -1,0 +1,43 @@
+    {
+      "robotname": "Samurai",
+      "parts": {
+        "head": {
+          "stats": {
+            "hitpoints": 115,
+            "shieldhitpoints": 75,
+            "shieldstrength": 30,
+            "weight": 80
+          },
+          "owned": true
+        },
+        "left": {
+          "stats": {
+            "hitpoints": 105,
+            "weight": 65,
+            "damageperround": 5,
+            "roundspersecond": 0.5,
+            "accuracy": 0.5
+          },
+          "owned": true
+        },
+        "right": {
+          "stats": {
+            "hitpoints": 105,
+            "weight": 65,
+            "damageperround": 5, 
+            "roundspersecond": 0.3, 
+            "accuracy": 0.5
+          },
+          "owned": true
+        },
+        "car": {
+          "stats": {
+            "hitpoints": 110,
+            "weight": 70, 
+            "speed":1960,
+            "jumpstrength":1960
+          },
+          "owned": true
+        }
+      }
+    }

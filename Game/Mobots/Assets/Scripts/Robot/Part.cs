@@ -162,7 +162,7 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<double
 	}	
 	
 	// Use this for initialization
-	protected virtual void Start(){
+	protected virtual void Start() {
 		this.mHealth = this.mMaxHealth;
 		this.mHealthBar = this.GetComponent<HealthBar>();
 		this.mMaterial = this.GetComponent<Renderer>().material;
@@ -175,18 +175,16 @@ public abstract class Part : MonoBehaviour, IDamageable<float>, IHealable<double
 	}
 	
 	// Update is called once per frame
-	protected virtual void Update(){
+	protected virtual void Update() {
 		if( this.mHealth < 0 ){
 			this.mHealth = 0;
 			this.GetComponent<Renderer>().material.color = this.mDownColor;
 		}
-		
-
 	}
 	
 	#endregion
 	
-	protected IEnumerator Flash(){
+	protected IEnumerator Flash() {
 		this.isFlashing = true;
 		yield return new  WaitForSeconds(0.1F);
 		gameObject.GetComponent<Renderer>().material = this.mFlashMaterial;

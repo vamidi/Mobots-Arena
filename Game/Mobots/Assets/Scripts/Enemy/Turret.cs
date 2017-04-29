@@ -39,18 +39,18 @@ public class Turret : MonoBehaviour {
 	void Awake(){
 
 		foreach( Transform child in this.transform){
-			if (child.gameObject.tag == this.mTags.mCarTag) {
+			if (child.gameObject.CompareTag(this.mTags.mCarTag)) {
 				this.goCar = child.gameObject;
 			}
 			if(child.childCount > 0) {
 				foreach( Transform nodeChild in child){
-					if (nodeChild.gameObject.tag == this.mTags.mHeadTag) {
+					if (nodeChild.gameObject.CompareTag(mTags.mHeadTag)) {
 						this.goHead = nodeChild.gameObject;
 					}
 					foreach (Transform innerChild in nodeChild) {
-						if (innerChild.gameObject.tag == this.mTags.mLarmTag) {
+						if (innerChild.gameObject.CompareTag(mTags.mLarmTag)) {
 							this.goLarm = innerChild.gameObject;
-						}else if(innerChild.gameObject.tag == this.mTags.mRamTag){
+						}else if(innerChild.gameObject.CompareTag(this.mTags.mRarmTag)) {
 							this.goRarm = innerChild.gameObject;
 						}
 					}

@@ -12,7 +12,7 @@ public class Larm : Arm {
 		base.Initialize();
 	}
 	
-	public override void Shoot(){
+	public override void Shoot() {
 		base.Shoot();
 		
 		// left btn click
@@ -47,20 +47,6 @@ public class Larm : Arm {
 	protected override void Awake(){
 		base.Awake();
 		this.mPart = PART.LARM;
-	}
-	
-	// Use this for initialization
-	protected override void Start () {
-		base.Start();
-	}
-	
-	// Update is called once per frame
-	protected override void Update () {
-		base.Update();
-	}
-	
-	protected override void LateUpdate () {
-		base.LateUpdate();
 	}
 	
 	protected override void GetInput(){

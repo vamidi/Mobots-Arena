@@ -3,7 +3,27 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - PowerCrateSpawn
+  - Right
+  - Enemy
+  - Car
+  - Head
+  - Left
+  - Bullet
+  - Robot
+  - Builder
+  - Waypoint
+  - Spawnpoints
+  - ButtonBrancher
+  - Ground
+  - CarUI
+  - RightUI
+  - ArmorUI
+  - HeadUI
+  - LeftUI
+  - Menu
+  - Target
   layers:
   - Default
   - TransparentFX
@@ -13,7 +33,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Ground
   - 
   - 
   - 

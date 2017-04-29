@@ -105,7 +105,7 @@ namespace MBA {
 								holder.AddComponent<LineRenderer>();
 								ComponentUtility.PasteComponentValues(goRarm.GetComponent<LineRenderer>());
 							}
-							holder.tag = this.mTags.mRamTag;
+							holder.tag = this.mTags.mRarmTag;
 							//							holder.AddComponent<Rarm>();
 							//							mParts [2] = holder.GetComponent<Rarm> ();
 							holder.transform.parent = parent;
@@ -146,7 +146,7 @@ namespace MBA {
 							foreach (Transform innerChild in nodeChild) {
 								if (innerChild.gameObject.tag == this.mTags.mLarmTag) {
 									this.goLarm = innerChild.gameObject;
-								}else if(innerChild.gameObject.tag == this.mTags.mRamTag){
+								}else if(innerChild.gameObject.tag == this.mTags.mRarmTag){
 									this.goRarm = innerChild.gameObject;
 								}
 							}
