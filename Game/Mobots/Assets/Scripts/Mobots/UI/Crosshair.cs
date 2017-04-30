@@ -7,7 +7,8 @@ namespace Mobots.UI {
 	public class Crosshair : MonoBehaviour {
 		public GameObject mCrosshairPrefab;
 		public Transform mCenterpoint;
-		public float mRange = 50f, mMinimalRange = 15f, zMovement = -0.4f;
+		public float mRange = 50f, mMinimalRange = 15f;
+		public float zMovement = -0.4f, mDisappearDistance = 5.5f;
 		public LayerMask mLayer;
 
 		private Robot.Larm mLarm;
@@ -51,6 +52,11 @@ namespace Mobots.UI {
 
 			if (Vector3.Distance(mCenterpoint.transform.position, mCrosshairPrefab.transform.position) < mMinimalRange) {
 				mCenterpoint.transform.localPosition = new Vector3(zMovement, mCenterpoint.transform.localPosition.y, mCenterpoint.transform.localPosition.z);
+			}
+
+			// we dont want the crosshair to be on top of the player
+			if (Vector3.Distance(mCenterpoint.transform.position, mCrosshairPrefab.transform.position) < mDisappearDistance) {
+				ToggleCrosshair(false);
 			}
 		}
 	}

@@ -689,6 +689,7 @@ MonoBehaviour:
   mRange: 50
   mMinimalRange: 15
   zMovement: -0.4
+  mDisappearDistance: 5.5
   mLayer:
     serializedVersion: 2
     m_Bits: 768
