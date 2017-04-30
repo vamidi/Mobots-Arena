@@ -84,7 +84,8 @@ namespace Mobots.Robot {
 //			StartCoroutine(this.SavePlayerPosition(2.5f));
 
 			this.initializeMass = this.mMass =  this.mParts [0].Weight + this.mParts [1].Weight + this.mParts [2].Weight + this.mParts [3].Weight;
-
+			if(mParts[3] != null)
+				mParts[3].SetStats();
 			Cursor.visible = false;
 
 		}

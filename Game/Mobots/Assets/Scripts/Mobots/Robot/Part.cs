@@ -149,12 +149,12 @@ namespace Mobots.Robot
 		}
 
 		protected virtual void Start() {
-			// Test case robot
-			if(mRobot != null && mRobot.mDebug)
-				LoadStatsByRobotName("Samurai");
-
 			mMaterial = GetComponent<Renderer>().material;
 			mFlashMaterial = new Material(Shader.Find("Mobile/Particles/Additive"));
+			// Test case robot
+			if (mRobot != null && mRobot.mDebug) {
+				LoadStatsByRobotName("Samurai");
+			}
 		}
 
 		protected virtual void Update() { }

@@ -15,8 +15,9 @@ namespace Mobots.Robot {
 		private float mJumpStrength = 5f;
 
 		public void SetSpeed(float speed) {
-			if(mRobot != null)
-				mSpeed = speed/mRobot.Mass;
+			if (mRobot != null) {
+				mSpeed = speed / mRobot.Mass;
+			}
 		}
 
 		public void SetJumpStrength(float strength) {
@@ -37,13 +38,5 @@ namespace Mobots.Robot {
 			get { return mJumpStrength; }
 			set { mJumpStrength = value; }
 		}
-
-		// Use this for initialization
-		protected override void Start () {
-			base.Start();
-		}
-
-		// Update is called once per frame
-		void Update() { }
 	}
 }
