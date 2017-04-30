@@ -36,6 +36,8 @@ namespace Mobots.UI {
 					mCrosshairPrefab.transform.position = hit.point;
 					mCrosshairPrefab.transform.LookAt(Camera.main.transform);
 				}
+			} else {
+				ToggleCrosshair(false);
 			}
 		}
 	}

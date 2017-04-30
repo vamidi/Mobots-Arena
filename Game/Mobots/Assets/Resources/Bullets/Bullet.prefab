@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 54000014022951012}
   - component: {fileID: 114000013676058886}
   - component: {fileID: 136000011169186504}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,6 +74,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!33 &33000012618585208
 MeshFilter:
@@ -108,10 +109,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b05e44e0579b4fb8a9b92ede05b3946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parent: {fileID: 0}
   hitParticle: {fileID: 1000012882606800, guid: 6a7c6599e7f314b879ea87180b308a72,
     type: 2}
   mLife: 2
-  mSpeed: 50
+  mSpeed: 80
   mDamage: 15
   mRigidbody: {fileID: 0}
   breakable:
