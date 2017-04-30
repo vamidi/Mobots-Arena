@@ -113,7 +113,7 @@ MonoBehaviour:
   hitParticle: {fileID: 1000012882606800, guid: 6a7c6599e7f314b879ea87180b308a72,
     type: 2}
   mLife: 2
-  mSpeed: 80
+  mSpeed: 120
   mDamage: 15
   mRigidbody: {fileID: 0}
   breakable:

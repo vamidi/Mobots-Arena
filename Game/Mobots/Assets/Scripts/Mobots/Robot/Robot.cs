@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Mobots.Robot {
@@ -82,6 +83,15 @@ namespace Mobots.Robot {
 
 		public Part GetPart(int index) {
 			return (mParts[index] != null) ? mParts[index] : null;
+		}
+
+		// QueryMethhod1 returns a query as its value.
+		public Part GetPartByType(PartType type) {
+			var partQuery =
+				from part in mParts
+				where part.PartType == type
+				select part;
+			return partQuery.First();
 		}
 
 		public int Mass {

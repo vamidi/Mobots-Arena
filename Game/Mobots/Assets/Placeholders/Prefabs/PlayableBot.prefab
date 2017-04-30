@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4073270961758720}
   - component: {fileID: 114264265765550422}
   - component: {fileID: 114161460996794564}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arms
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4953228957524980}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: rarm_spawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,9 +53,24 @@ GameObject:
   - component: {fileID: 4313808102423178}
   - component: {fileID: 54858515440610834}
   - component: {fileID: 114722567755704868}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayableBot
   m_TagString: Robot
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1203189146188158
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4228369768952058}
+  m_Layer: 10
+  m_Name: GunEnd
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73,7 +88,7 @@ GameObject:
   - component: {fileID: 33906142371165930}
   - component: {fileID: 23757291953537974}
   - component: {fileID: 114084941774939808}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: samurai_rarm
   m_TagString: Right
   m_Icon: {fileID: 0}
@@ -93,7 +108,7 @@ GameObject:
   - component: {fileID: 33410874884272366}
   - component: {fileID: 23410591332590632}
   - component: {fileID: 114235707503025754}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: samurai_larm
   m_TagString: Left
   m_Icon: {fileID: 0}
@@ -108,7 +123,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4947947794095528}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: larm_spawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,7 +142,7 @@ GameObject:
   - component: {fileID: 23040912898737672}
   - component: {fileID: 135544709190927766}
   - component: {fileID: 114866980512574102}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: samurai_head
   m_TagString: Head
   m_Icon: {fileID: 0}
@@ -146,7 +161,7 @@ GameObject:
   - component: {fileID: 23082245151316610}
   - component: {fileID: 114017887152561824}
   - component: {fileID: 135051191242047162}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: samurai_car
   m_TagString: Car
   m_Icon: {fileID: 0}
@@ -161,7 +176,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4993130037638082}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,7 +191,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4441389618723676}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GunEnd
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,8 +206,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4978198231691576}
-  m_Layer: 0
-  m_Name: GunEnd
+  m_Layer: 10
+  m_Name: cemterpoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -210,6 +225,7 @@ Transform:
   m_Children:
   - {fileID: 4751234109933714}
   - {fileID: 4104241645015700}
+  - {fileID: 4978198231691576}
   m_Father: {fileID: 4993130037638082}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -239,6 +255,19 @@ Transform:
   - {fileID: 4441389618723676}
   m_Father: {fileID: 4073270961758720}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4228369768952058
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1203189146188158}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.022, y: -0.005, z: 0.45}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4751234109933714}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4313808102423178
 Transform:
@@ -293,7 +322,7 @@ Transform:
   m_LocalPosition: {x: -1.3, y: -1, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children:
-  - {fileID: 4978198231691576}
+  - {fileID: 4228369768952058}
   m_Father: {fileID: 4073270961758720}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -329,12 +358,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1910276477038750}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.022, y: -0.005, z: 0.45}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.000000021855694, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.8, y: -1.2, z: 2}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children: []
-  m_Father: {fileID: 4751234109933714}
-  m_RootOrder: 0
+  m_Father: {fileID: 4073270961758720}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4993130037638082
 Transform:
@@ -656,8 +685,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mCrosshairPrefab: {fileID: 1913678250867710, guid: 3e29a5666866b441083e9a2c55424c2c,
     type: 2}
-  mGunEnd: {fileID: 4978198231691576}
+  mCenterpoint: {fileID: 4978198231691576}
   mRange: 50
+  mMinimalRange: 15
+  zMovement: -0.4
   mLayer:
     serializedVersion: 2
     m_Bits: 768
@@ -688,7 +719,7 @@ MonoBehaviour:
     mCarUI: CarUI
     mCancel: Cancel
   mPartType: 4
-  mGunEnd: {fileID: 4978198231691576}
+  mGunEnd: {fileID: 4228369768952058}
   mMuzzle: {fileID: 0}
   mBullet: {fileID: 1000011842968942, guid: d10603865b90a4951b54dffa96f209a7, type: 2}
   mCanFire: 0
@@ -730,7 +761,7 @@ MonoBehaviour:
     mMouseVertical: Mouse Y
   mOrbit:
     mXRotation: -34
-    mYRotation: 0
+    mYRotation: 2.5
     mMaxXRotation: -34
     mMinXRotation: -65
     mVorbitSmooth: 50

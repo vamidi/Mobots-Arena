@@ -1,13 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Mobots.Robot;
 using UnityEngine;
 
 namespace Mobots.UI {
 	public class Crosshair : MonoBehaviour {
 		public GameObject mCrosshairPrefab;
-		public Transform mGunEnd;
-		public float mRange = 50f;
+		public Transform mCenterpoint;
+		public float mRange = 50f, mMinimalRange = 15f, zMovement = -0.4f;
 		public LayerMask mLayer;
+
+		private Robot.Larm mLarm;
+
 		// Toggle the prefab on and off
 		public void ToggleCrosshair(bool active) {
 			if (mCrosshairPrefab)
@@ -16,6 +20,7 @@ namespace Mobots.UI {
 
 		// Use this for initialization
 		private void Start() {
+			mLarm = (Robot.Larm) transform.root.GetComponent<Robot.Robot>().GetPartByType(PartType.Larm);
 			if (mCrosshairPrefab != null) {
 				mCrosshairPrefab = Instantiate(mCrosshairPrefab);
 			}
@@ -29,8 +34,12 @@ namespace Mobots.UI {
 		// position the crosshai to where the player is aiming
 		private void PositionCrosshair() {
 			RaycastHit hit;
-			Vector3 rayOrg = this.mGunEnd.position;
-			if (Physics.Raycast(rayOrg, mGunEnd.transform.forward, out hit, this.mLayer)) {
+			var rayOrg = mCenterpoint.position;
+			if (mLarm) {
+				mCenterpoint.rotation = mLarm.transform.rotation;
+			}
+
+			if (Physics.Raycast(rayOrg, mCenterpoint.transform.forward, out hit, mLayer)) {
 				if (mCrosshairPrefab) {
 					ToggleCrosshair(true);
 					mCrosshairPrefab.transform.position = hit.point;
@@ -38,6 +47,10 @@ namespace Mobots.UI {
 				}
 			} else {
 				ToggleCrosshair(false);
+			}
+
+			if (Vector3.Distance(mCenterpoint.transform.position, mCrosshairPrefab.transform.position) < mMinimalRange) {
+				mCenterpoint.transform.localPosition = new Vector3(zMovement, mCenterpoint.transform.localPosition.y, mCenterpoint.transform.localPosition.z);
 			}
 		}
 	}
