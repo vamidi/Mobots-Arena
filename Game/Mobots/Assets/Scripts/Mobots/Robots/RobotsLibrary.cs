@@ -8,7 +8,7 @@ using Utils;
 
 namespace Mobots.Robots {
 	public class RobotsLibrary : MonoBehaviour {
-		public static RobotsLibrary instance;              //Static instance of RobotLibrary which allows it to be accessed by any other script.
+		public static RobotsLibrary instance;              // Static instance of RobotLibrary which allows it to be accessed by any other script.
 
 		/// <summary>
 		/// The dictionary that contains the robots and their parts

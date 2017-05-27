@@ -14,6 +14,5 @@ public class SimpleRotation : MonoBehaviour {
 	void Update () {
 		// ...also rotate around the World's Y axis
 		transform.Rotate(Vector3.up * Time.deltaTime * mSpeed, Space.World);
-		
 	}
 }

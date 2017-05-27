@@ -8,6 +8,8 @@ using MBA.UI;
 // 
 using Boomlagoon.JSON;
 
+using Mobots.UI;
+
 public class PlayerSelectController : MonoBehaviour {
 	
 	public GameObject mPlayerSlot;

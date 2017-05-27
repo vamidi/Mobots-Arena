@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Boomlagoon.JSON;
 // own namespace
 using MBA.UI;
+using Mobots.UI;
 
 public class GameManager : MonoBehaviour {
 	
@@ -86,7 +87,7 @@ public class GameManager : MonoBehaviour {
 		GameUtilities.sceneLoaded = null;
 	}
 	
-	public void OnPlayerWin(){
+	public void OnPlayerWin() {
 		this.mInGame = false;
 		this.mCursorOn = false;
 		this.mWin = (GameObject) Instantiate(this.mWinnerObj, this.transform.position, Quaternion.identity);

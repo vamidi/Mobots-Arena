@@ -1,11 +1,10 @@
 ﻿
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using System.Collections;
-using System.Collections.Generic;
 
 using Boomlagoon.JSON;
+using Mobots.UI;
 
 namespace MBA {
 	
