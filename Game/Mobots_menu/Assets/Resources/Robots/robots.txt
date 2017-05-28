@@ -1,0 +1,9 @@
+{
+  "robots": [
+    { "robotname": "Dino" },
+    { "robotname": "Samurai" },
+    { "robotname": "MKVI" },
+    { "robotname": "Knight" },
+    { "robotname": "MKVII" }
+  ]
+}
