@@ -40,7 +40,7 @@ namespace MBA {
 				}				
 			}
 			
-			public Part GetPart(int index){
+			public Part GetPart(int index) {
 				return this.mParts[index];
 			}
 		
